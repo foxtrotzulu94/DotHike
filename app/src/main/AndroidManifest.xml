@@ -32,16 +32,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MapsActivity"
             android:label="@string/maps_activity_name" >
             <intent-filter>
                 <action android:name="me.dotteam.dotprod.MapsActivity" />
-                    <category android:name="android.intent.category.DEFAULT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".HomeActivity"
+            android:label="@string/title_activity_home" >
+        </activity>
     </application>
 
 </manifest>
