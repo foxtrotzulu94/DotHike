@@ -2,20 +2,26 @@ package me.dotteam.dotprod;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private String TAG = "MapsActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate() Called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -36,11 +42,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.i(TAG, "onMapReady() Called");
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng montreal = new LatLng(-45, 73);
-        mMap.addMarker(new MarkerOptions().position(montreal).title("Marker in Montreal"));
+        // Set Maps Settings
+        UiSettings mapSettings = mMap.getUiSettings();
+        mapSettings.setTiltGesturesEnabled(false);
+        mapSettings.setMyLocationButtonEnabled(true);
+        mapSettings.setCompassEnabled(true);
+
+        // Enable MyLocation
+        mMap.setMyLocationEnabled(true);
+
+        // Add a marker in Montreal and LaPrairie and move the camera
+        LatLng montreal = new LatLng(45.5017, -73.5673);
+        LatLng laprairie = new LatLng(45.4167, -73.5);
+        mMap.addMarker(new MarkerOptions().position(montreal).title("Montreal"));
+        mMap.addMarker(new MarkerOptions().position(laprairie).title("LaPrairie"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(montreal));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
+        // Add Polyline between Montreal and LaPrairie
+        PolylineOptions polylineOptions = new PolylineOptions()
+                .add(montreal)
+                .add(laprairie);
+
+        Polyline polyline = mMap.addPolyline(polylineOptions);
+
     }
+
+
 }
