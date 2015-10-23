@@ -26,7 +26,7 @@
         <activity
             android:name=".MainHikeActivity"
             android:label="@string/maps_activity_name"
-            android:noHistory="true">
+            android:noHistory="true" >
             <intent-filter>
                 <action android:name="me.dotteam.dotprod.MapsActivity" />
 
@@ -36,7 +36,7 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
-            android:noHistory="true">
+            android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,7 +46,11 @@
         <activity
             android:name=".ResultsActivity"
             android:label="@string/title_activity_results"
-            android:noHistory="true">
+            android:noHistory="true" >
+        </activity>
+        <activity
+            android:name=".EnvCondActivity"
+            android:label="@string/title_activity_env_cond" >
         </activity>
     </application>
 

@@ -1,6 +1,7 @@
 package me.dotteam.dotprod;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -22,6 +23,7 @@ public class MainHikeActivity extends FragmentActivity implements OnMapReadyCall
     private GoogleMap mMap;
     private String TAG = "MainHikeActivity";
     private Button buttonEndHike;
+    private Button buttonEnvCond;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +36,20 @@ public class MainHikeActivity extends FragmentActivity implements OnMapReadyCall
         mapFragment.getMapAsync(this);
 
         buttonEndHike = (Button) findViewById(R.id.buttonEndHike);
+        buttonEnvCond = (Button) findViewById(R.id.buttonEnvCond);
 
         buttonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentResults = new Intent(MainHikeActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
+            }
+        });
+        buttonEnvCond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentEnvCond = new Intent(MainHikeActivity.this, EnvCondActivity.class);
+                startActivity(intentEnvCond);
             }
         });
     }
@@ -68,20 +78,32 @@ public class MainHikeActivity extends FragmentActivity implements OnMapReadyCall
         // Enable MyLocation
         mMap.setMyLocationEnabled(true);
 
+        // Set Map Type to Terrain
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                Location location = mMap.getMyLocation();
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+            }
+        });
+
         // Add a marker in Montreal and LaPrairie and move the camera
-        LatLng montreal = new LatLng(45.5017, -73.5673);
+        /*LatLng montreal = new LatLng(45.5017, -73.5673);
         LatLng laprairie = new LatLng(45.4167, -73.5);
         mMap.addMarker(new MarkerOptions().position(montreal).title("Montreal"));
         mMap.addMarker(new MarkerOptions().position(laprairie).title("LaPrairie"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(montreal));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
 
         // Add Polyline between Montreal and LaPrairie
         PolylineOptions polylineOptions = new PolylineOptions()
                 .add(montreal)
                 .add(laprairie);
 
-        Polyline polyline = mMap.addPolyline(polylineOptions);
+        Polyline polyline = mMap.addPolyline(polylineOptions);*/
 
     }
 

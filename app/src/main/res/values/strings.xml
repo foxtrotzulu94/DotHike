@@ -6,7 +6,9 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="buttonTextStartHike">Start Hike</string>
     <string name="buttonTextEndHike">End Hike</string>
+    <string name="buttonTextEnvCond">Env Cond</string>
     <string name="title_activity_results">ResultsActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="buttonTextResultsDone">Done</string>
+    <string name="title_activity_env_cond">EnvCondActivity</string>
 </resources>
