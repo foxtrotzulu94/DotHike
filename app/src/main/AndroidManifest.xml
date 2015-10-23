@@ -24,17 +24,9 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".IntroActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/maps_activity_name" >
+            android:name=".MainHikeActivity"
+            android:label="@string/maps_activity_name"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="me.dotteam.dotprod.MapsActivity" />
 
@@ -43,7 +35,18 @@
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home" >
+            android:label="@string/app_name"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ResultsActivity"
+            android:label="@string/title_activity_results"
+            android:noHistory="true">
         </activity>
     </application>
 

@@ -1,8 +1,12 @@
 <resources>
-    <string name="app_name">DotProd</string>
+    <string name="app_name">.Hike</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="maps_activity_name">Maps</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="buttonTextStartHike">Start Hike</string>
+    <string name="buttonTextEndHike">End Hike</string>
+    <string name="title_activity_results">ResultsActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="buttonTextResultsDone">Done</string>
 </resources>

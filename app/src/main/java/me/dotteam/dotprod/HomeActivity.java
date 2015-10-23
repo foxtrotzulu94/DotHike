@@ -1,16 +1,32 @@
 package me.dotteam.dotprod;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class HomeActivity extends AppCompatActivity {
+
+   private Button buttonStartHike;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        buttonStartHike = (Button) findViewById(R.id.buttonStartHike);
+
+        buttonStartHike.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intentMainHike = new Intent(HomeActivity.this, MainHikeActivity.class);
+                startActivity(intentMainHike);
+            }
+        });
+
     }
 
     @Override

@@ -8,31 +8,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class IntroActivity extends AppCompatActivity {
-
-    Button mapsButton;
+public class ResultsActivity extends AppCompatActivity {
+    private Button buttonResultsDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intro);
+        setContentView(R.layout.activity_results);
+        buttonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
 
-        mapsButton = (Button) findViewById(R.id.mapsButton);
-
-        mapsButton.setOnClickListener(new View.OnClickListener() {
+        buttonResultsDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mapsIntent = new Intent(IntroActivity.this, MapsActivity.class);
-                startActivity(mapsIntent);
+                Intent intentHome = new Intent(ResultsActivity.this, HomeActivity.class);
+                startActivity(intentHome);
+
             }
         });
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_intro, menu);
+        getMenuInflater().inflate(R.menu.menu_results, menu);
         return true;
     }
 
