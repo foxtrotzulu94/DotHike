@@ -85,9 +85,11 @@ public class MainHikeActivity extends FragmentActivity implements OnMapReadyCall
             @Override
             public void onMapLoaded() {
                 Location location = mMap.getMyLocation();
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                if (location != null) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                }
             }
         });
 
