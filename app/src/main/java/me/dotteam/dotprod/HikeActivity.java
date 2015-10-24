@@ -14,14 +14,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
-public class MainHikeActivity extends FragmentActivity implements OnMapReadyCallback {
+public class HikeActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private String TAG = "MainHikeActivity";
+    private String TAG = "HikeActivity";
     private Button buttonEndHike;
     private Button buttonEnvCond;
 
@@ -29,7 +26,7 @@ public class MainHikeActivity extends FragmentActivity implements OnMapReadyCall
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate() Called");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mainhike);
+        setContentView(R.layout.activity_hike);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -41,14 +38,14 @@ public class MainHikeActivity extends FragmentActivity implements OnMapReadyCall
         buttonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentResults = new Intent(MainHikeActivity.this, ResultsActivity.class);
+                Intent intentResults = new Intent(HikeActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
             }
         });
         buttonEnvCond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentEnvCond = new Intent(MainHikeActivity.this, EnvCondActivity.class);
+                Intent intentEnvCond = new Intent(HikeActivity.this, EnvCondActivity.class);
                 startActivity(intentEnvCond);
             }
         });

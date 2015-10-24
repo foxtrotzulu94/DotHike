@@ -22,7 +22,7 @@ public class HomeActivity extends AppCompatActivity {
         buttonStartHike.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intentMainHike = new Intent(HomeActivity.this, MainHikeActivity.class);
+                Intent intentMainHike = new Intent(HomeActivity.this, HikeActivity.class);
                 startActivity(intentMainHike);
             }
         });

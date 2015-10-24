@@ -24,7 +24,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MainHikeActivity"
+            android:name=".HikeActivity"
             android:label="@string/maps_activity_name"
             android:noHistory="true" >
             <intent-filter>
