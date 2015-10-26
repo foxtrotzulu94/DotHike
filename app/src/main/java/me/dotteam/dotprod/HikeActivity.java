@@ -124,7 +124,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(MainHikeActivity.this, "Current location could not be found", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(HikeActivity.this, "Current location could not be found", Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
