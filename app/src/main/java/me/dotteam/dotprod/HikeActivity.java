@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,10 +22,11 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     private String TAG = "HikeActivity";
     private Button buttonEndHike;
     private Button buttonEnvCond;
+    private boolean mGotLocation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i(TAG, "onCreate() Called");
+        Log.d(TAG, "onCreate() Called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hike);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -63,7 +65,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.i(TAG, "onMapReady() Called");
+        Log.d(TAG, "onMapReady() Called");
         mMap = googleMap;
 
         // Set Maps Settings
@@ -81,10 +83,55 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
-                Location location = mMap.getMyLocation();
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                // Attempt to find and zoom to current location
+                mapZoomCameraToCurrentLocation();
+
+                // If finding current location failed, start a thread to retry
+                if (!mGotLocation) {
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(TAG, "Entered find current location thread");
+                            int counter = 0;
+                            // This will attempt to find location numberOfAttempts times
+                            int numberofAttempts = 5; //Number of attempts
+                            int waitBetweenAttempts = 1000; // how long to wait between attempts in milliseconds
+                            while (counter < numberofAttempts) {
+                                try {
+                                    Thread.sleep(waitBetweenAttempts);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                // Attempt to find current location
+                                mapZoomCameraToCurrentLocation();
+
+                                // If attempt was successful, break out of while loop to exit thread
+                                if (mGotLocation) {
+                                    Log.d(TAG, "Current location found");
+                                    break;
+                                }
+                                // If attempt failed, increment counter
+                                else {
+                                    counter++;
+                                }
+                            }
+
+                            // If the counter is equal numberOfAttempts, give up
+                            if (counter == numberofAttempts) {
+                                Log.e(TAG, "Current location could not be found");
+
+                                // Show a Toast to inform user
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainHikeActivity.this, "Current location could not be found", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    t.start();
+                }
             }
         });
 
@@ -104,5 +151,18 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
+    private void mapZoomCameraToCurrentLocation() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final Location location = mMap.getMyLocation();
+                if (location != null){
+                    final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                    mGotLocation = true;
+                }
+            }
+        });
+    }
 }
