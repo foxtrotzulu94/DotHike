@@ -33,21 +33,23 @@
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/buttonTextEnvCond"
             android:id="@+id/buttonEnvCond"
             android:layout_above="@+id/buttonEndHike"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_weight="0.5" />
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="@string/buttonTextEndHike"
             android:id="@+id/buttonEndHike"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_alignEnd="@+id/map"
-            android:background="#C23A22" />
+            android:background="#C23A22"
+            android:layout_weight="0.85" />
     </LinearLayout>
 
 </LinearLayout>
