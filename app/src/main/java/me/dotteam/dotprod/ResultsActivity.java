@@ -9,15 +9,15 @@ import android.view.View;
 import android.widget.Button;
 
 public class ResultsActivity extends AppCompatActivity {
-    private Button buttonResultsDone;
+    private Button mButtonResultsDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-        buttonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
+        mButtonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
 
-        buttonResultsDone.setOnClickListener(new View.OnClickListener() {
+        mButtonResultsDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentHome = new Intent(ResultsActivity.this, HomeActivity.class);

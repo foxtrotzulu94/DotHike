@@ -9,14 +9,14 @@ import android.view.View;
 import android.widget.Button;
 
 public class EnvCondActivity extends AppCompatActivity {
-    private Button buttonBackToMainHike;
+    private Button mButtonBackToMainHike;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_env_cond);
-        buttonBackToMainHike = (Button) findViewById(R.id.buttonBack);
+        mButtonBackToMainHike = (Button) findViewById(R.id.buttonBack);
 
-        buttonBackToMainHike.setOnClickListener(new View.OnClickListener() {
+        mButtonBackToMainHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentMainHike = new Intent(EnvCondActivity.this, HikeActivity.class);

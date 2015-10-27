@@ -20,8 +20,8 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private String TAG = "HikeActivity";
-    private Button buttonEndHike;
-    private Button buttonEnvCond;
+    private Button mButtonEndHike;
+    private Button mButtonEnvCond;
     private boolean mGotLocation = false;
 
     @Override
@@ -34,17 +34,17 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        buttonEndHike = (Button) findViewById(R.id.buttonEndHike);
-        buttonEnvCond = (Button) findViewById(R.id.buttonEnvCond);
+        mButtonEndHike = (Button) findViewById(R.id.buttonEndHike);
+        mButtonEnvCond = (Button) findViewById(R.id.buttonEnvCond);
 
-        buttonEndHike.setOnClickListener(new View.OnClickListener() {
+        mButtonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentResults = new Intent(HikeActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
             }
         });
-        buttonEnvCond.setOnClickListener(new View.OnClickListener() {
+        mButtonEnvCond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentEnvCond = new Intent(HikeActivity.this, EnvCondActivity.class);
