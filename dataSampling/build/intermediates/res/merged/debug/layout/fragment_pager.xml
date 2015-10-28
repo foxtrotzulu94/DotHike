@@ -1,6 +1,0 @@
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-<!-- From: file:/media/DMZ/Personal/Projects/COEN390/DataSampling/sensorTagLib/src/main/res/layout/fragment_pager.xml --><!-- From: file:/media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/res/layout/fragment_pager.xml -->
