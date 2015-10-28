@@ -1,0 +1,45 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+    <style name="table_analyze">
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
+    </style>
+    <style name="abstract_cell">
+        <item name="android:paddingTop">@dimen/cell_padding_top</item>
+        <item name="android:paddingBottom">@dimen/cell_padding_bot</item>
+        <item name="android:textSize">@dimen/text_size</item>
+    </style>
+    <style name="title_cell" parent="@style/abstract_cell">
+        <item name="android:paddingLeft">@dimen/cell_padding_outer</item>
+        <item name="android:paddingRight">@dimen/cell_padding_inner</item>
+    </style>
+    <style name="header_cell" parent="@style/abstract_cell">
+        <item name="android:paddingLeft">@dimen/cell_padding_outer</item>
+        <item name="android:paddingRight">@dimen/cell_padding_outer</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="value_cell" parent="@style/abstract_cell">
+        <item name="android:paddingLeft">@dimen/cell_padding_inner</item>
+        <item name="android:paddingRight">@dimen/cell_padding_outer</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+</resources>

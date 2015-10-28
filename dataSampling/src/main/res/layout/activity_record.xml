@@ -1,0 +1,122 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ca.concordia.sensortag.minimal.MainActivity$PlaceholderFragment" >
+
+    <TextView
+        android:id="@+id/textDuration"
+        android:labelFor="@+id/inputTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/inputTime"
+        android:layout_alignBottom="@+id/inputTime"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/inputTime"
+        android:text="@string/act_samp_form_time_limit"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/inputTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:ems="8"
+        android:inputType="time" >
+
+        <requestFocus />
+    </EditText>
+
+    <CheckBox
+        android:id="@+id/checkboxForever"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/inputTime"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:text="@string/act_samp_form_forever" />
+
+    <TextView
+        android:id="@+id/textOr"
+        android:labelFor="@+id/inputSamples"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkboxForever"
+        android:layout_centerHorizontal="true"
+        android:text="@string/act_samp_or"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/inputSamples"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textOr"
+        android:ems="8"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textSamples"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/inputSamples"
+        android:layout_alignBottom="@+id/inputSamples"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/inputSamples"
+        android:text="@string/act_samp_form_samples"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <CheckBox
+        android:id="@+id/checkboxInfiniteSamples"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/inputSamples"
+        android:button="@null"
+        android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:text="@string/act_samp_form_infinite_samples" />
+
+    <Button
+        android:id="@+id/buttonRecordPause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/checkboxInfiniteSamples"
+        android:drawableLeft="@drawable/ic_media_play"
+        android:text="@string/act_samp_button_record" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/buttonRecordPause"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/buttonReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:drawableLeft="@drawable/ic_menu_revert"
+            android:text="@string/act_samp_button_reset" />
+
+        <Button
+            android:id="@+id/buttonAnalyze"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:drawableLeft="@drawable/ic_menu_view"
+            android:text="@string/act_samp_button_analyse" />
+    </LinearLayout>
+
+</RelativeLayout>

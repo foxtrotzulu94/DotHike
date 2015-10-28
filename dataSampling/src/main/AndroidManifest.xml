@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file defines essential information for Android to know how to launch the application,
+what components (Activities, Services, etc.) that the application has, what it has to let the
+application do (permissions which the user has to accept when installing the application), etc.
+-->
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="ca.concordia.sensortag.datasample"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <!--
+    Tells Android what the minimum required API version for the application to run, and the
+    version the application was written for. Android will stop the user from installing an application
+    whose minSdkVersion is higher than the installed Android version.
+    
+    API levels correspond one-to-one to different Android versions. For more information, see
+    https://developer.android.com/guide/topics/manifest/uses-sdk-element.html#ApiLevels
+
+    In Android Studio "minSdkVersion value is not used; it is always overridden by the value
+    specified in the Gradle build script, so should be removed to avoid ambiguity."
+
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="19" />
+
+    -->
+
+    <!--
+    Needed to give permission to the application to access Bluetooth:
+    the BLUETOOTH permission allows the application to establish connections and transfer data,
+    while BLUETOOTH_ADMIN allows the application to manipulate Bluetooth settings (e.g. turning
+    Bluetooth on) and initiating device discovery.
+    -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <!--
+    The SensorTag uses a feature called "Bluetooth Low-Energy" or BLE, part of the Bluetooth
+    4.0 specification. We need this to do anything with the SensorTag.
+    -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.bluetooth.ble"
+        android:required="true" />
+
+    <!--
+    Contains all the details of the application, i.e. the components that exists (Activities,
+    Services, etc.) and how to treat each of them from the Android OS point of view.
+    -->
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/tible"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup, theme">
+
+        <!--
+        Service that handles all Bluetooth LE communications with the SensorTag. This comes
+        from the SensorTagLib and must be listed in the application's manifest to be available at
+        runtime.
+        -->
+        <service
+            android:name="ti.android.ble.common.BluetoothLeService"
+            android:enabled="true" />
+        
+        <!--
+        Service that handles recording and storing data. A Service is used in order to ensure that
+        the user can close the app, or navigate to another app, and the recording will continue
+        running.
+        -->
+        <service
+            android:name="ca.concordia.sensortag.datasample.RecordService"
+            android:enabled="true" />
+
+        <!--
+        Activity that is listed in Android's Applications drawer. You can have
+        multiple Activities defined like this, which will make multiple icons in Android's
+        Application drawer.
+        -->
+        <activity
+            android:name="ca.concordia.sensortag.datasample.DeviceSelectActivity"
+            android:label="Step Counter"
+            android:screenOrientation="portrait" >
+
+            <!--
+            The Intent Filter tells Android which "signals" from other applications can call
+            your application. For example, Gmail would want to get a signal when the user clicks an
+            email message, so that Gmail can open a New Message window. In this case, we only care
+            about the user clicking the application on the Home Screen or Application drawer.
+            -->
+            <intent-filter>
+
+                <!-- Allows this Activity to launch when the application is launched. -->
+                <action android:name="android.intent.action.MAIN" />
+                <!-- Show this Activity's icon in the Launcher (Home Screen/Application drawer). -->
+                <category android:name="android.intent.category.LAUNCHER" />
+                <!--
+                     If we have more than two activities with MAIN action intent-filter,
+                     this category defines which one is the default one to start with the app.
+                     This is useful when we also want more than one Launcher icon.
+                -->
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--
+        This activity reads the recorded data so far, analyses it, and shows the analysed data on-
+        screen.
+        -->
+        <activity
+            android:name="ca.concordia.sensortag.datasample.AnalyzeActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+        <!--
+        This is the "main" activity for setting up the Data Sampling application. This is only
+        launched by the DeviceSelectActivity, so we don't have any special properties to give it
+        here, other than to force portrait mode (simply because we haven't created a landscape
+        layout or put code to avoid re-doing SensorTag initialisation when you change from portrait
+        to landscape, which destroys and recreates the activity).
+        -->
+        <activity
+            android:name="ca.concordia.sensortag.datasample.RecordActivity"
+            android:parentActivityName="ca.concordia.sensortag.datasample.DeviceSelectActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+        
+        <activity
+            android:name="ca.concordia.sensortag.datasample.TestActivity"
+            android:label="Step Counter Test App"
+            android:screenOrientation="portrait" >+
+
+           <!--
+           <intent-filter>
+                &lt;!&ndash; Allows this Activity to launch when the application is launched. &ndash;&gt;
+                &lt;!&ndash;action android:name="android.intent.action.MAIN" /&ndash;&gt;
+                &lt;!&ndash; Show this Activity's icon in the Launcher (Home Screen/Application drawer). &ndash;&gt;
+                &lt;!&ndash;category android:name="android.intent.category.LAUNCHER" /&ndash;&gt;
+            </intent-filter>
+            -->
+
+        </activity>
+    </application>
+
+</manifest>

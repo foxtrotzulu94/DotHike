@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Data Sampler - Step Counter</string>
+    
+    <string name="act_samp_form_time_limit">Duration (s)</string>
+    <string name="act_samp_form_forever">Forever</string>
+    <string name="act_samp_or">OR</string>
+    <string name="act_samp_form_samples">Samples</string>
+    <string name="act_samp_form_infinite_samples">Infinite</string>
+    <string name="act_samp_button_record">Record</string>
+    <string name="act_samp_button_record_complete">Record Complete</string>
+    <string name="act_samp_button_resume">Resume</string>
+    <string name="act_samp_button_pause">Pause</string>
+    <string name="act_samp_button_reset">Reset</string>
+    <string name="act_samp_button_analyse">Analyse</string>
+    
+    <string name="id_notif_svc_record">ca.concordia.datasample.notif_svc_record</string>
+    <string name="notif_service">Step Counter</string>
+    <string name="notif_service_stopped">Stopped</string>
+    <string name="notif_service_record">Running</string>
+    <string name="notif_service_pause">Paused</string>
+    <string name="notif_service_finished">Done</string>
+    <string name="notif_service_label_elapsed">Time Elapsed:</string>
+    <string name="notif_service_label_samples">Steps:</string>
+    
+    <string name="act_anal_time">Total time</string>
+    <string name="act_anal_events">Steps taken</string>
+    <string name="act_anal_freq">Steps per minute</string>
+    <string name="act_anal_average">Average</string>
+    <string name="act_anal_rmsvar">RMS of variation</string>
+    <string name="act_anal_min">Minimum</string>
+    <string name="act_anal_max">Maximum</string>
+</resources>

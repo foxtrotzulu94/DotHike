@@ -1,0 +1,130 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:7:1-151:12
+	xmlns:tools
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:9:5-51
+	xmlns:android
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:8:5-63
+	package
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:10:5-48
+		INJECTED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml
+		INJECTED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml
+	android:versionName
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:12:5-30
+	android:versionCode
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:11:5-28
+		INJECTED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml
+		INJECTED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml
+uses-permission#android.permission.BLUETOOTH
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:37:5-68
+MERGED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:11:5-68
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:37:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:38:5-74
+MERGED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:12:5-74
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:38:22-71
+uses-feature#android.hardware.bluetooth_le
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:44:5-46:35
+MERGED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:14:5-16:35
+	android:required
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:46:9-32
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:45:9-53
+uses-feature#android.hardware.bluetooth.ble
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:47:5-49:35
+MERGED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:17:5-19:35
+	android:required
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:49:9-32
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:48:9-54
+application
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:55:5-149:19
+MERGED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:21:5-44:19
+	android:label
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:58:9-41
+	android:allowBackup
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:56:9-35
+		REJECTED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:22:9-36
+	android:icon
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:57:9-39
+	android:theme
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:59:9-40
+		REJECTED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:25:9-56
+	tools:replace
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:60:9-51
+service#ti.android.ble.common.BluetoothLeService
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:67:9-69:38
+MERGED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:26:9-28:38
+	android:enabled
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:69:13-35
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:68:13-68
+service#ca.concordia.sensortag.datasample.RecordService
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:76:9-78:38
+	android:enabled
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:78:13-35
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:77:13-75
+activity#ca.concordia.sensortag.datasample.DeviceSelectActivity
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:85:9-109:20
+	android:screenOrientation
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:88:13-49
+	android:label
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:87:13-41
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:86:13-82
+intent-filter#android.intent.action.MAIN+android.intent.category.DEFAULT+android.intent.category.LAUNCHER
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:96:13-108:29
+action#android.intent.action.MAIN
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:99:17-69
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:99:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:101:17-77
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:101:27-74
+category#android.intent.category.DEFAULT
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:107:17-76
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:107:27-73
+activity#ca.concordia.sensortag.datasample.AnalyzeActivity
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:115:9-118:20
+	android:screenOrientation
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:117:13-49
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:116:13-77
+activity#ca.concordia.sensortag.datasample.RecordActivity
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:127:9-131:20
+	android:screenOrientation
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:130:13-49
+	android:parentActivityName
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:129:13-96
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:128:13-76
+activity#ca.concordia.sensortag.datasample.TestActivity
+ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:134:9-148:20
+	android:screenOrientation
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:137:13-49
+	android:label
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:136:13-50
+	android:name
+		ADDED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml:135:13-74
+uses-sdk
+INJECTED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:7:5-9:41
+	android:targetSdkVersion
+		INJECTED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml
+		INJECTED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml
+		INJECTED from /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/src/main/AndroidManifest.xml
+activity#ca.concordia.sensortag.DeviceSelectActivity
+ADDED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:30:9-43:20
+	android:screenOrientation
+		ADDED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:33:13-49
+	android:label
+		ADDED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:32:13-45
+	android:name
+		ADDED from [DataSampling:sensorTagLib:unspecified] /media/DMZ/Personal/Projects/COEN390/DataSampling/dataSampling/build/intermediates/exploded-aar/DataSampling/sensorTagLib/unspecified/AndroidManifest.xml:31:13-71
