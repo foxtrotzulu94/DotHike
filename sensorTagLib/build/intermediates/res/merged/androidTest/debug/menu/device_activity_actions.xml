@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/opt_prefs"
+        android:title="@string/prefs"/>
+    
+    <item
+        android:id="@+id/opt_fwupdate"
+        android:title="@string/fwupdate"/>
+    <item
+        android:id="@+id/opt_about"
+        android:title="@string/about"/>
+
+</menu><!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/src/main/res/menu/device_activity_actions.xml --><!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/build/intermediates/bundles/debug/res/menu/device_activity_actions.xml -->
