@@ -84,7 +84,7 @@ public class TestActivity extends Activity {
 		mPrefs = getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE);
 		
 		Log.i(TAG, "LOAD");
-		mData = new RecordingData(mPrefs);
+		mData = new RecordingData(this, mPrefs);
 		logData();
 		
 		Log.i(TAG, "CLEAR");
@@ -92,7 +92,7 @@ public class TestActivity extends Activity {
 		logData();
 
 		Log.i(TAG, "SETUP BLANK");
-		mData = new RecordingData(mPrefs);
+		mData = new RecordingData(this, mPrefs);
 		mData.savePreferences();
 		logData();
 		
@@ -120,7 +120,7 @@ public class TestActivity extends Activity {
 		logData();
 		
 		Log.i(TAG, "RELOAD ALL THE THINGS");
-		mData = new RecordingData(mPrefs);
+		mData = new RecordingData(this, mPrefs);
 		logData();
 		
 		finish();

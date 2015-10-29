@@ -162,7 +162,7 @@ public class RecordService extends Service {
 
 		// Obtain the SharedPreferences for storing recording data and the RecordingData structure.
 		mPrefs = getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE);
-		mData = new RecordingData(mPrefs);
+		mData = new RecordingData(this, mPrefs);
 		
 		// Create the handler and runner that are responsible for updating the notification in the
 		// notif bar (it is set up in onStartCommand later)

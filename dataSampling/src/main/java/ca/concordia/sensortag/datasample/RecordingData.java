@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -41,6 +42,7 @@ public class RecordingData {
 	public static String PREF_ELAPSED = "ca.concordia.datasample.ElapsedTime";
 
 	SharedPreferences mPrefs;
+	PersistentStorageService mPersistentStorageService;
 
 	// Recording settings - reflected in sharedprefs
 	private long mRecDuration_ms = 0; // 0 = infinite
@@ -67,9 +69,10 @@ public class RecordingData {
 	 * @param prefs
 	 *            The SharedPreferences object to read from and write to.
 	 */
-	RecordingData(SharedPreferences prefs) {
+	RecordingData(Context context, SharedPreferences prefs) {
 		Log.i(TAG, "new RecordingData using " + prefs);
 		mPrefs = prefs;
+		mPersistentStorageService = new PersistentStorageService(context);
 		setNewRecording(0, 0); // to reset all variables
 		loadPreferences();
 	}
@@ -107,7 +110,7 @@ public class RecordingData {
 	synchronized public boolean savePreferences() {
 		Log.v(TAG, "savePreferences()");
 	//TODO: CHANGE THIS. HIJACK THE INTERFACE HERE AND HOOK UP THE DATABASE TO STORE
-		SharedPreferences.Editor editor = mPrefs.edit();
+		/*SharedPreferences.Editor editor = mPrefs.edit();
 
 		editor.putString(PREF_STATUS, mStatus.toString())
 				.putLong(PREF_REC_DURATION, mRecDuration_ms)
@@ -127,7 +130,11 @@ public class RecordingData {
 		boolean res = editor.commit();
 		if(!res) Log.e(TAG, "Failed to save data");
 		mChanges = 0;
-		return res;
+		return res;*/
+		DBData data = new DBData(mStatus, mRecDuration_ms, mRecSamples, mElapsed_ms, mEventTimestamps);
+		mPersistentStorageService.insertRecordedValues(data);
+		return true;
+
 	}
 
 	/**
@@ -138,7 +145,7 @@ public class RecordingData {
 	synchronized public void loadPreferences() {
 		Log.v(TAG, "loadPreferences()");
 	//TODO: CHANGE THIS. HIJACK THE INTERFACE HERE AND HOOK UP THE DATABASE TO LOAD THE DATA
-		mStatus = Status.valueOf(mPrefs.getString(PREF_STATUS, Status.NOT_STARTED.toString()));
+		/*mStatus = Status.valueOf(mPrefs.getString(PREF_STATUS, Status.NOT_STARTED.toString()));
 		mRecDuration_ms = mPrefs.getLong(PREF_REC_DURATION, 0);
 		mRecSamples = mPrefs.getInt(PREF_REC_SAMPLES, 0);
 		mElapsed_ms = mPrefs.getLong(PREF_ELAPSED, 0);
@@ -164,7 +171,20 @@ public class RecordingData {
 			mEventsChanged = false;
 		}
 		
-		mChanges = 0;
+		mChanges = 0;*/
+
+		DBData data = mPersistentStorageService.readRecordedValues();
+		if (data != null) {
+			mStatus = data.getStatus();
+			mRecDuration_ms = data.getRecDuration();
+			mRecSamples = data.getRecSamples();
+			mElapsed_ms = data.getElapsed();
+			if (mEventsChanged) {
+				mEventTimestamps = data.getEventTimestamps();
+				mEventsChanged = false;
+			}
+			mChanges = 0;
+		}
 	}
 
 	/**
