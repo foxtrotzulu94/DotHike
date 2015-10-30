@@ -9,4 +9,4 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent" />
 
-</RelativeLayout><!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/src/main/res/layout/fragment_help.xml --><!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/build/intermediates/bundles/debug/res/layout/fragment_help.xml -->
+</RelativeLayout><!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/src/main/res/layout/fragment_help.xml --><!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/build/intermediates/bundles/debug/res/layout/fragment_help.xml -->

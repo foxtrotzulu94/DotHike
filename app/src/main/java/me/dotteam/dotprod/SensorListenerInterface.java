@@ -10,6 +10,6 @@ public interface SensorListenerInterface {
         TEMPERATURE, HUMIDITY, PRESSURE, PEDOMETER, MAGNETOMETER
     }
 
-    void update(HikeSensors hikesensors, float value);
+    void update(HikeSensors hikesensors, double value);
 
 }

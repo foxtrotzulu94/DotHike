@@ -93,4 +93,4 @@
     <item uuid="0xFFF4">Simple Profile Characteristic 4</item>
     <item uuid="0xFFF5">Simple Profile Characteristic 5</item>
   </profile>
-</gattuuid><!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/src/main/res/xml/gatt_uuid.xml -->
+</gattuuid><!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/src/main/res/xml/gatt_uuid.xml -->

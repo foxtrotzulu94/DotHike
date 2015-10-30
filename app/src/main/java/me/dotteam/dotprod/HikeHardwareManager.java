@@ -2,6 +2,7 @@ package me.dotteam.dotprod;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.util.Log;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import ti.android.util.Point3D;
  * Created by as on 2015-10-23.
  */
 public class HikeHardwareManager {
+    private String TAG = "HHM";
     private SensorTagManager mSensorTagManager;
     private SensorTagManagerListener mSensorTagManagerListener;
     List<SensorListenerInterface> mSensorListenerList;
@@ -28,14 +30,34 @@ public class HikeHardwareManager {
         mSensorListenerList = new ArrayList<SensorListenerInterface>();
 
         mSensorTagManager.addListener(mSensorTagManagerListener);
+
+        mSensorTagManager.initServices();
+        if (!mSensorTagManager.isServicesReady()) {
+            // if initServices failed or took too long, log an error (in LogCat) and exit
+            Log.e(TAG, "Discover failed - exiting");
+            return;
+        }
+
         mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE);
         mSensorTagManager.enableSensor(Sensor.HUMIDITY);
         mSensorTagManager.enableSensor(Sensor.BAROMETER);
+
+        mSensorTagManager.enableUpdates();
+
     }
 
 
-    private void addListener(SensorListenerInterface sensorListenerInterface){
+    void addListener(SensorListenerInterface sensorListenerInterface){
+        Log.d(TAG, "Adding Listener");
         mSensorListenerList.add(sensorListenerInterface);
+    }
+
+    void enableSensorTag() {
+        mSensorTagManager.enableUpdates();;
+    }
+
+    void disableSensorTag() {
+        mSensorTagManager.disableUpdates();
     }
 
 
@@ -55,6 +77,11 @@ public class HikeHardwareManager {
             // run: in this case, it logs the value of the temperature measurement ("temp") to the
             // Android LogCat for debugging purposes.
             super.onUpdateAmbientTemperature(mgr, temp);
+
+            Log.d(TAG, "onUpdateTemperature Called");
+            for (int i = 0; i < mSensorListenerList.size(); i++) {
+                mSensorListenerList.get(i).update(SensorListenerInterface.HikeSensors.TEMPERATURE, temp);
+            }
 
         }
 
@@ -96,12 +123,15 @@ public class HikeHardwareManager {
         public void onUpdateBarometer(SensorTagManager mgr, double pressure, double height) {
             super.onUpdateBarometer(mgr, pressure, height);
 
-
 			/*
 			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			 * CHANGE ME: See explanation in javadoc above
 			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			 */
+
+            for (int i = 0; i < mSensorListenerList.size(); i++) {
+                mSensorListenerList.get(i).update(SensorListenerInterface.HikeSensors.PRESSURE, pressure);
+            }
         }
 
         /**
@@ -131,6 +161,9 @@ public class HikeHardwareManager {
         public void onUpdateHumidity(SensorTagManager mgr, double rh) {
             super.onUpdateHumidity(mgr, rh);
 
+            for (int i = 0; i < mSensorListenerList.size(); i++) {
+                mSensorListenerList.get(i).update(SensorListenerInterface.HikeSensors.HUMIDITY, rh);
+            }
         }
 
         /**

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/src/main/res/values/strings.xml -->
+    <!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string-array name="device_filter"><item>SensorTag</item></string-array>
     <string name="about">About</string>
@@ -56,7 +56,7 @@
     <string name="unitRH">%rH\n</string>
     <string name="unitT3">uT\nuT\nuT\n</string>
     <string name="xyz3">x:\ny:\nz:\n</string>
-    <!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/src/main/res/values/styles.xml -->
+    <!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--

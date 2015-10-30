@@ -2,4 +2,4 @@
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:keyWidth="10%p"
     android:keyHeight="10%p">
-</Keyboard><!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/src/main/res/xml/popup.xml --><!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/build/intermediates/bundles/debug/res/xml/popup.xml -->
+</Keyboard><!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/src/main/res/xml/popup.xml --><!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/build/intermediates/bundles/debug/res/xml/popup.xml -->

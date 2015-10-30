@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/build/intermediates/bundles/debug/res/values/values.xml -->
+    <!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/build/intermediates/bundles/debug/res/values/values.xml -->
     <eat-comment/>
     <string-array name="device_filter"><item>SensorTag</item></string-array>
     <string name="about">About</string>

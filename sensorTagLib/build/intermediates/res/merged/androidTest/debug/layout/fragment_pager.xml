@@ -3,4 +3,4 @@
     android:id="@+id/pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
-<!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/src/main/res/layout/fragment_pager.xml --><!-- From: file:/C:/Users/am/AndroidStudioProjects/DotProd/sensorTagLib/build/intermediates/bundles/debug/res/layout/fragment_pager.xml -->
+<!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/src/main/res/layout/fragment_pager.xml --><!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/build/intermediates/bundles/debug/res/layout/fragment_pager.xml -->

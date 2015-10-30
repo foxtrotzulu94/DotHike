@@ -9,7 +9,7 @@ public class TestSensorListener implements SensorListenerInterface {
     String TAG = "SensorListener";
 
     @Override
-    public void update(HikeSensors hikesensors, float value) {
+    public void update(HikeSensors hikesensors, double value) {
         switch (hikesensors) {
             case TEMPERATURE: {
                 Log.d(TAG, "Temperature: " + String.valueOf(value));
