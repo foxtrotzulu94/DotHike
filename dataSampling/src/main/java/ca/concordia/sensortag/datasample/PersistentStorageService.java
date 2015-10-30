@@ -22,6 +22,7 @@ public class PersistentStorageService {
 
     public static final String DB_TABLE1_NAME="sample_set";
     public static final String TABLE1_COLUMN_NAME="timestamp";
+    public static final String TABLE1_COLUMN_ID="_id";
     public static final String DB_TABLE2_NAME="parameters";
     public static final String TABLE2_COLUMN1_NAME="status";
     public static final String TABLE2_COLUMN2_NAME="rec_duration";
@@ -63,34 +64,10 @@ public class PersistentStorageService {
     }
 
     public DBData readRecordedValues(){
-        // Check if there are any parameters
-        String query = "SELECT COUNT(*) FROM " + DB_TABLE1_NAME;
-        Log.d(TAG, query);
-        Cursor c = database.rawQuery(query, null);
-
-        if (c != null) {
-            c.moveToFirst();
-        } else {
-            // Throw exception
-            return null;
-        }
-
-        int numParameters = c.getInt(0);
-
-        Log.d(TAG, String.valueOf(numParameters));
-
-        if (numParameters == 0) {
-            return null;
-        }
-
         // Get parameters
-        query = "SELECT * FROM " + DB_TABLE2_NAME;
+        Cursor c = database.query(DB_TABLE2_NAME, null, null, null, null, null, null);
 
-        Log.d(TAG, query);
-
-        c = database.rawQuery(query, null);
-
-        if (c != null) {
+        if (c != null && c.getCount() != 0) {
             c.moveToFirst();
         } else {
             // Throw exception
@@ -104,24 +81,8 @@ public class PersistentStorageService {
         outData.setRecSamples(c.getInt(c.getColumnIndex(TABLE2_COLUMN3_NAME)));
         outData.setElapsed(c.getLong(c.getColumnIndex(TABLE2_COLUMN4_NAME)));
 
-        // Get number of recorded values
-        query = "SELECT COUNT(*) FROM " + DB_TABLE1_NAME;
-        Log.d(TAG, query);
-        c = database.rawQuery(query, null);
-
-        if (c != null) {
-            c.moveToFirst();
-        } else {
-            // Throw exception
-            return null;
-        }
-
-        int numValues = c.getInt(0);
-
         // Get recorded values
-        query = "SELECT * FROM " + DB_TABLE1_NAME;
-        Log.d(TAG, query);
-        c = database.rawQuery(query, null);
+        c = database.query(DB_TABLE1_NAME, null, null, null, null, null, TABLE1_COLUMN_ID);
 
         if (c != null) {
             c.moveToFirst();
@@ -129,6 +90,8 @@ public class PersistentStorageService {
             // Throw exception
             return null;
         }
+
+        int numValues = c.getCount();
 
         List<Long> recordedValues = new ArrayList<Long>();
 

@@ -133,7 +133,6 @@ public class RecordService extends Service {
 	private String mStatusMessage = null;
 
 	private String mAppName = null;
-	private SharedPreferences mPrefs = null;
 	private RecordingData mData = null;
 	
 	private NotificationManager mNotificationManager;
@@ -160,9 +159,8 @@ public class RecordService extends Service {
 		mErrorSensorTag = null;
 		mAppName = getString(R.string.app_name);
 
-		// Obtain the SharedPreferences for storing recording data and the RecordingData structure.
-		mPrefs = getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE);
-		mData = new RecordingData(this, mPrefs);
+		// Obtain the RecordingData structure.
+		mData = new RecordingData(this);
 		
 		// Create the handler and runner that are responsible for updating the notification in the
 		// notif bar (it is set up in onStartCommand later)

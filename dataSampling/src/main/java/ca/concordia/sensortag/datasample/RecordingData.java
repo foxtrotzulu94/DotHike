@@ -33,15 +33,6 @@ public class RecordingData {
 	public static String TAG = "RecordingData";
 	public static int DEFAULT_SAMPLES_SIZE = 512;
 
-	// SharedPreferences keys
-	public static String PREF_STATUS = "ca.concordia.datasample.Status";
-	public static String PREF_REC_DURATION = "ca.concordia.datasample.RecDuration";
-	public static String PREF_REC_SAMPLES = "ca.concordia.datasample.RecSamples";
-	public static String PREF_DATA_DATA = "ca.concordia.datasample.Data";
-	public static String PREF_DATA_SAMPLES = "ca.concordia.datasample.NumSamples";
-	public static String PREF_ELAPSED = "ca.concordia.datasample.ElapsedTime";
-
-	SharedPreferences mPrefs;
 	PersistentStorageService mPersistentStorageService;
 
 	// Recording settings - reflected in sharedprefs
@@ -66,12 +57,10 @@ public class RecordingData {
 	 * Instantiate the RecordingData container and immediately load data from the passed
 	 * SharedPreferences.
 	 * 
-	 * @param prefs
-	 *            The SharedPreferences object to read from and write to.
+	 * @param
 	 */
-	RecordingData(Context context, SharedPreferences prefs) {
-		Log.i(TAG, "new RecordingData using " + prefs);
-		mPrefs = prefs;
+	RecordingData(Context context) {
+		Log.i(TAG, "new RecordingData using sqlite");
 		mPersistentStorageService = new PersistentStorageService(context);
 		setNewRecording(0, 0); // to reset all variables
 		loadPreferences();
@@ -110,31 +99,9 @@ public class RecordingData {
 	synchronized public boolean savePreferences() {
 		Log.v(TAG, "savePreferences()");
 	//TODO: CHANGE THIS. HIJACK THE INTERFACE HERE AND HOOK UP THE DATABASE TO STORE
-		/*SharedPreferences.Editor editor = mPrefs.edit();
-
-		editor.putString(PREF_STATUS, mStatus.toString())
-				.putLong(PREF_REC_DURATION, mRecDuration_ms)
-				.putInt(PREF_REC_SAMPLES, mRecSamples)
-				.putLong(PREF_ELAPSED, mElapsed_ms);
-		
-		if(mEventsChanged) {
-			Log.d(TAG, "Events changed; saving new events list");
-			String serializedData = "";
-			for (Long timestamp : mEventTimestamps) {
-				serializedData += Long.toHexString(timestamp) + " ";
-			}
-			editor.putString(PREF_DATA_DATA, serializedData);
-			mEventsChanged = false;
-		}
-		
-		boolean res = editor.commit();
-		if(!res) Log.e(TAG, "Failed to save data");
-		mChanges = 0;
-		return res;*/
 		DBData data = new DBData(mStatus, mRecDuration_ms, mRecSamples, mElapsed_ms, mEventTimestamps);
 		mPersistentStorageService.insertRecordedValues(data);
 		return true;
-
 	}
 
 	/**
@@ -145,33 +112,6 @@ public class RecordingData {
 	synchronized public void loadPreferences() {
 		Log.v(TAG, "loadPreferences()");
 	//TODO: CHANGE THIS. HIJACK THE INTERFACE HERE AND HOOK UP THE DATABASE TO LOAD THE DATA
-		/*mStatus = Status.valueOf(mPrefs.getString(PREF_STATUS, Status.NOT_STARTED.toString()));
-		mRecDuration_ms = mPrefs.getLong(PREF_REC_DURATION, 0);
-		mRecSamples = mPrefs.getInt(PREF_REC_SAMPLES, 0);
-		mElapsed_ms = mPrefs.getLong(PREF_ELAPSED, 0);
-		String serializedData = mPrefs.getString(PREF_DATA_DATA, "");
-
-		if(mEventsChanged) {
-			Log.d(TAG, "Events changed; reloading events list from preferences");
-			
-			String[] splitData = serializedData.split(" ");
-			mEventTimestamps = new ArrayList<Long>(mRecSamples != 0 ? mRecSamples
-					: DEFAULT_SAMPLES_SIZE);
-
-			for (int i = 0; i < splitData.length; ++i) {
-				if(splitData[i].length() == 0) continue; // extra spaces can be ignored
-				try {
-					addEvent(Long.parseLong(splitData[i], 16));
-				}
-				catch (NumberFormatException e) {
-					Log.e(TAG, "loadPreferences: Value \"" + splitData[i] + "\" (index " + i
-							+ ") has invalid format; expected hexadecimal long");
-				}
-			}
-			mEventsChanged = false;
-		}
-		
-		mChanges = 0;*/
 
 		DBData data = mPersistentStorageService.readRecordedValues();
 		if (data != null) {
@@ -236,8 +176,7 @@ public class RecordingData {
 	/**
 	 * Set the total amount of time that has elapsed for the current recording session.
 	 * 
-	 * @param duration
-	 *            Amount of time elapsed during recording so far, in milliseconds.
+	 * @param
 	 */
 	synchronized public void setElapsedTime(long time) {
 		mElapsed_ms = time;
@@ -248,8 +187,7 @@ public class RecordingData {
 	 * Increase the amount of time that has elapsed for teh current recording session by a value.
 	 * This adds the passed value to the elapsed time stored.
 	 * 
-	 * @param duration
-	 *            Amount of time to add to the total elapsed time, in milliseconds.
+	 * @param
 	 */
 	synchronized public void addElapsedTime(long timeDelta) {
 		mElapsed_ms += timeDelta;
@@ -274,13 +212,6 @@ public class RecordingData {
 	synchronized public void setRecordMaxSamples(int samples) {
 		mRecSamples = (samples > 0) ? samples : 0;
 		++mChanges;
-	}
-
-	/**
-	 * @return The SharedPreferences being used to store the recording data.
-	 */
-	public SharedPreferences getSharedPreferences() {
-		return mPrefs;
 	}
 
 	/**
