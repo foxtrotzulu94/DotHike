@@ -1,6 +1,0 @@
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-<!-- From: file:/Users/EricTremblay/Documents/University/Fall%202015/ELEC390/DotProd/sensorTagLib/src/main/res/layout/fragment_pager.xml -->
