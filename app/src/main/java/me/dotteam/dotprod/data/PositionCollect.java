@@ -5,7 +5,8 @@ import com.google.android.gms.location.LocationListener;
 
 
 /**
- * 
+ * Listener implementation used by {@link SessionCollectionService} to subscribe to location updates
+ *
  */
 public class PositionCollect implements LocationListener {
 
@@ -15,9 +16,6 @@ public class PositionCollect implements LocationListener {
     public PositionCollect() {
     }
 
-    /**
-     *
-     */
     @Override
     public void onLocationChanged(Location location) {
         //TODO: Implement here

@@ -3,21 +3,21 @@ package me.dotteam.dotprod.data;
 import android.content.ContentValues;
 
 /**
- * 
+ * Data structure to represent the set of Environmental Data Statistics
  */
 public class EnvData {
     /**
-     * 
+     * Temperature Statistics Object
      */
     protected EnvStatistic temperature;
 
     /**
-     * 
+     * Humidity Statistics Object
      */
     protected EnvStatistic humidity;
 
     /**
-     * 
+     * Pressure Statistics Object
      */
     protected EnvStatistic pressure;
 
@@ -55,21 +55,24 @@ public class EnvData {
     }
 
     /**
-     * @return
+     * Method to obtain the Temperature Statistics ContentValues to be used for storage
+     * @return ContentValues object with correct key-value pairs
      */
     public ContentValues getSerializedTemp(int ID) {
         return temperature.toStorage(ID);
     }
 
     /**
-     * @return
+     * Method to obtain the Humidity Statistics ContentValues to be used for storage
+     * @return ContentValues object with correct key-value pairs
      */
     public ContentValues getSerializedHumidity(int ID) {
         return humidity.toStorage(ID);
     }
 
     /**
-     * @return
+     * Method to obtain the Pressure Statistics ContentValues to be used for storage
+     * @return ContentValues object with correct key-value pairs
      */
     public ContentValues getSerializedPressure(int ID) {
         return pressure.toStorage(ID);

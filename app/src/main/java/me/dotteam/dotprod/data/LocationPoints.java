@@ -5,13 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ * Data structure to represent a traversed set of locations
  */
 public class LocationPoints {
 
-    /**
-     * 
-     */
     protected List<Coordinates> points;
 
     /**

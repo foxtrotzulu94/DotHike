@@ -3,22 +3,22 @@ package me.dotteam.dotprod.data;
 import android.content.ContentValues;
 
 /**
- * 
+ * Data structure to represent a single Environmental Statistic
  */
 public class EnvStatistic {
 
     /**
-     * 
+     * Observed Minimum
      */
     protected float min=Float.POSITIVE_INFINITY;
 
     /**
-     * 
+     * Observed Average. Generally, the latest obtained value from external sensors
      */
     protected float avg=Float.NaN;
 
     /**
-     * 
+     * Observed Maximum
      */
     protected float max=0;
 
@@ -40,6 +40,10 @@ public class EnvStatistic {
         return min;
     }
 
+    /**
+     * Method to update the environmental statistic with a new value
+     * @param newSample latest observed value of the Environmental measure.
+     */
     public void insertSample(float newSample){
         //NOTE: Might want to replace this in the future...
         avg=newSample;
@@ -55,7 +59,8 @@ public class EnvStatistic {
 
 
     /**
-     * @return
+     * Method to obtain the object of the Environmental Statistic to be used for storage
+     * @return ContentValues object with correct key-value pairs
      */
     public ContentValues toStorage(int ID) {
         ContentValues retVal = new ContentValues();

@@ -8,54 +8,46 @@ import java.util.Random;
 
 
 /**
- * 
+ * Centralized, Singleton class for managing all Data collection, storage and review
  */
 public class HikeDataDirector {
-    /**
-     * 
-     */
-    private Context mCreateContext;
 
-    /**
-     * 
-     */
     private static HikeDataDirector mInstance;
-
-    /**
-     * 
-     */
+    private Context mCreateContext;
     private PersistentStorageEntity mPSE;
 
     /**
-     * 
+     * Reference to the SessionData object currently in memory
+     * This may correspond to a recently generated entity OR a loaded object from Persistent Storage
      */
     private SessionData mSessionData;
 
     /**
-     * 
+     * Reference to a lightweight service for background data collection
      */
     private SessionCollectionService mCollectionService;
 
     /**
-     * 
+     * Indicates if the SessionData object is from a Persistent Storage entry
      */
     private boolean mDataIsHistoric=false;
 
     /**
-     * 
+     * Indicates if there is an active SessionsCollectionService running
      */
     private boolean mIsCollectingData=false;
 
     private HikeDataDirector(Context currentContext){
         mCreateContext = currentContext;
-//        mPSE = new PersistentStorageEntity();
+//        mPSE = new PersistentStorageEntity(); //Defer creation of a persistent storage manager.
     }
 
 
 
     /**
-     * @param currentContext 
-     * @return
+     * Singleton method to obtain or generate current instance.
+     * @param currentContext Context from which the instance is being requested
+     * @return Singleton Object instance of the HikeDataDirector
      */
     public static HikeDataDirector getInstance(Context currentContext) {
         if(mInstance==null){
@@ -65,27 +57,29 @@ public class HikeDataDirector {
     }
 
     /**
-     * 
+     * Method to indicate that background collection must begin
      */
     public void beginCollectionService() {
         // TODO implement here (Spawn a SessionCollectionService entity)
     }
 
     /**
-     * 
+     * Method to signal the end of background collection and the need to present a SessionData object
      */
     public void endCollectionService() {
         // TODO implement here (Kill the SessionCollectionService entity)
     }
 
     /**
-     * @return
+     * Used to indicate that a generated SessionData object can be saved in Persistent Storage
+     * @return boolean indicating the success or failure of the operation
      */
     public boolean storeCollectedStatistics() {
         // TODO implement here
         return false;
     }
 
+    //TODO: Eventually remove
     public void testStorage(){
         Thread backgroundCheck = new Thread(){
             @Override
@@ -123,11 +117,22 @@ public class HikeDataDirector {
                     }
                 }
                 else{
-                    Log.e("HDD","SAVE WAS UNSUCCESSFUL IN TEST RUN!");
+                    Log.e("HDD", "SAVE WAS UNSUCCESSFUL IN TEST RUN!");
                 }
             }
         };
         backgroundCheck.start();
     }
 
+    public boolean isCollectingData() {
+        return mIsCollectingData;
+    }
+
+    public boolean isDataHistoric() {
+        return mDataIsHistoric;
+    }
+
+    public SessionData getSessionData(){
+        return mSessionData;
+    }
 }

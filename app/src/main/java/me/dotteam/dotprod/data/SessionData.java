@@ -3,28 +3,15 @@ package me.dotteam.dotprod.data;
 import android.content.ContentValues;
 
 /**
- * 
+ * Data structure for representing a completed hiking session.
  */
 public class SessionData {
 
-    /**
-     * 
-     */
     private Hike mHike;
-
-    /**
-     * 
-     */
     private EnvData mCurrentStats;
-
-    /**
-     * 
-     */
     private LocationPoints mGeoPoints;
 
-    /**
-     * 
-     */
+    //TODO: consider removing
     private boolean isHistoric;
 
     /**
@@ -42,6 +29,10 @@ public class SessionData {
         mGeoPoints=trackpoints;
     }
 
+    /**
+     * Protected call to {@link Hike}'s toStorage() function
+     * @return ContentValues object with correct Key (String) to Value pairings
+     */
     public ContentValues hikeToStorage(){
         return mHike.toStorage();
     }
@@ -68,5 +59,9 @@ public class SessionData {
 
     public boolean isFromDB() {
         return isFromDB;
+    }
+
+    public boolean setHikeID(int ID){
+        return mHike.setUniqueID(ID);
     }
 }

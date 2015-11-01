@@ -10,20 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ * Class to handle Persistent Storage of Data structures defined in the application
  */
 public class PersistentStorageEntity {
 
     private Context mCreateContext;
-
-    /**
-     * 
-     */
     private DBAssistant mProvider;
-
     private SQLiteDatabase mDB;
-
-    private int hikesInDatabase;
 
     /**
      * Default constructor
@@ -35,7 +28,9 @@ public class PersistentStorageEntity {
     }
 
     /**
-     * @return
+     * Method to retrieved the saved {@link Hike} objects. This should be called first before requesting to
+     * load any other object from persistent storage in order to guarantee a non-null instance is returned
+     * @return List of stored Hike Objects
      */
     public List<Hike> getHikesList() {
         List<Hike> allHikes = new ArrayList<>();
@@ -62,8 +57,9 @@ public class PersistentStorageEntity {
     }
 
     /**
-     * @param specificHike 
-     * @return
+     * Method to retrieve the entire {@link SessionData} object representation associated to a Hike object
+     * @param specificHike the HikeObject that defines the SessionData
+     * @return a SessionData object with the indicators that it was in the DB
      */
     public SessionData loadHikeData(Hike specificHike) {
         // TODO implement here
@@ -71,8 +67,10 @@ public class PersistentStorageEntity {
     }
 
     /**
-     * @param hikeID 
-     * @return
+     * Method to retrieve the entire {@link SessionData} object from an arbitrary hikeID
+     * The hikeID must be linked to an actual DB entry or it will return null
+     * @param hikeID The hike_id value used in the database
+     * @return a SessionData object with the indicators that it was in the DB, null otherwise.
      */
     public SessionData loadHikeData(int hikeID) {
         // TODO implement here
@@ -80,8 +78,9 @@ public class PersistentStorageEntity {
     }
 
     /**
-     * @param givenSession 
-     * @return
+     * Send a {@link SessionData} object to be stored in the database
+     * @param givenSession the SessionData object to be stored
+     * @return True if successfully stored, false otherwise
      */
     public boolean saveSession(SessionData givenSession) {
         mDB = mProvider.getWritableDatabase();
@@ -95,7 +94,7 @@ public class PersistentStorageEntity {
         Cursor cursor = mDB.query(DBAssistant.HIKE,null,null,
                 null,null,null,"id");
 
-        cursor.moveToFirst();
+        cursor.moveToLast();
         Log.w("","Statement returned "+cursor.getColumnCount()+" "+cursor.getCount());
         int assignedID = cursor.getInt(cursor.getColumnIndex("id"));
 
@@ -113,6 +112,10 @@ public class PersistentStorageEntity {
         return true;
     }
 
+    /**
+     * Request a complete deletion of any stored data
+     * WARNING: This entirely eliminates and recreates the database. ALL DATA IS LOST.
+     */
     public void reset(){
         mProvider.onUpgrade(mDB,-1,1);
     }
