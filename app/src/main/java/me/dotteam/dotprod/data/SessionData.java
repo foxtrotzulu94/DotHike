@@ -1,16 +1,11 @@
 package me.dotteam.dotprod.data;
-import java.util.*;
+
+import android.content.ContentValues;
 
 /**
  * 
  */
 public class SessionData {
-
-    /**
-     * Default constructor
-     */
-    public SessionData() {
-    }
 
     /**
      * 
@@ -38,7 +33,40 @@ public class SessionData {
     private boolean isFromDB;
 
 
+    /**
+     * Default constructor
+     */
+    public SessionData(Hike hikeSession, EnvData envData, LocationPoints trackpoints) {
+        mHike=hikeSession;
+        mCurrentStats = envData;
+        mGeoPoints=trackpoints;
+    }
 
+    public ContentValues hikeToStorage(){
+        return mHike.toStorage();
+    }
 
+    public long hikeStartTime(){
+        return mHike.startTime();
+    }
 
+    public long hikeEndTime(){
+        return mHike.endTime();
+    }
+
+    public EnvData getCurrentStats() {
+        return mCurrentStats;
+    }
+
+    public LocationPoints getGeoPoints() {
+        return mGeoPoints;
+    }
+
+    public boolean isHistoric() {
+        return isHistoric;
+    }
+
+    public boolean isFromDB() {
+        return isFromDB;
+    }
 }

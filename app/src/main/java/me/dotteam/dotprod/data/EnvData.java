@@ -25,7 +25,9 @@ public class EnvData {
      * Default constructor
      */
     public EnvData() {
-
+        temperature = new EnvStatistic();
+        humidity = new EnvStatistic();
+        pressure = new EnvStatistic();
     }
 
     public void updateTemp(float newSample){
@@ -55,22 +57,22 @@ public class EnvData {
     /**
      * @return
      */
-    public ContentValues getSerializedTemp() {
-        return temperature.toStorage();
+    public ContentValues getSerializedTemp(int ID) {
+        return temperature.toStorage(ID);
     }
 
     /**
      * @return
      */
-    public ContentValues getSerializedHumidity() {
-        return humidity.toStorage();
+    public ContentValues getSerializedHumidity(int ID) {
+        return humidity.toStorage(ID);
     }
 
     /**
      * @return
      */
-    public ContentValues getSerializedPressure() {
-        return pressure.toStorage();
+    public ContentValues getSerializedPressure(int ID) {
+        return pressure.toStorage(ID);
     }
 
 }

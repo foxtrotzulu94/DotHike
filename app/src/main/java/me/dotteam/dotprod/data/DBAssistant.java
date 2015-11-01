@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.*;
 
 /**
  * 
@@ -23,6 +22,10 @@ public class DBAssistant extends SQLiteOpenHelper {
      *
      */
     public static final String HIKE_ID="hike_id";
+
+    public static final String HIKE_START="startTime";
+
+    public static final String HIKE_END="endTime";
 
     /**
      * 
@@ -55,27 +58,24 @@ public class DBAssistant extends SQLiteOpenHelper {
     /**
      * 
      */
-    public static final String SCHEME_CREATE="PRAGMA foreign_keys = off;\n" +
-            "BEGIN TRANSACTION;\n" +
-            "\n" +
-            "CREATE TABLE "+ENVHUMD+" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+MIN_COL+" REAL NOT NULL, "+AVG_COL+" REAL NOT NULL, "+MAX_COL+" REAL NOT NULL)\n" +
-            "\n" +
-            "CREATE TABLE "+ENVTEMP+" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+MIN_COL+" REAL NOT NULL, "+AVG_COL+" REAL NOT NULL, "+MAX_COL+" REAL NOT NULL)\n" +
-            "\n" +
-            "CREATE TABLE "+COORDS+" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+LONG_COL+" REAL NOT NULL, "+LAT_COL+" REAL NOT NULL, "+ALT_COL+" REAL)\n" +
-            "\n" +
-            "CREATE TABLE "+HIKE+" (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, startTime TIME NOT NULL, endTime TIME NOT NULL)\n" +
-            "\n" +
-            "CREATE TABLE "+ENVPRES+" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+MIN_COL+" REAL NOT NULL, "+AVG_COL+" REAL NOT NULL, "+MAX_COL+" REAL NOT NULL)\n" +
-            "\n" +
-            "COMMIT TRANSACTION;\n" +
-            "PRAGMA foreign_keys = on;\n";
+    public static final String SCHEME_CREATE_HIKES_TABLE="CREATE TABLE "+HIKE+" (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "+HIKE_START+" INTEGER NOT NULL, "+HIKE_END+" INTEGER NOT NULL);";
+    public static final String SCHEME_CREATE_TEMPERATURE_TABLE="CREATE TABLE "+ENVTEMP+" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+MIN_COL+" REAL NOT NULL, "+AVG_COL+" REAL NOT NULL, "+MAX_COL+" REAL NOT NULL);";
+    public static final String SCHEME_CREATE_HUMIDITY_TABLE="CREATE TABLE "+ENVHUMD+" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+MIN_COL+" REAL NOT NULL, "+AVG_COL+" REAL NOT NULL, "+MAX_COL+" REAL NOT NULL); ";
+    public static final String SCHEME_CREATE_PRESSURE_TABLE="CREATE TABLE "+ENVPRES+" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+MIN_COL+" REAL NOT NULL, "+AVG_COL+" REAL NOT NULL, "+MAX_COL+" REAL NOT NULL); ";
+    public static final String SCHEME_CREATE_COORDS_TABLE="CREATE TABLE "+COORDS+" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+LONG_COL+" REAL NOT NULL, "+LAT_COL+" REAL NOT NULL, "+ALT_COL+" REAL); ";
+
+    public static final String[] SCHEME_CREATE = {
+            SCHEME_CREATE_HIKES_TABLE,
+            SCHEME_CREATE_COORDS_TABLE,
+            SCHEME_CREATE_TEMPERATURE_TABLE,
+            SCHEME_CREATE_HUMIDITY_TABLE,
+            SCHEME_CREATE_PRESSURE_TABLE
+    };
 
     /**
      * 
      */
-    public static final String SCHEME_DESTROY="PRAGMA foreign_keys = off;\n"+
-            "DROP TABLE IF EXIST "+HIKE+","+COORDS+","+ENVHUMD+","+ENVTEMP+","+ENVPRES;
+    public static final String SCHEME_DESTROY="DROP TABLE IF EXISTS ";
 
     /**
      * 
@@ -97,6 +97,10 @@ public class DBAssistant extends SQLiteOpenHelper {
      */
     public void onCreate(SQLiteDatabase sqlDB) {
         Log.d(LOG_ID,"Creating DB for First Time: "+DB_NAME+SCHEME_VERSION);
+        for (int i = 0; i < SCHEME_CREATE.length; i++) {
+            sqlDB.execSQL(SCHEME_CREATE[i]);
+        }
+        Log.d(LOG_ID,"Executed "+SCHEME_CREATE);
     }
 
     /**
@@ -105,8 +109,12 @@ public class DBAssistant extends SQLiteOpenHelper {
      * @param curr
      */
     public void onUpgrade(SQLiteDatabase sqlDB, int prev, int curr) {
-        Log.w(LOG_ID,String.format("Updating DB from version %s to %s. Will destroy previous",prev,curr));
-        sqlDB.execSQL(SCHEME_DESTROY);
+        Log.w(LOG_ID, String.format("Updating DB from version %s to %s. Will destroy previous", prev, curr));
+        sqlDB.execSQL(SCHEME_DESTROY+COORDS);
+        sqlDB.execSQL(SCHEME_DESTROY+ENVPRES);
+        sqlDB.execSQL(SCHEME_DESTROY+ENVTEMP);
+        sqlDB.execSQL(SCHEME_DESTROY+ENVHUMD);
+        sqlDB.execSQL(SCHEME_DESTROY + HIKE);
         onCreate(sqlDB);
     }
 

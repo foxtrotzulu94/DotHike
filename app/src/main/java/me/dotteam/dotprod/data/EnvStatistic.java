@@ -57,8 +57,9 @@ public class EnvStatistic {
     /**
      * @return
      */
-    public ContentValues toStorage() {
+    public ContentValues toStorage(int ID) {
         ContentValues retVal = new ContentValues();
+        retVal.put(DBAssistant.HIKE_ID,ID);
         retVal.put(DBAssistant.MIN_COL,this.min);
         retVal.put(DBAssistant.AVG_COL,this.avg);
         retVal.put(DBAssistant.MAX_COL,this.max);

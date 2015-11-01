@@ -1,16 +1,9 @@
 package me.dotteam.dotprod.data;
-import java.util.*;
 
 /**
  * 
  */
 public class SessionCollectionService {
-
-    /**
-     * Default constructor
-     */
-    public SessionCollectionService() {
-    }
 
     /**
      * 
@@ -38,10 +31,11 @@ public class SessionCollectionService {
     private Thread workerThread;
 
 
-
-
-
-
+    /**
+     * Default constructor
+     */
+    public SessionCollectionService() {
+    }
 
     /**
      * 

@@ -35,8 +35,9 @@ public class Coordinates {
     /**
      * @return
      */
-    public ContentValues toStorage() {
+    public ContentValues toStorage(int ID) {
         ContentValues retVal = new ContentValues();
+        retVal.put(DBAssistant.HIKE_ID,ID);
         retVal.put(DBAssistant.LONG_COL,this.longitude);
         retVal.put(DBAssistant.LAT_COL,this.latitude);
         retVal.put(DBAssistant.ALT_COL,this.altitude);

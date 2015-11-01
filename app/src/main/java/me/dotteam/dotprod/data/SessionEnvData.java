@@ -1,16 +1,12 @@
 package me.dotteam.dotprod.data;
-import java.util.*;
+
+
+import java.util.List;
 
 /**
  * 
  */
 public class SessionEnvData extends EnvData {
-
-    /**
-     * Default constructor
-     */
-    public SessionEnvData() {
-    }
 
     /**
      * 
@@ -27,4 +23,9 @@ public class SessionEnvData extends EnvData {
      */
     protected List<Float> recordedHumidity;
 
+    /**
+     * Default constructor
+     */
+    public SessionEnvData() {
+    }
 }
