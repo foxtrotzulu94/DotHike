@@ -7,14 +7,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class EnvCondActivity extends AppCompatActivity {
     private Button mButtonBackToMainHike;
+
+    //TextViews of the titles of Displays
+    private TextView mTextCurrentHumity;
+    private TextView mTextCurrentTemperature;
+    private TextView mTextCurrentPressure;
+
+    //TextViews of containing the Displays
+    private TextView mTextDisplayHumity;
+    private TextView mTextDisplayTemperature;
+    private TextView mTextDisplayPressure;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_env_cond);
         mButtonBackToMainHike = (Button) findViewById(R.id.buttonBack);
+        mTextCurrentHumity = (TextView) findViewById(R.id.textCurHum);
+        mTextCurrentTemperature = (TextView) findViewById(R.id.textCurTemp);
+        mTextCurrentPressure = (TextView) findViewById(R.id.textCurPress);
+        mTextDisplayHumity = (TextView) findViewById(R.id.textDispHum);
+        mTextDisplayTemperature = (TextView) findViewById(R.id.textDispTemp);
+        mTextDisplayPressure = (TextView) findViewById(R.id.textDispPress);
 
         mButtonBackToMainHike.setOnClickListener(new View.OnClickListener() {
             @Override
