@@ -17,18 +17,47 @@ import ti.android.util.Point3D;
 /**
  * Created by as on 2015-10-23.
  */
-public class HikeHardwareManager {
+public class HikeHardwareManager implements SensorTagConnector.STConnectorListener{
     private String TAG = "HHM";
     private SensorTagManager mSensorTagManager;
     private SensorTagManagerListener mSensorTagManagerListener;
-    List<SensorListenerInterface> mSensorListenerList;
+    private SensorTagConnector mSTConnector;
+    private List<SensorListenerInterface> mSensorListenerList;
+    private boolean mSTConnected = false;
+    private Context mContext;
+    private static HikeHardwareManager mInstance;
 
 
-    public HikeHardwareManager(Context context, BluetoothDevice bluetoothDevice) {
-        mSensorTagManager = new SensorTagManager(context, bluetoothDevice);
+    public static HikeHardwareManager getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = new HikeHardwareManager(context);
+        }
+        return mInstance;
+    }
+
+    private HikeHardwareManager(Context context) {
+        mContext = context;
         mSensorTagManagerListener = new SensorTagManagerListener();
         mSensorListenerList = new ArrayList<SensorListenerInterface>();
+        mSTConnector = new SensorTagConnector(mContext);
+        mSTConnector.addListener(this);
+    }
 
+
+    void addListener(SensorListenerInterface sensorListenerInterface){
+        Log.d(TAG, "Adding Listener");
+        mSensorListenerList.add(sensorListenerInterface);
+    }
+
+    void removeListener(SensorListenerInterface sensorListenerInterface) {
+        Log.d(TAG, "Removing Listener");
+        mSensorListenerList.remove(sensorListenerInterface);
+    }
+
+    @Override
+    public void onSensorTagConnect(BluetoothDevice btdevice) {
+        Log.d(TAG, "PARTY!! We have a bluetooth device!");
+        mSensorTagManager = new SensorTagManager(mContext, btdevice);
         mSensorTagManager.addListener(mSensorTagManagerListener);
 
         mSensorTagManager.initServices();
@@ -44,22 +73,14 @@ public class HikeHardwareManager {
 
         mSensorTagManager.enableUpdates();
 
+        mSTConnected = true;
     }
 
-
-    void addListener(SensorListenerInterface sensorListenerInterface){
-        Log.d(TAG, "Adding Listener");
-        mSensorListenerList.add(sensorListenerInterface);
-    }
-
-    void enableSensorTag() {
-        mSensorTagManager.enableUpdates();
-    }
-
-    void disableSensorTag() {
+    @Override
+    public void onSensorTagDisconnect() {
         mSensorTagManager.disableUpdates();
+        mSTConnected = false;
     }
-
 
     public class SensorTagManagerListener extends SensorTagLoggerListener implements SensorTagListener {
 

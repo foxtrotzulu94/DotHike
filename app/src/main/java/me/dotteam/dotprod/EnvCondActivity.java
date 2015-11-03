@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import me.dotteam.dotprod.data.Hike;
+
 public class EnvCondActivity extends AppCompatActivity {
     private EnvCondListener mSensorListener;
 
@@ -16,7 +18,7 @@ public class EnvCondActivity extends AppCompatActivity {
     private Button mButtonBackToMainHike;
 
     //TextViews of the titles of Displays
-    private TextView mTextCurrentHumity;
+    private TextView mTextCurrentHumidity;
     private TextView mTextCurrentTemperature;
     private TextView mTextCurrentPressure;
 
@@ -25,13 +27,15 @@ public class EnvCondActivity extends AppCompatActivity {
     private TextView mTextDisplayTemperature;
     private TextView mTextDisplayPressure;
 
+    private HikeHardwareManager mHHM;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_env_cond);
         mButtonBackToMainHike = (Button) findViewById(R.id.buttonBack);
-        mTextCurrentHumity = (TextView) findViewById(R.id.textCurHum);
+        mTextCurrentHumidity = (TextView) findViewById(R.id.textCurHum);
         mTextCurrentTemperature = (TextView) findViewById(R.id.textCurTemp);
         mTextCurrentPressure = (TextView) findViewById(R.id.textCurPress);
         mTextDisplayHumidity = (TextView) findViewById(R.id.textDispHum);
@@ -46,16 +50,44 @@ public class EnvCondActivity extends AppCompatActivity {
             }
         });
 
-//        mSensorListener = new EnvCondListener(this);
-//        mHHM.addListener(mSensorListener);
-//        mHHM.enableSensorTag();
-            mSensorListener=EnvCondListener.myInstance;
-        if(mSensorListener!=null){
-            mSensorListener.setmTextDisplayHumidity(mTextDisplayHumidity);
-            mSensorListener.setmTextDisplayPressure(mTextDisplayPressure);
-            mSensorListener.setmTextDisplayTemperature(mTextDisplayTemperature);
-            mSensorListener.setOwner(this);
+        mHHM = HikeHardwareManager.getInstance(this);
+        mSensorListener = new EnvCondListener(this);
+        mHHM.addListener(mSensorListener);
+
         }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mHHM.removeListener(mSensorListener);
+    }
+
+    void updateTemperature(final String temp) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTextDisplayTemperature.setText(temp);
+            }
+        });
+    }
+
+    void updateHumidity(final String hum) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTextDisplayHumidity.setText(hum);
+            }
+        });
+    }
+
+    void updatePressure(final String pressure) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTextDisplayPressure.setText(pressure);
+            }
+        });
     }
 
     @Override
