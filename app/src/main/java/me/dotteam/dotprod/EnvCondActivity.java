@@ -7,14 +7,36 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class EnvCondActivity extends AppCompatActivity {
+    private EnvCondListener mSensorListener;
+
+
     private Button mButtonBackToMainHike;
+
+    //TextViews of the titles of Displays
+    private TextView mTextCurrentHumity;
+    private TextView mTextCurrentTemperature;
+    private TextView mTextCurrentPressure;
+
+    //TextViews of containing the Displays
+    private TextView mTextDisplayHumidity;
+    private TextView mTextDisplayTemperature;
+    private TextView mTextDisplayPressure;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_env_cond);
         mButtonBackToMainHike = (Button) findViewById(R.id.buttonBack);
+        mTextCurrentHumity = (TextView) findViewById(R.id.textCurHum);
+        mTextCurrentTemperature = (TextView) findViewById(R.id.textCurTemp);
+        mTextCurrentPressure = (TextView) findViewById(R.id.textCurPress);
+        mTextDisplayHumidity = (TextView) findViewById(R.id.textDispHum);
+        mTextDisplayTemperature = (TextView) findViewById(R.id.textDispTemp);
+        mTextDisplayPressure = (TextView) findViewById(R.id.textDispPress);
 
         mButtonBackToMainHike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -23,6 +45,17 @@ public class EnvCondActivity extends AppCompatActivity {
                 startActivity(intentMainHike);
             }
         });
+
+//        mSensorListener = new EnvCondListener(this);
+//        mHHM.addListener(mSensorListener);
+//        mHHM.enableSensorTag();
+            mSensorListener=EnvCondListener.myInstance;
+        if(mSensorListener!=null){
+            mSensorListener.setmTextDisplayHumidity(mTextDisplayHumidity);
+            mSensorListener.setmTextDisplayPressure(mTextDisplayPressure);
+            mSensorListener.setmTextDisplayTemperature(mTextDisplayTemperature);
+            mSensorListener.setOwner(this);
+        }
     }
 
     @Override

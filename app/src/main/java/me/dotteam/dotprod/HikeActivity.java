@@ -1,5 +1,7 @@
 package me.dotteam.dotprod;
 
+import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -23,6 +25,13 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     private Button mButtonEndHike;
     private Button mButtonEnvCond;
     private boolean mGotLocation = false;
+
+    private Context mContext;
+    private BluetoothDevice mBTDevice;
+
+    private HikeHardwareManager mHHM;
+    private EnvCondListener mSensorListener;
+    private SensorTagConnector STConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,53 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intentEnvCond);
             }
         });
+
+        mContext = this;
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                STConnect = new SensorTagConnector(mContext, HikeActivity.this);
+                while (!STConnect.isReady()) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {}
+                }
+                mBTDevice = STConnect.getBluetoothDevice();
+                onBluetoothdeviceConnect();
+            }
+        });
+
+        t.start();
+
+    }
+
+    void onBluetoothdeviceConnect() {
+        mHHM = new HikeHardwareManager(this, mBTDevice);
+        mSensorListener = new EnvCondListener();
+        mHHM.addListener(mSensorListener);
+        mHHM.enableSensorTag();
+
+        Log.d(TAG, "PARTY!! We have a bluetooth device!");
+        Log.d("STConnect", "PARTY!! We have a bluetooth device!");
+    }
+
+    void sensorTagDisconnectCallback() {
+        Log.d(TAG, "DisconnectCallback");
+        mHHM.disableSensorTag();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!STConnect.isReady()) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {}
+                }
+                mBTDevice = STConnect.getBluetoothDevice();
+                onBluetoothdeviceConnect();
+            }
+        });
+        t.start();
     }
 
 

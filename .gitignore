@@ -1,4 +1,5 @@
-/build
+app/build
+sensorTagLib/build
 .gradle
 /local.properties
 /.idea/workspace.xml
