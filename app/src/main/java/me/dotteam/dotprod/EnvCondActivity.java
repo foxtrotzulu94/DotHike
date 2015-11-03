@@ -54,6 +54,7 @@ public class EnvCondActivity extends AppCompatActivity {
             mSensorListener.setmTextDisplayHumidity(mTextDisplayHumidity);
             mSensorListener.setmTextDisplayPressure(mTextDisplayPressure);
             mSensorListener.setmTextDisplayTemperature(mTextDisplayTemperature);
+            mSensorListener.setOwner(this);
         }
     }
 

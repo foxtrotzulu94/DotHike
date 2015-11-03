@@ -1,5 +1,7 @@
 package me.dotteam.dotprod;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -9,6 +11,7 @@ import android.widget.TextView;
 public class EnvCondListener implements SensorListenerInterface {
 
     public static EnvCondListener myInstance;
+    private Activity owner;
 
     String TAG = "EnvCondListener";
     private TextView mTextDisplayHumidity;
@@ -19,28 +22,45 @@ public class EnvCondListener implements SensorListenerInterface {
         myInstance = this;
     }
 
+    public void setOwner(Activity owner) {
+        this.owner = owner;
+    }
+
     @Override
     public void update(HikeSensors hikesensors, double value) {
-        TextView updatingTesty;
+        final TextView updatingTesty;
+        final double newVal=value;
         switch (hikesensors) {
             case TEMPERATURE: {
                 Log.d(TAG, "Temperature: " + String.valueOf(value));
                 updatingTesty=mTextDisplayTemperature;
+                break;
             }
             case HUMIDITY: {
                 Log.d(TAG, "Humidity: " + String.valueOf(value));
                 updatingTesty=mTextDisplayHumidity;
+                break;
             }
             case PRESSURE: {
                 Log.d(TAG, "Pressure: " + String.valueOf(value));
                 updatingTesty=mTextDisplayPressure;
+                break;
             }
             default:{
                 updatingTesty=mTextDisplayPressure;
+                break;
             }
         }
-        updatingTesty.setText(Double.toString(value));
+
+        owner.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updatingTesty.setText(Double.toString(newVal));
+            }
+        });
+
     }
+
 
     public void setmTextDisplayHumidity(TextView mTextDisplayHumidity) {
         this.mTextDisplayHumidity = mTextDisplayHumidity;
