@@ -30,7 +30,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     private BluetoothDevice mBTDevice;
 
     private HikeHardwareManager mHHM;
-    private TestSensorListener mSensorListener;
+    private EnvCondListener mSensorListener;
     private SensorTagConnector STConnect;
 
     @Override
@@ -83,7 +83,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
     void onBluetoothdeviceConnect() {
         mHHM = new HikeHardwareManager(this, mBTDevice);
-        mSensorListener = new TestSensorListener();
+        mSensorListener = new EnvCondListener();
         mHHM.addListener(mSensorListener);
         mHHM.enableSensorTag();
 

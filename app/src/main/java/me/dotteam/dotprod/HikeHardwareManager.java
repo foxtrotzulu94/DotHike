@@ -53,7 +53,7 @@ public class HikeHardwareManager {
     }
 
     void enableSensorTag() {
-        mSensorTagManager.enableUpdates();;
+        mSensorTagManager.enableUpdates();
     }
 
     void disableSensorTag() {

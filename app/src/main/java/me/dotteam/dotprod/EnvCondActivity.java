@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class EnvCondActivity extends AppCompatActivity {
+    private EnvCondListener mSensorListener;
+
+
     private Button mButtonBackToMainHike;
 
     //TextViews of the titles of Displays
@@ -18,7 +21,7 @@ public class EnvCondActivity extends AppCompatActivity {
     private TextView mTextCurrentPressure;
 
     //TextViews of containing the Displays
-    private TextView mTextDisplayHumity;
+    private TextView mTextDisplayHumidity;
     private TextView mTextDisplayTemperature;
     private TextView mTextDisplayPressure;
 
@@ -31,7 +34,7 @@ public class EnvCondActivity extends AppCompatActivity {
         mTextCurrentHumity = (TextView) findViewById(R.id.textCurHum);
         mTextCurrentTemperature = (TextView) findViewById(R.id.textCurTemp);
         mTextCurrentPressure = (TextView) findViewById(R.id.textCurPress);
-        mTextDisplayHumity = (TextView) findViewById(R.id.textDispHum);
+        mTextDisplayHumidity = (TextView) findViewById(R.id.textDispHum);
         mTextDisplayTemperature = (TextView) findViewById(R.id.textDispTemp);
         mTextDisplayPressure = (TextView) findViewById(R.id.textDispPress);
 
@@ -42,6 +45,16 @@ public class EnvCondActivity extends AppCompatActivity {
                 startActivity(intentMainHike);
             }
         });
+
+//        mSensorListener = new EnvCondListener(this);
+//        mHHM.addListener(mSensorListener);
+//        mHHM.enableSensorTag();
+            mSensorListener=EnvCondListener.myInstance;
+        if(mSensorListener!=null){
+            mSensorListener.setmTextDisplayHumidity(mTextDisplayHumidity);
+            mSensorListener.setmTextDisplayPressure(mTextDisplayPressure);
+            mSensorListener.setmTextDisplayTemperature(mTextDisplayTemperature);
+        }
     }
 
     @Override
