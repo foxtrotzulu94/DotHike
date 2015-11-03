@@ -17,7 +17,7 @@ import ti.android.util.Point3D;
 /**
  * Created by as on 2015-10-23.
  */
-public class HikeHardwareManager implements SensorTagConnector.STConnectorListener{
+public class HikeHardwareManager implements SensorTagConnector.STConnectorListener {
     private String TAG = "HHM";
     private SensorTagManager mSensorTagManager;
     private SensorTagManagerListener mSensorTagManagerListener;
