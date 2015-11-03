@@ -3,6 +3,7 @@ package me.dotteam.dotprod;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import me.dotteam.dotprod.data.Hike;
 
 public class EnvCondActivity extends AppCompatActivity {
+    private String TAG = "EnvCondActivity";
     private EnvCondListener mSensorListener;
 
 
@@ -32,6 +34,7 @@ public class EnvCondActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate Called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_env_cond);
         mButtonBackToMainHike = (Button) findViewById(R.id.buttonBack);
@@ -52,14 +55,20 @@ public class EnvCondActivity extends AppCompatActivity {
 
         mHHM = HikeHardwareManager.getInstance(this);
         mSensorListener = new EnvCondListener(this);
-        mHHM.addListener(mSensorListener);
 
         }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onStart() {
+        Log.d(TAG, "onStart called");
+        super.onStart();
+        mHHM.addListener(mSensorListener);
+    }
 
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "onStop Called");
+        super.onStop();
         mHHM.removeListener(mSensorListener);
     }
 
