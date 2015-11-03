@@ -29,9 +29,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intentMainHike);
             }
         });
-        Log.d("Home", "Testing DB");
-        HikeDataDirector HDD = HikeDataDirector.getInstance(this);
-        HDD.testStorage();
+
     }
 
     @Override
