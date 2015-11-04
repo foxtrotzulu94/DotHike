@@ -41,6 +41,16 @@
             android:layout_weight="0.1"
             >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="[DEBUG]"
+                android:id="@+id/app_build"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:gravity="center" />
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -86,6 +96,7 @@
                     android:layout_weight="0.5"
                     android:layout_margin="10dp" />
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

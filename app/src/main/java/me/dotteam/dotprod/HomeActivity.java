@@ -8,6 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.Date;
+import java.util.Formatter;
+import java.util.Locale;
 
 import me.dotteam.dotprod.data.HikeDataDirector;
 
@@ -30,6 +35,18 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        //Show build information for debugging.
+        if (BuildConfig.DEBUG) {
+            TextView buildField = (TextView) findViewById(R.id.app_build);
+            Date buildDate = new Date(BuildConfig.TIMESTAMP);
+            Formatter formatter = new Formatter(new StringBuilder(), Locale.US);
+            formatter.format("[ %1$s build ] \nBuild: %2$s\nCommitt: %3$s \n[from %4$s]",
+                    BuildConfig.BUILD_TYPE,
+                    buildDate.toString(),
+                    BuildConfig.GIT_COMMIT_INFO,
+                    BuildConfig.GIT_BRANCH);
+            buildField.setText(formatter.toString());
+        }
     }
 
     @Override
