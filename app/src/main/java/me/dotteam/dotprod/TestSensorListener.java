@@ -5,39 +5,38 @@ import android.util.Log;
 import me.dotteam.dotprod.hw.SensorListenerInterface;
 
 /**
- * Created by as on 2015-10-23.
+ * Created by EricTremblay on 15-11-04.
  */
-public class EnvCondListener implements SensorListenerInterface {
-    private EnvCondActivity owner;
-
-    String TAG = "EnvCondListener";
-
-    public EnvCondListener(EnvCondActivity owner) {
-        this.owner = owner;
-    }
+public class TestSensorListener implements SensorListenerInterface {
+    private final String TAG = "TestSensorListener";
 
     @Override
     public void update(HikeSensors hikesensors, double value) {
         switch (hikesensors) {
             case TEMPERATURE: {
                 Log.d(TAG, "Temperature: " + String.valueOf(value));
-                owner.updateTemperature(String.valueOf(value));
                 break;
             }
             case HUMIDITY: {
                 Log.d(TAG, "Humidity: " + String.valueOf(value));
-                owner.updateHumidity(String.valueOf(value));
                 break;
             }
             case PRESSURE: {
                 Log.d(TAG, "Pressure: " + String.valueOf(value));
-                owner.updatePressure(String.valueOf(value));
                 break;
             }
-            default:{
+            case PEDOMETER: {
+                Log.d(TAG, "Step Count: " + String.valueOf(value));
+                break;
+            }
+            case MAGNETOMETER: {
+                Log.d(TAG, "Magnetometer: " + String.valueOf(value));
+                break;
+            }
+            default: {
+                Log.d(TAG, "Default case called");
                 break;
             }
         }
-
     }
 }

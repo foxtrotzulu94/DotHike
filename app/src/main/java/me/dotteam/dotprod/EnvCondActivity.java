@@ -9,8 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import me.dotteam.dotprod.data.Hike;
+import me.dotteam.dotprod.hw.HikeHardwareManager;
 
 public class EnvCondActivity extends AppCompatActivity {
     private String TAG = "EnvCondActivity";

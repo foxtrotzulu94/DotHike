@@ -18,6 +18,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 
+import me.dotteam.dotprod.hw.HikeHardwareManager;
+
 public class HikeActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -26,11 +28,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     private Button mButtonEnvCond;
     private boolean mGotLocation = false;
 
-    private Context mContext;
-    private BluetoothDevice mBTDevice;
-
     private HikeHardwareManager mHHM;
-    private EnvCondListener mSensorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +57,6 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intentEnvCond);
             }
         });
-
-        //mHHM = HikeHardwareManager.getInstance(this);
-
     }
 
 
@@ -170,7 +165,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 if (location != null){
                     final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
                     mGotLocation = true;
                 }
             }
