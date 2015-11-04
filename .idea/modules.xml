@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DotProdReal.iml" filepath="$PROJECT_DIR$/DotProdReal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DotProd.iml" filepath="$PROJECT_DIR$/DotProd.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/sensorTagLib/sensorTagLib.iml" filepath="$PROJECT_DIR$/sensorTagLib/sensorTagLib.iml" />
     </modules>
