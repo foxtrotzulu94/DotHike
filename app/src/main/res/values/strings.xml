@@ -13,4 +13,10 @@
     <string name="title_activity_env_cond">EnvCondActivity</string>
     <string name="buttonTextBackToMainHike">Back to Main Hike</string>
     <string name="textAppName">.Hike</string>
+    <string name="textCurrentHumidity">Current Humidity</string>
+    <string name="textCurrentTemperature">Current Temperature</string>
+    <string name="textCurrentPressure">Current Pressure</string>
+    <string name="textDisplayHumidity">Humidity Display</string>
+    <string name="textDisplayTemperature">Temperature Display</string>
+    <string name="textDisplayPressure">Pressure Display</string>
 </resources>
