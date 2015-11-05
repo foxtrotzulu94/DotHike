@@ -9,7 +9,6 @@
     android:orientation="vertical"
     android:gravity="center">
 
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -41,6 +40,16 @@
             android:layout_weight="0.1"
             >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="[DEBUG]"
+                android:id="@+id/app_build"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:gravity="center_vertical|center|center_horizontal" />
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -51,9 +60,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/imageButton"
-                    android:layout_gravity="center_vertical"
                     android:layout_weight="0.5"
-                    android:layout_margin="10dp" />
+                    android:layout_margin="10dp"
+                    android:src="@drawable/settingsimage"
+                    android:scaleType="fitCenter" />
 
                 <ImageButton
                     android:layout_width="match_parent"
