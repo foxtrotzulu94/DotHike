@@ -1,4 +1,4 @@
-package me.dotteam.dotprod;
+package me.dotteam.dotprod.hw;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -28,6 +28,13 @@ import ti.android.util.CustomToast;
  * Created by EricTremblay on 15-10-30.
  */
 public class SensorTagConnector {
+
+    public interface STConnectorListener {
+
+        void onSensorTagConnect(BluetoothDevice btdevice);
+
+        void onSensorTagDisconnect();
+    }
     // Log
     private static final String TAG = "STConnector";
 
@@ -58,14 +65,12 @@ public class SensorTagConnector {
     private IntentFilter mFilter;
     private String[] mDeviceFilter = null;
 
-    private boolean mReady = false;
-
     Context mContext;
-    HikeActivity mActivity;
+    List<STConnectorListener> mListeners;
 
-    public SensorTagConnector(Context context, HikeActivity activity) {
+    public SensorTagConnector(Context context) {
         mContext = context;
-        mActivity = activity;
+        mListeners = new ArrayList<STConnectorListener>();
         // Use this check to determine whether BLE is supported on the device. Then
         // you can selectively disable BLE-related features.
         if (!mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -109,8 +114,10 @@ public class SensorTagConnector {
             }
             mInitialised = true;
         }
+    }
 
-        scanLeDevice(true);
+    public void addListener(STConnectorListener listener) {
+        mListeners.add(listener);
     }
 
     private boolean scanLeDevice(boolean enable) {
@@ -189,7 +196,6 @@ public class SensorTagConnector {
                     if (!ok) {
                         //setError("Connect failed");
                     }
-                    mReady = true;
                     scanLeDevice(false);
                     break;
                 default:
@@ -209,16 +215,17 @@ public class SensorTagConnector {
     }
 
     private void startBluetoothLeService() {
-        boolean f;
 
         Intent bindIntent = new Intent(mContext, BluetoothLeService.class);
         mContext.startService(bindIntent);
-        f = mContext.bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        if (f)
+        boolean bindServiceResult = mContext.bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        if (bindServiceResult) {
             Log.d(TAG, "BluetoothLeService - success");
+            scanLeDevice(true);
+        }
         else {
             CustomToast.middleBottom(mContext, "Bind to BluetoothLeService failed");
-            //finish();
+            // Exit
         }
     }
 
@@ -241,37 +248,43 @@ public class SensorTagConnector {
                         break;
                     case BluetoothAdapter.STATE_OFF:
                         Toast.makeText(context, ca.concordia.sensortag.R.string.app_closing, Toast.LENGTH_LONG).show();
-                        //finish();
+                        // Exit
                         break;
                     default:
                         Log.w(TAG, "Action STATE CHANGED not processed ");
                         break;
                 }
 
-            }
-            else if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+            } else if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 Log.d(TAG, "ACTION_GATT_CONNECTED");
                 // GATT connect
                 int status = intent.getIntExtra(BluetoothLeService.EXTRA_STATUS,
                         BluetoothGatt.GATT_FAILURE);
                 if (status == BluetoothGatt.GATT_SUCCESS) {
-                    //startDeviceActivity();
+                    for (int i = 0; i < mListeners.size(); i++) {
+                        mListeners.get(i).onSensorTagConnect(mBluetoothDevice);
+                    }
                 }
+                else {
+                    //setError("Connect failed. Status: " + status);
+                }
+
             }
             else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 Log.d(TAG, "ACTION_GATT_DISCONNECTED");
                 // GATT disconnect
                 //TODO: What happens when connection is lost?? Restart scanning and reconnect
                 scanLeDevice(true);
-                mReady = false;
-                mActivity.sensorTagDisconnectCallback();
-
-                //stopDeviceActivity();
-                //if (status == BluetoothGatt.GATT_SUCCESS) {
-                //}
-                //else {
+                int status = intent.getIntExtra(BluetoothLeService.EXTRA_STATUS,
+                        BluetoothGatt.GATT_FAILURE);
+                for (int i = 0; i < mListeners.size(); i++) {
+                    mListeners.get(i).onSensorTagDisconnect();
+                }
+                if (status == BluetoothGatt.GATT_SUCCESS) {
+                }
+                else {
                     //setError("Disconnect failed. Status: " + status);
-                //}
+                }
                 mConnIndex = NO_DEVICE;
                 mBluetoothLeService.close();
             }
@@ -289,7 +302,7 @@ public class SensorTagConnector {
             mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
             if (!mBluetoothLeService.initialize()) {
                 Log.e(TAG, "Unable to initialize BluetoothLeService");
-                //finish();
+                // Exit
                 return;
             }
             final int n = mBluetoothLeService.numConnectedDevices();
@@ -339,7 +352,4 @@ public class SensorTagConnector {
         return mBluetoothDevice;
     }
 
-    public boolean isReady() {
-        return mReady;
-    }
 }
