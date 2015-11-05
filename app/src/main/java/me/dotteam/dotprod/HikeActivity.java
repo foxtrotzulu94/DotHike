@@ -19,6 +19,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 
 import me.dotteam.dotprod.hw.HikeHardwareManager;
+import me.dotteam.dotprod.hw.TestSensorListener;
 
 public class HikeActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -29,6 +30,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean mGotLocation = false;
 
     private HikeHardwareManager mHHM;
+    private TestSensorListener mTestSensorListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,12 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intentEnvCond);
             }
         });
+
+        // Test to see if SensorTag readings are still captured when app is in the background
+        mHHM = HikeHardwareManager.getInstance(this);
+        mTestSensorListener = new TestSensorListener();
+        mHHM.addListener(mTestSensorListener);
+
     }
 
 
