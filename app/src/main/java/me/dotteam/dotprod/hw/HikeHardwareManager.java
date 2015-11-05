@@ -39,6 +39,9 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mContext = context;
         mSensorTagManagerListener = new SensorTagManagerListener();
         mSensorListenerList = new ArrayList<SensorListenerInterface>();
+    }
+
+    public void startSensorTagConnector() {
         mSTConnector = new SensorTagConnector(mContext);
         mSTConnector.addListener(this);
     }

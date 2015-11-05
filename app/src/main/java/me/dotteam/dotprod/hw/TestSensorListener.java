@@ -1,4 +1,4 @@
-package me.dotteam.dotprod;
+package me.dotteam.dotprod.hw;
 
 import android.util.Log;
 
