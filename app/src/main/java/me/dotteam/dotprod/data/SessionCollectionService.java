@@ -12,9 +12,9 @@ import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
 
-import me.dotteam.dotprod.HikeHardwareManager;
+import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
-import me.dotteam.dotprod.SensorListenerInterface;
+import me.dotteam.dotprod.hw.SensorListenerInterface;
 
 /**
  * Lightweight class used for Sensor Data Collection as a service.
@@ -51,7 +51,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
         Log.d("Collect","SERVICE STARTED!!!");
 
         //register yourself
-        //HikeHardwareManager.getInstance().addListener(this);
+        HikeHardwareManager.getInstance(this).addListener(this);
         //HikeLocationEntity.getInstance().addListener(this);
     }
 
@@ -83,7 +83,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
         mNotifier.cancelAll();
 
         //de-register yourself
-        //HikeHardwareManager.getInstance().addListener(this);
+        HikeHardwareManager.getInstance(this).removeListener(this);
         //HikeLocationEntity.getInstance().addListener(this);
     }
 
