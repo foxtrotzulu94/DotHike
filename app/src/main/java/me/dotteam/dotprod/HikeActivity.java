@@ -62,6 +62,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Test to see if SensorTag readings are still captured when app is in the background
         mHHM = HikeHardwareManager.getInstance(this);
+        mHHM.startSensorTagConnector();
         mTestSensorListener = new TestSensorListener();
         mHHM.addListener(mTestSensorListener);
 
