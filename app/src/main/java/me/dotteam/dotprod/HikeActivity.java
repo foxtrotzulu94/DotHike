@@ -18,6 +18,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 
+import me.dotteam.dotprod.hw.HikeHardwareManager;
+
 public class HikeActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -26,12 +28,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     private Button mButtonEnvCond;
     private boolean mGotLocation = false;
 
-    private Context mContext;
-    private BluetoothDevice mBTDevice;
-
     private HikeHardwareManager mHHM;
-    private TestSensorListener mSensorListener;
-    private SensorTagConnector STConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,53 +57,6 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intentEnvCond);
             }
         });
-
-        mContext = this;
-
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                STConnect = new SensorTagConnector(mContext, HikeActivity.this);
-                while (!STConnect.isReady()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {}
-                }
-                mBTDevice = STConnect.getBluetoothDevice();
-                onBluetoothdeviceConnect();
-            }
-        });
-
-        t.start();
-
-    }
-
-    void onBluetoothdeviceConnect() {
-        mHHM = new HikeHardwareManager(this, mBTDevice);
-        mSensorListener = new TestSensorListener();
-        mHHM.addListener(mSensorListener);
-        mHHM.enableSensorTag();
-
-        Log.d(TAG, "PARTY!! We have a bluetooth device!");
-        Log.d("STConnect", "PARTY!! We have a bluetooth device!");
-    }
-
-    void sensorTagDisconnectCallback() {
-        Log.d(TAG, "DisconnectCallback");
-        mHHM.disableSensorTag();
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (!STConnect.isReady()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {}
-                }
-                mBTDevice = STConnect.getBluetoothDevice();
-                onBluetoothdeviceConnect();
-            }
-        });
-        t.start();
     }
 
 
@@ -215,7 +165,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 if (location != null){
                     final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
                     mGotLocation = true;
                 }
             }
