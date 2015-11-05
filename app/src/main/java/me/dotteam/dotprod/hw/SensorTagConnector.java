@@ -215,12 +215,11 @@ public class SensorTagConnector {
     }
 
     private void startBluetoothLeService() {
-        boolean f;
 
         Intent bindIntent = new Intent(mContext, BluetoothLeService.class);
         mContext.startService(bindIntent);
-        f = mContext.bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        if (f) {
+        boolean bindServiceResult = mContext.bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        if (bindServiceResult) {
             Log.d(TAG, "BluetoothLeService - success");
             scanLeDevice(true);
         }
