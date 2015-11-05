@@ -29,7 +29,8 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intentMainHike);
             }
         });
-
+        HikeDataDirector testy = HikeDataDirector.getInstance(this);
+        testy.beginCollectionService();
     }
 
     @Override
@@ -48,6 +49,7 @@ public class HomeActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            HikeDataDirector.getInstance(this).endCollectionService();
             return true;
         }
 

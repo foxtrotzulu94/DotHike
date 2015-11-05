@@ -10,17 +10,17 @@ public class EnvStatistic {
     /**
      * Observed Minimum
      */
-    protected float min=Float.POSITIVE_INFINITY;
+    protected double min=Float.POSITIVE_INFINITY;
 
     /**
      * Observed Average. Generally, the latest obtained value from external sensors
      */
-    protected float avg=Float.NaN;
+    protected double avg=Float.NaN;
 
     /**
      * Observed Maximum
      */
-    protected float max=0;
+    protected double max=0;
 
     /**
      * Default constructor
@@ -28,15 +28,15 @@ public class EnvStatistic {
     public EnvStatistic() {
     }
 
-    public float getAvg() {
+    public double getAvg() {
         return avg;
     }
 
-    public float getMax() {
+    public double getMax() {
         return max;
     }
 
-    public float getMin() {
+    public double getMin() {
         return min;
     }
 
@@ -44,7 +44,7 @@ public class EnvStatistic {
      * Method to update the environmental statistic with a new value
      * @param newSample latest observed value of the Environmental measure.
      */
-    public void insertSample(float newSample){
+    public void insertSample(double newSample){
         //NOTE: Might want to replace this in the future...
         avg=newSample;
 

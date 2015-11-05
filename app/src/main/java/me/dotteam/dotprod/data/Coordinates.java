@@ -7,15 +7,15 @@ import android.content.ContentValues;
  */
 public class Coordinates {
 
-    protected float longitude;
-    protected float latitude;
-    protected float altitude;
+    protected double longitude;
+    protected double latitude;
+    protected double altitude;
 
 
     /**
      * Default constructor
      */
-    public Coordinates(float longitude, float lat, float alt) {
+    public Coordinates(double longitude, double lat, double alt) {
         this.longitude=longitude;
         latitude=lat;
         altitude=alt;

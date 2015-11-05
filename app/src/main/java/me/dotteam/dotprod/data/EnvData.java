@@ -30,15 +30,15 @@ public class EnvData {
         pressure = new EnvStatistic();
     }
 
-    public void updateTemp(float newSample){
+    public void updateTemp(double newSample){
         temperature.insertSample(newSample);
     }
 
-    public void updateHumidity(float newSample){
+    public void updateHumidity(double newSample){
         humidity.insertSample(newSample);
     }
 
-    public void updatePressure(float newSample){
+    public void updatePressure(double newSample){
         pressure.insertSample(newSample);
     }
 
