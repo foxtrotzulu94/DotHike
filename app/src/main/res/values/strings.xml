@@ -19,4 +19,6 @@
     <string name="textDisplayHumidity">Humidity Display</string>
     <string name="textDisplayTemperature">Temperature Display</string>
     <string name="textDisplayPressure">Pressure Display</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="textBottonNavigationActivity">NavigationActivity</string>
 </resources>
