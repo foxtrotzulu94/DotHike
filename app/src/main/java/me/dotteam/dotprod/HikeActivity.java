@@ -40,6 +40,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
     private Button mButtonEndHike;
     private Button mButtonEnvCond;
+    private Button mButtonNavigationActivity;
     private boolean mGotLocation = false;
 
     private HikeHardwareManager mHHM;
@@ -60,6 +61,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
         mButtonEndHike = (Button) findViewById(R.id.buttonEndHike);
         mButtonEnvCond = (Button) findViewById(R.id.buttonEnvCond);
+        mButtonNavigationActivity = (Button) findViewById(R.id.buttonNavigationActivity);
 
         mButtonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +75,14 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Intent intentEnvCond = new Intent(HikeActivity.this, EnvCondActivity.class);
                 startActivity(intentEnvCond);
+            }
+        });
+
+        mButtonNavigationActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentNavigationActivity = new Intent(HikeActivity.this, NavigationActivity.class);
+                startActivity(intentNavigationActivity);
             }
         });
 

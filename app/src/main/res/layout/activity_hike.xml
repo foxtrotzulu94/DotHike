@@ -30,15 +30,29 @@
         android:layout_weight="0.7"
         android:gravity="bottom|right">
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/buttonTextEnvCond"
-            android:id="@+id/buttonEnvCond"
-            android:layout_above="@+id/buttonEndHike"
-            android:layout_alignParentEnd="true"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.3">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/textBottonNavigationActivity"
+                android:id="@+id/buttonNavigationActivity"
+                android:layout_weight="0.5" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/buttonTextEnvCond"
+                android:id="@+id/buttonEnvCond"
+                android:layout_above="@+id/buttonEndHike"
+                android:layout_alignParentEnd="true"
+                android:layout_weight="0.5" />
+        </LinearLayout>
 
         <Button
             android:layout_width="match_parent"
@@ -49,7 +63,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignEnd="@+id/map"
             android:background="#C23A22"
-            android:layout_weight="0.85" />
+            android:layout_weight="0.7" />
+
     </LinearLayout>
 
 </LinearLayout>
