@@ -35,18 +35,18 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intentMainHike);
             }
         });
-
-//        if (BuildConfig.DEBUG) {
-//            TextView buildField = (TextView) findViewById(R.id.app_build);
-//            Date buildDate = new Date(BuildConfig.TIMESTAMP);
-//            Formatter formatter = new Formatter(new StringBuilder(), Locale.US);
-//            formatter.format("[ %1$s build ] \nBuild: %2$s\nCommitt: %3$s \n[from %4$s]",
-//                    BuildConfig.BUILD_TYPE,
-//                    buildDate.toString(),
-//                    BuildConfig.GIT_COMMIT_INFO,
-//                    BuildConfig.GIT_BRANCH);
-//            buildField.setText(formatter.toString());
-//        }
+        //Show build information for debugging.
+        if (BuildConfig.DEBUG) {
+            TextView buildField = (TextView) findViewById(R.id.app_build);
+            Date buildDate = new Date(BuildConfig.TIMESTAMP);
+            Formatter formatter = new Formatter(new StringBuilder(), Locale.US);
+            formatter.format("[ %1$s build ] \nBuild: %2$s\nCommitt: %3$s \n[from %4$s]",
+                    BuildConfig.BUILD_TYPE,
+                    buildDate.toString(),
+                    BuildConfig.GIT_COMMIT_INFO,
+                    BuildConfig.GIT_BRANCH);
+            buildField.setText(formatter.toString());
+        }
 
         Log.d("Home", "Testing DB");
         HikeDataDirector HDD = HikeDataDirector.getInstance(this);

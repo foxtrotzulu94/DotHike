@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:gravity="center">
 
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
