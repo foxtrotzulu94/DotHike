@@ -18,8 +18,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 
+import me.dotteam.dotprod.data.TestSensorListener;
+
 import me.dotteam.dotprod.hw.HikeHardwareManager;
-import me.dotteam.dotprod.hw.TestSensorListener;
+
 
 public class HikeActivity extends FragmentActivity implements OnMapReadyCallback {
 

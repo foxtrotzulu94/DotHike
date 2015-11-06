@@ -22,6 +22,8 @@ import me.dotteam.dotprod.hw.SensorListenerInterface;
  */
 public class SessionCollectionService extends Service implements SensorListenerInterface,LocationListener{
 
+    private final String LONG_NAME=".Hike Statistics Service";
+
     private NotificationManager mNotifier;
 
     private EnvData recordedData;
@@ -60,8 +62,9 @@ public class SessionCollectionService extends Service implements SensorListenerI
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.dothikemin)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+                        .setContentTitle(LONG_NAME)
+                        .setContentText("Hello World!")
+                        .setOngoing(true);
 
         mNotifier.notify(this.getApplicationInfo().uid,
                 mBuilder.build());
