@@ -9,113 +9,46 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.1">
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/textAppName"
+        android:id="@+id/textAppName"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.9"
-            android:gravity="top|center_vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="[DEBUG]"
+        android:id="@+id/app_build"
+        android:textSize="12sp"
+        android:layout_gravity="center"
+        android:gravity="center_vertical|center|center_horizontal" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/textAppName"
-                android:id="@+id/textAppName"
-                android:gravity="center_vertical|center_horizontal"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.1"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="[DEBUG]"
-                android:id="@+id/app_build"
-                android:textSize="12sp"
-                android:layout_gravity="center"
-                android:gravity="center_vertical|center|center_horizontal" />
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageButton"
-                    android:layout_weight="0.5"
-                    android:layout_margin="10dp"
-                    android:src="@drawable/settingsimage"
-                    android:scaleType="fitCenter" />
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageButton3"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.5"
-                    android:layout_margin="10dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5">
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageButton2"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.5"
-                    android:layout_margin="10dp" />
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageButton4"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.5"
-                    android:layout_margin="10dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
+    <ImageButton
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.9">
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonStartHike"
+        android:background="#BDECB6"
+        android:layout_weight="0.5" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonTextStartHike"
-            android:id="@+id/buttonStartHike"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:background="#BDECB6"
-            android:layout_weight="0.5" />
-    </LinearLayout>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonSettings" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonPastHikes" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton" />
 
 </LinearLayout>
