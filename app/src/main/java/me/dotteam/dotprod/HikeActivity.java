@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
@@ -18,22 +19,34 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import me.dotteam.dotprod.data.Coordinates;
+import me.dotteam.dotprod.data.LocationPoints;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.hw.TestSensorListener;
 import me.dotteam.dotprod.loc.HikeLocationEntity;
 
 public class HikeActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+    private String TAG = "HikeActivity";
 
     private GoogleMap mMap;
-    private String TAG = "HikeActivity";
+    private boolean mMapReady = false;
+    private PolylineOptions mMapPolylineOptions;
+
     private Button mButtonEndHike;
     private Button mButtonEnvCond;
     private boolean mGotLocation = false;
 
     private HikeHardwareManager mHHM;
-    private TestSensorListener mTestSensorListener;
     private HikeLocationEntity mHLE;
+
+    private float mDistanceTravelled = 0;
+    private LocationPoints mLocationPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +79,15 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
         // Test to see if SensorTag readings are still captured when app is in the background
         mHHM = HikeHardwareManager.getInstance(this);
         mHHM.startSensorTagConnector();
-        mTestSensorListener = new TestSensorListener();
-        mHHM.addListener(mTestSensorListener);
+        mHHM.addListener(new TestSensorListener());
 
         // Test to see if HLE is working as expected
         mHLE = HikeLocationEntity.getInstance(this);
         mHLE.addLocationListener(this);
         mHLE.startLocationUpdates();
+
+        // New LocationPoints object to save coordinates
+        mLocationPoints = new LocationPoints();
 
     }
 
@@ -84,6 +99,36 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 + "\nAltitude: " + location.getAltitude()
                 + "\nBearing: " + location.getBearing()
                 + "\nAccuracy :" + location.getAccuracy());
+
+        if (location.getAccuracy() <= 40) {
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+            mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
+                    (float) location.getLatitude(), (float) location.getAltitude()));
+
+            mMapPolylineOptions.add(latLng);
+            mMap.addPolyline(mMapPolylineOptions);
+
+            List<Coordinates> coordinatesList = mLocationPoints.getCoordinateList();
+            int numberOfPoints = coordinatesList.size();
+
+            if (numberOfPoints > 1) {
+                // Array to store results
+                float results[] = new float[3];
+
+                // Get previous and current longitude and latitude
+                double prevLongitude = coordinatesList.get(numberOfPoints - 2).getLongitude();
+                double prevLatitude = coordinatesList.get(numberOfPoints - 2).getLatitude();
+                double currLongitude = coordinatesList.get(numberOfPoints - 1).getLongitude();
+                double currLatitude = coordinatesList.get(numberOfPoints - 1).getLatitude();
+
+                // Calculate distance between both points and add it to total
+                Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, results);
+                mDistanceTravelled += results[0];
+            }
+        }
+
+
     }
 
     /**
@@ -99,7 +144,8 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady() Called");
         mMap = googleMap;
-
+        mMapPolylineOptions = new PolylineOptions();
+        mMapReady = true;
         // Set Maps Settings
         UiSettings mapSettings = mMap.getUiSettings();
         mapSettings.setTiltGesturesEnabled(false);

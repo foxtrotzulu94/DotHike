@@ -34,4 +34,15 @@ public class Coordinates {
         return retVal;
     }
 
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public float getAltitude() {
+        return altitude;
+    }
 }
