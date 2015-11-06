@@ -10,6 +10,10 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
+        buildConfigField "String", "GIT_BRANCH", "\""+getGitBranch()+"\""
+        buildConfigField "String", "GIT_COMMIT_INFO", "\""+getGitCommit()+"\""
     }
     buildTypes {
         release {
@@ -17,6 +21,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+def getGitCommit() {
+    def gitCom = "git log -n 1 --format=\'%ad\'"
+    def result = gitCom.execute()
+    return result.text.trim()
+}
+
+def getGitBranch(){
+   def gitCom = "git rev-parse --abbrev-ref HEAD"
+   def result = gitCom.execute()
+   return result.text.trim()
 }
 
 dependencies {
