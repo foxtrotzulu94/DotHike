@@ -19,6 +19,7 @@ import me.dotteam.dotprod.data.HikeDataDirector;
 public class HomeActivity extends AppCompatActivity {
 
    private Button mButtonStartHike;
+    private HikeDataDirector testy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentMainHike = new Intent(HomeActivity.this, HikeActivity.class);
                 startActivity(intentMainHike);
+                testy.endCollectionService();
             }
         });
         //Show build information for debugging.
@@ -47,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
             buildField.setText(formatter.toString());
         }
         
-        HikeDataDirector testy = HikeDataDirector.getInstance(this);
+        testy = HikeDataDirector.getInstance(this);
         testy.beginCollectionService();
     }
 

@@ -63,7 +63,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.dothikemin)
                         .setContentTitle(LONG_NAME)
-                        .setContentText("Hello World!")
+                        .setContentText(new Hike(0,100,100*60*1000).elapsedTime())
                         .setOngoing(true);
 
         mNotifier.notify(this.getApplicationInfo().uid,

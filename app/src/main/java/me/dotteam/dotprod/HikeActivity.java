@@ -52,6 +52,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Intent intentResults = new Intent(HikeActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
+                finish();
             }
         });
         mButtonEnvCond.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +65,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Test to see if SensorTag readings are still captured when app is in the background
         mHHM = HikeHardwareManager.getInstance(this);
-        mHHM.startSensorTagConnector();
+//        mHHM.startSensorTagConnector();
         mTestSensorListener = new TestSensorListener();
         mHHM.addListener(mTestSensorListener);
 
