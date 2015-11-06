@@ -27,8 +27,8 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     /**
      * Default Values for Location Updates
      */
-    private final int DEFAULT_INTERVAL = 10000;
-    private final int DEFAULT_FASTEST_INTERVAL = 5000;
+    private final int DEFAULT_INTERVAL = 1000;
+    private final int DEFAULT_FASTEST_INTERVAL = 500;
     private final int DEFAULT_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
     /**
@@ -44,7 +44,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     private int mPriority;
 
     /**
-     * Static HikeLocationEntity Singleton Reference
+     * HikeLocationEntity Singleton Reference
      */
     private static HikeLocationEntity mInstance;
 
@@ -98,6 +98,9 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
         mInterval = DEFAULT_INTERVAL;
         mFastestInterval = DEFAULT_FASTEST_INTERVAL;
         mPriority = DEFAULT_PRIORITY;
+        mLocationRequest.setInterval(mInterval);
+        mLocationRequest.setFastestInterval(mFastestInterval);
+        mLocationRequest.setPriority(mPriority);
 
         // Save Context
         mContext = context;
@@ -110,11 +113,14 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * Starts location updates for all registered listeners
      */
     public void startLocationUpdates() {
+        Log.d(TAG, "Starting location updates");
         mRequestingLocationUpdates = true;
         if (mGoogleApiClientConnected) {
             for (int i = 0; i < mLocationListeners.size(); i++) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationListeners.get(i));
             }
+        } else {
+            Log.i(TAG, "GoogleApiClient is not connected. Unable to start location updates");
         }
     }
 
@@ -122,11 +128,27 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * Stops location updates for all registered listeners
      */
     public void stopLocationUpdates() {
+        Log.d(TAG, "Stopping location updates");
         mRequestingLocationUpdates = false;
         if (mGoogleApiClientConnected) {
             for (int i = 0; i < mLocationListeners.size(); i++) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, mLocationListeners.get(i));
             }
+        } else {
+            Log.i(TAG, "GoogleApiClient is not connected. Unable to stop location updates");
+        }
+    }
+
+    /**
+     * Applies changes to location entity by calling {@link #stopLocationUpdates()}
+     * and {@link #startLocationUpdates()}
+     */
+    public void resetLocationUpdates() {
+        if (mGoogleApiClientConnected) {
+            stopLocationUpdates();
+            startLocationUpdates();
+        } else {
+            Log.i(TAG, "GoogleApiClient is not connected. Unable to reset location updates");
         }
     }
 
@@ -136,6 +158,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * @param listener LocationListener to be registered
      */
     public void addLocationListener(LocationListener listener) {
+        Log.d(TAG, "Adding listener " + listener.toString());
         mLocationListeners.add(listener);
         if (mGoogleApiClientConnected && mRequestingLocationUpdates) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, listener);
@@ -148,6 +171,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * @param listener LocationListener to unregister
      */
     public void removeLocationListener(LocationListener listener) {
+        Log.d(TAG, "Removing listener " + listener.toString());
         mLocationListeners.remove(listener);
         if (mGoogleApiClientConnected && mRequestingLocationUpdates) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, listener);
@@ -158,11 +182,13 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * Method to build GoogleApiClient object from within HikeLocationEntity object
      */
     private synchronized void buildGoogleApiClient() {
+        Log.d(TAG, "Building GoogleApiClient");
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        mGoogleApiClient.connect();
     }
 
     /**
@@ -171,6 +197,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      */
     public void setInterval(int mInterval) {
         this.mInterval = mInterval;
+        mLocationRequest.setInterval(mInterval);
     }
 
     /**
@@ -179,6 +206,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      */
     public void setFastestInterval(int mFastestInterval) {
         this.mFastestInterval = mFastestInterval;
+        mLocationRequest.setFastestInterval(mFastestInterval);
     }
 
     /**
@@ -189,6 +217,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      */
     public void setPriority(int mPriority) {
         this.mPriority = mPriority;
+        mLocationRequest.setPriority(mPriority);
     }
 
     /**
@@ -233,6 +262,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
 
     @Override
     public void onConnected(Bundle bundle) {
+        Log.i(TAG, "GoogleApiClient connected");
         mGoogleApiClientConnected = true;
         if (mRequestingLocationUpdates) {
             startLocationUpdates();
@@ -253,12 +283,13 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
             }
         }
 
-        Log.d(TAG, "GoogleApiClient Connection Suspended. Cause: " + cause);
+        Log.i(TAG, "GoogleApiClient Connection Suspended. Cause: " + cause);
         mGoogleApiClientConnected = false;
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d(TAG, "GoogleApiClient connection failed" + connectionResult);
         mGoogleApiClientConnected = false;
 
     }

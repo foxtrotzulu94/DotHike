@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -20,8 +21,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.hw.TestSensorListener;
+import me.dotteam.dotprod.loc.HikeLocationEntity;
 
-public class HikeActivity extends FragmentActivity implements OnMapReadyCallback {
+public class HikeActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
     private String TAG = "HikeActivity";
@@ -31,6 +33,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
     private HikeHardwareManager mHHM;
     private TestSensorListener mTestSensorListener;
+    private HikeLocationEntity mHLE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +69,22 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
         mTestSensorListener = new TestSensorListener();
         mHHM.addListener(mTestSensorListener);
 
+        // Test to see if HLE is working as expected
+        mHLE = HikeLocationEntity.getInstance(this);
+        mHLE.addLocationListener(this);
+        mHLE.startLocationUpdates();
+
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.i(TAG, "Location Changed!"
+                + "\nLatitude: " + location.getLatitude()
+                + "\nLongitude: " + location.getLongitude()
+                + "\nAltitude: " + location.getAltitude()
+                + "\nBearing: " + location.getBearing()
+                + "\nAccuracy :" + location.getAccuracy());
+    }
 
     /**
      * Manipulates the map once available.
