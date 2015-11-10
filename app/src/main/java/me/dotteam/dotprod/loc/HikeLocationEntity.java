@@ -27,8 +27,8 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     /**
      * Default Values for Location Updates
      */
-    private final int DEFAULT_INTERVAL = 1000;
-    private final int DEFAULT_FASTEST_INTERVAL = 500;
+    private final int DEFAULT_INTERVAL = 5000;
+    private final int DEFAULT_FASTEST_INTERVAL = 1000;
     private final int DEFAULT_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
     /**
@@ -157,7 +157,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * Start location updates for the LocationListener if the GoogleApiClient is connected and the location updates have been started
      * @param listener LocationListener to be registered
      */
-    public void addLocationListener(LocationListener listener) {
+    public void addListener(LocationListener listener) {
         Log.d(TAG, "Adding listener " + listener.toString());
         mLocationListeners.add(listener);
         if (mGoogleApiClientConnected && mRequestingLocationUpdates) {
@@ -170,7 +170,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * This LocationListener will cease receiving any location updates
      * @param listener LocationListener to unregister
      */
-    public void removeLocationListener(LocationListener listener) {
+    public void removeListener(LocationListener listener) {
         Log.d(TAG, "Removing listener " + listener.toString());
         mLocationListeners.remove(listener);
         if (mGoogleApiClientConnected && mRequestingLocationUpdates) {

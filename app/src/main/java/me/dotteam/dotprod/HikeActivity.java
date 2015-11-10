@@ -1,7 +1,5 @@
 package me.dotteam.dotprod;
 
-import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -9,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
@@ -19,14 +16,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import me.dotteam.dotprod.data.Coordinates;
-import me.dotteam.dotprod.data.LocationPoints;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.hw.TestSensorListener;
 import me.dotteam.dotprod.loc.HikeLocationEntity;
@@ -46,8 +37,6 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     private HikeHardwareManager mHHM;
     private HikeLocationEntity mHLE;
 
-    private float mDistanceTravelled = 0;
-    private LocationPoints mLocationPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,13 +80,10 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
         mHHM.startSensorTagConnector();
         mHHM.addListener(new TestSensorListener());
 
-        // Test to see if HLE is working as expected
+        // Get HLE reference and add listener
         mHLE = HikeLocationEntity.getInstance(this);
-        mHLE.addLocationListener(this);
+        mHLE.addListener(this);
         mHLE.startLocationUpdates();
-
-        // New LocationPoints object to save coordinates
-        mLocationPoints = new LocationPoints();
 
     }
 
@@ -112,33 +98,9 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (location.getAccuracy() <= 40) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-            mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
-                    (float) location.getLatitude(), (float) location.getAltitude()));
-
             mMapPolylineOptions.add(latLng);
             mMap.addPolyline(mMapPolylineOptions);
-
-            List<Coordinates> coordinatesList = mLocationPoints.getCoordinateList();
-            int numberOfPoints = coordinatesList.size();
-
-            if (numberOfPoints > 1) {
-                // Array to store results
-                float results[] = new float[3];
-
-                // Get previous and current longitude and latitude
-                double prevLongitude = coordinatesList.get(numberOfPoints - 2).getLongitude();
-                double prevLatitude = coordinatesList.get(numberOfPoints - 2).getLatitude();
-                double currLongitude = coordinatesList.get(numberOfPoints - 1).getLongitude();
-                double currLatitude = coordinatesList.get(numberOfPoints - 1).getLatitude();
-
-                // Calculate distance between both points and add it to total
-                Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, results);
-                mDistanceTravelled += results[0];
-            }
         }
-
-
     }
 
     /**
