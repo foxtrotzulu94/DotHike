@@ -64,4 +64,8 @@ public class SessionData {
     public boolean setHikeID(int ID){
         return mHike.setUniqueID(ID);
     }
+
+    public String toString(){
+        return String.format("Session Data:\n%s\n%s",mHike.toString(),mCurrentStats.toString());
+    }
 }

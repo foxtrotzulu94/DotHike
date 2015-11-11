@@ -65,7 +65,7 @@ public class Hike {
      * Notify the starting of a Hike
      */
     public void start(){
-        if(uniqueID<0 && startTime<0){
+        if(uniqueID<0 || startTime<0){
             startTime=System.currentTimeMillis();
         }
     }
@@ -74,8 +74,8 @@ public class Hike {
      * Notify the end of a Hike
      */
     public void end(){
-        if(uniqueID<0 && endTime<0){
-            startTime=System.currentTimeMillis();
+        if(uniqueID<0 || endTime<0){
+            endTime=System.currentTimeMillis();
         }
     }
 
@@ -133,5 +133,9 @@ public class Hike {
                 TimeUnit.MILLISECONDS.toHours(current),
                 TimeUnit.MILLISECONDS.toMinutes(current%3600000),
                 TimeUnit.MILLISECONDS.toSeconds(current%60000));
+    }
+
+    public String toString(){
+        return String.format("ID: %s Elapsed: %s\n",this.uniqueID,elapsedTime());
     }
 }

@@ -34,7 +34,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentMainHike = new Intent(HomeActivity.this, HikeActivity.class);
                 startActivity(intentMainHike);
-                testy.endCollectionService();
+//                testy.endCollectionService();
             }
         });
         //Show build information for debugging.
@@ -50,8 +50,8 @@ public class HomeActivity extends AppCompatActivity {
             buildField.setText(formatter.toString());
         }
         
-        testy = HikeDataDirector.getInstance(this);
-        testy.beginCollectionService();
+//        testy = HikeDataDirector.getInstance(this);
+//        testy.beginCollectionService();
     }
 
     @Override

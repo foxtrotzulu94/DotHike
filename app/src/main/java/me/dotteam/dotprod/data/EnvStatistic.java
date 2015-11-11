@@ -71,4 +71,8 @@ public class EnvStatistic {
         return retVal;
     }
 
+    public String toString(){
+        return String.format("High: %s, Avg: %s, Low: %s",max,avg,min);
+    }
+
 }

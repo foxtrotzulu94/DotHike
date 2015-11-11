@@ -18,6 +18,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import me.dotteam.dotprod.data.HikeDataDirector;
 import me.dotteam.dotprod.data.TestSensorListener;
 
 import me.dotteam.dotprod.hw.HikeHardwareManager;
@@ -29,7 +30,6 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private boolean mMapReady = false;
     private PolylineOptions mMapPolylineOptions;
-    private String TAG = "HikeActivity";
     private Button mButtonEndHike;
     private Button mButtonEnvCond;
     private Button mButtonNavigationActivity;
@@ -37,6 +37,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
     private HikeHardwareManager mHHM;
     private HikeLocationEntity mHLE;
+    private HikeDataDirector mHDD;
 
 
     @Override
@@ -58,6 +59,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Intent intentResults = new Intent(HikeActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
+                mHDD.endCollectionService();
                 finish();
             }
         });
@@ -79,8 +81,11 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Test to see if SensorTag readings are still captured when app is in the background
         mHHM = HikeHardwareManager.getInstance(this);
-        mHHM.startSensorTagConnector();
-        mHHM.addListener(new TestSensorListener());
+        mHHM.startSensorTagConnector(); //TODO: CHANGE THIS!!!!
+//        mHHM.addListener(new TestSensorListener());
+
+        mHDD = HikeDataDirector.getInstance(this);
+        mHDD.beginCollectionService();
 
         // Get HLE reference and add listener
         mHLE = HikeLocationEntity.getInstance(this);

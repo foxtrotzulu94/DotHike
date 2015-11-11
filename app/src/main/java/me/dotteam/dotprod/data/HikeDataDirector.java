@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class HikeDataDirector {
 
-    private final static String LOG_TAG="Hike_HDD";
+    private final static String TAG ="Hike_HDD";
 
     private static HikeDataDirector mInstance;
     private Context mCreateContext;
@@ -69,10 +69,10 @@ public class HikeDataDirector {
             mIsCollectingData=true;
             mCollectionServiceIntent = new Intent(mCreateContext,SessionCollectionService.class);
             mCreateContext.startService(mCollectionServiceIntent);
-            Log.d(LOG_TAG, "Starting background collection service");
+            Log.d(TAG, "Starting background collection service");
         }
         else{
-            Log.w(LOG_TAG,"beginCollectionService was called, but a background service might be running already!");
+            Log.w(TAG,"beginCollectionService was called, but a background service might be running already!");
         }
     }
 
@@ -83,21 +83,22 @@ public class HikeDataDirector {
         if(mCollectionServiceIntent!=null){
             mCreateContext.stopService(new Intent(mCreateContext,SessionCollectionService.class));
             mCollectionServiceIntent=null;
-            Log.d(LOG_TAG, "Finishing the background collection service");
+            Log.d(TAG, "Finishing the background collection service");
         }
         else{
-            Log.w(LOG_TAG,"beginCollectionService was called, but a background service might be running already!");
+            Log.w(TAG,"beginCollectionService was called, but a background service might be running already!");
         }
     }
 
     public void receiveDataFromService(Service reportingService, SessionData collectedData){
-        Log.d(LOG_TAG,"Receiving data");
+        Log.d(TAG,"Receiving data");
         if(reportingService!=null && collectedData!=null){
             //The data was received, so store it and say we are NOT collecting data anymore.
             //This allows other components to call beginCollectionService() again.
             mSessionData = collectedData;
             mIsCollectingData=false;
-            Log.d(LOG_TAG,"Data received!");
+            Log.d(TAG,"Data received!");
+            Log.e(TAG, "receiveDataFromService "+collectedData.toString());
         }
     }
 

@@ -78,4 +78,8 @@ public class EnvData {
         return pressure.toStorage(ID);
     }
 
+    public String toString(){
+        return String.format("Temp: %s\nHumidity: %s\nPressure: %s",this.temperature.toString(),humidity.toString(),pressure.toString());
+    }
+
 }

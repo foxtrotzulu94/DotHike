@@ -23,6 +23,7 @@ import me.dotteam.dotprod.hw.SensorListenerInterface;
 public class SessionCollectionService extends Service implements SensorListenerInterface,LocationListener{
 
     private final String LONG_NAME=".Hike Statistics Service";
+    private final String TAG="SCS";
 
     private NotificationManager mNotifier;
 
@@ -97,6 +98,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
      */
     @Override
     public void update(HikeSensors hikesensors, double value) {
+        Log.d("SCS",String.format("Got update %s: %s",hikesensors.toString(),value));
         switch (hikesensors){
             case TEMPERATURE:{
                 recordedData.updateTemp(value);
