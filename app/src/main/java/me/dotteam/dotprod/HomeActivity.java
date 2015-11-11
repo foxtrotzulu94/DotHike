@@ -7,8 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -19,22 +18,18 @@ import me.dotteam.dotprod.data.HikeDataDirector;
 
 public class HomeActivity extends AppCompatActivity {
 
-   private ImageButton mButtonStartHike;
+    private LinearLayout mLinearLayoutStartHike;
+    private LinearLayout mLinearLayoutPastHikes;
+    private LinearLayout mLinearLayoutSensors;
+    private LinearLayout mLinearLayoutSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        setMemberIDs();
+        setIntents();
 
-        mButtonStartHike = (ImageButton) findViewById(R.id.imageButtonStartHike);
-
-        mButtonStartHike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentMainHike = new Intent(HomeActivity.this, HikeActivity.class);
-                startActivity(intentMainHike);
-            }
-        });
         //Show build information for debugging.
         if (BuildConfig.DEBUG) {
             TextView buildField = (TextView) findViewById(R.id.app_build);
@@ -51,6 +46,24 @@ public class HomeActivity extends AppCompatActivity {
         Log.d("Home", "Testing DB");
         HikeDataDirector HDD = HikeDataDirector.getInstance(this);
         HDD.testStorage();
+    }
+
+    public void setMemberIDs(){
+        mLinearLayoutStartHike = (LinearLayout) findViewById(R.id.linearLayoutStartHike);
+        mLinearLayoutPastHikes = (LinearLayout) findViewById(R.id.linearLayoutPastHikes);
+        mLinearLayoutSensors = (LinearLayout) findViewById(R.id.linearLayoutSensors);
+        mLinearLayoutSettings = (LinearLayout) findViewById(R.id.linearLayoutSettings);
+    }
+
+    public void setIntents(){
+        // Intent to HikeActivity
+        mLinearLayoutStartHike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentMainHike = new Intent(HomeActivity.this, HikeActivity.class);
+                startActivity(intentMainHike);
+            }
+        });
     }
 
     @Override
