@@ -12,6 +12,8 @@ import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
 
+import java.util.Date;
+
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
 import me.dotteam.dotprod.hw.SensorListenerInterface;
@@ -27,7 +29,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
     private NotificationManager mNotifier;
 
-    private EnvData recordedData;
+    private SessionEnvData recordedData;
     private LocationPoints recordedCoordinates;
     private Hike currentHike;
 
@@ -44,7 +46,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
     @Override
     public void onCreate(){
         //Initialize objects
-        recordedData = new EnvData();
+        recordedData = new SessionEnvData(); //TODO: Change after debugging
         recordedCoordinates = new LocationPoints();
         currentHike = new Hike();
         currentHike.start();

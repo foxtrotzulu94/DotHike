@@ -65,7 +65,7 @@ public class Hike {
      * Notify the starting of a Hike
      */
     public void start(){
-        if(uniqueID<0 || startTime<0){
+        if(uniqueID<0 && startTime<0){
             startTime=System.currentTimeMillis();
         }
     }
@@ -74,7 +74,7 @@ public class Hike {
      * Notify the end of a Hike
      */
     public void end(){
-        if(uniqueID<0 || endTime<0){
+        if(uniqueID<0 && endTime<0){
             endTime=System.currentTimeMillis();
         }
     }

@@ -26,6 +26,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     private boolean mSTConnected = false;
     private Context mContext;
     private static HikeHardwareManager mInstance;
+    private int samplingFrequency = 2000; //In milliseconds. 1000ms = 1s. MAX:2550ms
 
 
     public static HikeHardwareManager getInstance(Context context) {
@@ -70,10 +71,10 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             return;
         }
 
-        mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE);
-        mSensorTagManager.enableSensor(Sensor.HUMIDITY);
-        mSensorTagManager.enableSensor(Sensor.BAROMETER);
-
+        //TODO: wrap this in a function call in case we want to dynamically change the sampling frequency
+        mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE,samplingFrequency);
+        mSensorTagManager.enableSensor(Sensor.HUMIDITY,samplingFrequency);
+        mSensorTagManager.enableSensor(Sensor.BAROMETER,samplingFrequency);
         mSensorTagManager.enableUpdates();
 
         mSTConnected = true;

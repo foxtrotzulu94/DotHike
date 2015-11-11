@@ -7,15 +7,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.Date;
+import java.util.List;
+
+import me.dotteam.dotprod.data.HikeDataDirector;
+import me.dotteam.dotprod.data.SessionData;
+import me.dotteam.dotprod.data.SessionEnvData;
 
 public class ResultsActivity extends AppCompatActivity {
     private Button mButtonResultsDone;
+    private TextView mDumpSpace;
+    private HikeDataDirector mHDD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
         mButtonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
+        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
 
         mButtonResultsDone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -25,6 +37,21 @@ public class ResultsActivity extends AppCompatActivity {
 
             }
         });
+        mHDD=HikeDataDirector.getInstance(this);
+//        String dump="";
+        StringBuilder dump = new StringBuilder();
+        SessionData results = mHDD.getSessionData();
+        SessionEnvData fullList = (SessionEnvData) results.getCurrentStats();
+        dump.append(results.toString());
+        if(fullList!=null){
+            List<Long> elements = fullList.getTimestamps();
+            for (Long timestamp: elements) {
+                dump.append(new Date(timestamp).toString());
+                dump.append('\n');
+            }
+        }
+        mDumpSpace.setText(dump.toString());
+
     }
 
     @Override
