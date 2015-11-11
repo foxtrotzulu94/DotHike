@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -18,7 +19,7 @@ import me.dotteam.dotprod.data.HikeDataDirector;
 
 public class HomeActivity extends AppCompatActivity {
 
-   private Button mButtonStartHike;
+   private ImageButton mButtonStartHike;
     private HikeDataDirector testy;
 
     @Override
@@ -26,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        mButtonStartHike = (Button) findViewById(R.id.buttonStartHike);
+        mButtonStartHike = (ImageButton) findViewById(R.id.imageButtonStartHike);
 
         mButtonStartHike.setOnClickListener(new View.OnClickListener() {
             @Override
