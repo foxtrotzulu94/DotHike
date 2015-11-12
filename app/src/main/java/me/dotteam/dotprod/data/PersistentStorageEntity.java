@@ -62,8 +62,7 @@ public class PersistentStorageEntity {
      * @return a SessionData object with the indicators that it was in the DB
      */
     public SessionData loadHikeData(Hike specificHike) {
-        // TODO implement here
-        return null;
+        return loadHikeData(specificHike.uniqueID);
     }
 
     /**
@@ -73,7 +72,30 @@ public class PersistentStorageEntity {
      * @return a SessionData object with the indicators that it was in the DB, null otherwise.
      */
     public SessionData loadHikeData(int hikeID) {
-        // TODO implement here
+        if(hikeID<1){
+            return null;
+        }
+        //TODO: IMPLEMENT EFFICIENTLY!
+//        mDB = mProvider.getReadableDatabase();
+//
+//        //First, load the Hike
+//        Cursor cursor = mDB.query(DBAssistant.HIKE,null,DBAssistant.HIKE_ID+"=?",
+//                new String[]{Integer.toString(hikeID)},null,null,null);
+//        if(cursor.getCount()<1){
+//            return null;
+//        }
+//        cursor.moveToFirst();
+//        Hike loadedHike = new Hike(hikeID,
+//                cursor.getLong(cursor.getColumnIndex(DBAssistant.HIKE_START)),
+//                cursor.getLong(cursor.getColumnIndex(DBAssistant.HIKE_END)));
+//        cursor.close();
+
+//        cursor = mDB.query(DBAssistant.ENVHUMD)
+
+
+
+//        SessionData retVal = new SessionData();
+//        return retVal;
         return null;
     }
 
@@ -88,7 +110,7 @@ public class PersistentStorageEntity {
         //Get the hike as contentValue and insert it into the DB
         mDB.insert(DBAssistant.HIKE,null,givenSession.hikeToStorage());
 
-        mDB = mProvider.getReadableDatabase();
+//        mDB = mProvider.getReadableDatabase();
 
         //After inserting, query the DB to retrieve its assigned hike ID
         Cursor cursor = mDB.query(DBAssistant.HIKE,null,null,

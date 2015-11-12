@@ -30,6 +30,12 @@ public class EnvData {
         pressure = new EnvStatistic();
     }
 
+    public EnvData(EnvStatistic temperature,EnvStatistic humidity,EnvStatistic pressure){
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+    }
+
     public void updateTemp(double newSample){
         temperature.insertSample(newSample);
     }

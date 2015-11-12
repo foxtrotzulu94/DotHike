@@ -35,7 +35,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
     NotificationCompat.Builder mBuilder;
     private int notificationID;
 
-    private SessionEnvData recordedData;
+    private EnvData recordedData;
     private LocationPoints recordedCoordinates;
     private Hike currentHike;
 
@@ -83,7 +83,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
     @Override
     public void onCreate(){
         //Initialize objects
-        recordedData = new SessionEnvData(); //TODO: Change after debugging
+        recordedData = new EnvData();
         recordedCoordinates = new LocationPoints();
         currentHike = new Hike();
         currentHike.start();

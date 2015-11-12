@@ -11,11 +11,8 @@ public class SessionData {
     private EnvData mCurrentStats;
     private LocationPoints mGeoPoints;
 
-    //TODO: consider removing
-    private boolean isHistoric;
-
     /**
-     * 
+     * Indicates whether or not the SessionData was loaded from Persistent Storage
      */
     private boolean isFromDB;
 
@@ -51,10 +48,6 @@ public class SessionData {
 
     public LocationPoints getGeoPoints() {
         return mGeoPoints;
-    }
-
-    public boolean isHistoric() {
-        return isHistoric;
     }
 
     public boolean isFromDB() {
