@@ -50,7 +50,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
-            android:id="@+id/linearLayoutStartHike">
+            android:id="@+id/linearLayoutStartHike"
+            android:clickable="true"
+            android:background="@drawable/clickable_linear_layout">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -79,7 +81,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
-            android:id="@+id/linearLayoutPastHikes">
+            android:id="@+id/linearLayoutPastHikes"
+            android:clickable="true"
+            android:background="@drawable/clickable_linear_layout">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -108,7 +112,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
-            android:id="@+id/linearLayoutSensors">
+            android:id="@+id/linearLayoutSensors"
+            android:clickable="true"
+            android:background="@drawable/clickable_linear_layout">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -137,7 +143,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.2"
-            android:id="@+id/linearLayoutSettings">
+            android:id="@+id/linearLayoutSettings"
+            android:clickable="true"
+            android:background="@drawable/clickable_linear_layout">
 
             <ImageView
                 android:layout_width="match_parent"
