@@ -26,7 +26,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     private boolean mSTConnected = false;
     private Context mContext;
     private static HikeHardwareManager mInstance;
-    private int samplingFrequency = 2000; //In milliseconds. 1000ms = 1s. MAX:2550ms
+    private int samplingFrequency = 500; //In milliseconds. 1000ms = 1s. MAX:2550ms
 
 
     public static HikeHardwareManager getInstance(Context context) {
