@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 
 import java.util.Date;
 import java.util.Formatter;
@@ -16,19 +18,20 @@ import java.util.Locale;
 
 import me.dotteam.dotprod.data.HikeDataDirector;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity{
 
     private LinearLayout mLinearLayoutStartHike;
     private LinearLayout mLinearLayoutPastHikes;
     private LinearLayout mLinearLayoutSensors;
     private LinearLayout mLinearLayoutSettings;
+    private FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setMemberIDs();
-        setIntents();
+        setOnClickListener();
 
         //Show build information for debugging.
         if (BuildConfig.DEBUG) {
@@ -55,13 +58,21 @@ public class HomeActivity extends AppCompatActivity {
         mLinearLayoutSettings = (LinearLayout) findViewById(R.id.linearLayoutSettings);
     }
 
-    public void setIntents(){
+    public void setOnClickListener(){
         // Intent to HikeActivity
         mLinearLayoutStartHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentMainHike = new Intent(HomeActivity.this, HikeActivity.class);
                 startActivity(intentMainHike);
+            }
+        });
+
+        // Shows Setting Dialogue
+        mLinearLayoutSettings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                DSettingsFragment dSettingsFragment = new DSettingsFragment();
+                dSettingsFragment.show(fm, "Settings Dialog");
             }
         });
     }
