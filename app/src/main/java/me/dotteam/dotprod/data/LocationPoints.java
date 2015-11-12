@@ -18,6 +18,10 @@ public class LocationPoints {
         points=new ArrayList<Coordinates>();
     }
 
+    public LocationPoints(List<Coordinates> pointList){
+        points = pointList;
+    }
+
     public void addPoint(Coordinates newPoint){
         points.add(newPoint);
     }

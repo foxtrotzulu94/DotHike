@@ -86,7 +86,7 @@ public class HikeDataDirector {
             Log.d(TAG, "Finishing the background collection service");
         }
         else{
-            Log.w(TAG,"beginCollectionService was called, but a background service might be running already!");
+            Log.w(TAG, "beginCollectionService was called, but a background service might be running already!");
         }
     }
 
@@ -107,8 +107,10 @@ public class HikeDataDirector {
      * @return boolean indicating the success or failure of the operation
      */
     public boolean storeCollectedStatistics() {
-        // TODO implement here
-        return false;
+        if(mPSE==null){
+            mPSE = new PersistentStorageEntity(mCreateContext);
+        }
+        return mPSE.saveSession(mSessionData);
     }
 
     //TODO: Eventually remove

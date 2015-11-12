@@ -50,8 +50,8 @@ public class HomeActivity extends AppCompatActivity {
             buildField.setText(formatter.toString());
         }
         
-//        testy = HikeDataDirector.getInstance(this);
-//        testy.beginCollectionService();
+        testy = HikeDataDirector.getInstance(this);
+        testy.testStorage();
     }
 
     @Override

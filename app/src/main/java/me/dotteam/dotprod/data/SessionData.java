@@ -42,6 +42,8 @@ public class SessionData {
         return mHike.endTime();
     }
 
+    public int hikeID(){ return mHike.getUniqueID(); }
+
     public EnvData getCurrentStats() {
         return mCurrentStats;
     }
