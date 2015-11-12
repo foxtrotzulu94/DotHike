@@ -18,6 +18,7 @@ import java.util.Date;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
 import me.dotteam.dotprod.hw.SensorListenerInterface;
+import me.dotteam.dotprod.loc.HikeLocationEntity;
 
 /**
  * Lightweight class used for Sensor Data Collection as a service.
@@ -96,7 +97,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
         //register yourself
         HikeHardwareManager.getInstance(this).addListener(this);
-        //HikeLocationEntity.getInstance().addListener(this);
+        HikeLocationEntity.getInstance(this).addListener(this);
     }
 
     private void firstNotify(){
@@ -126,7 +127,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
         //de-register yourself
         HikeHardwareManager.getInstance(this).removeListener(this);
-        //HikeLocationEntity.getInstance().addListener(this);
+        HikeLocationEntity.getInstance(this).addListener(this);
     }
 
     /**
@@ -160,6 +161,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
     @Override
     public void onLocationChanged(Location location) {
         //Store the new point in our recorded coordinates list
+        Log.d(TAG, "onLocationChanged Added "+location.toString());
         this.recordedCoordinates.addPoint(new Coordinates(
                 location.getLongitude(),
                 location.getLatitude(),

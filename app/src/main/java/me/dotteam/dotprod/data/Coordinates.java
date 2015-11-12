@@ -45,4 +45,8 @@ public class Coordinates {
     public double getAltitude() {
         return altitude;
     }
+
+    public String toString(){
+        return String.format("Lat %.3f Long %.3f Alt %.3f",latitude,longitude,altitude);
+    }
 }

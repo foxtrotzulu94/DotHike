@@ -48,11 +48,12 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     }
 
     public void stopSensorTag(){
-        mSTConnector.stop();
         if(mSensorTagManager!=null) {
             mSensorTagManager.disableUpdates();
-            mSensorTagManager.close();
+            if(mSensorTagManager.isServicesReady())
+                mSensorTagManager.close();
         }
+        mSTConnector.stop();
         mSTConnector = null;
 
         System.gc(); //Mark for Cleanup!

@@ -66,6 +66,6 @@ public class SessionData {
     }
 
     public String toString(){
-        return String.format("Session Data:\n%s\n%s",mHike.toString(),mCurrentStats.toString());
+        return String.format("Session Data:\n%s\n%s\n%s",mHike.toString(),mCurrentStats.toString(),mGeoPoints.toString());
     }
 }

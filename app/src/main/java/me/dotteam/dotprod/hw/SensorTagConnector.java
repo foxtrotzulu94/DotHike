@@ -121,10 +121,15 @@ public class SensorTagConnector {
     }
 
     public void stop(){
-        mBluetoothLeService.close();
-        mContext.stopService(new Intent(mContext, BluetoothLeService.class));
-        mContext.unbindService(mServiceConnection);
-        mContext.unregisterReceiver(mReceiver);
+        scanLeDevice(false);
+        if(mBluetoothLeService!=null) {
+            mBluetoothLeService.close();
+            mBluetoothLeService = null;
+            mContext.stopService(new Intent(mContext, BluetoothLeService.class));
+            mContext.unbindService(mServiceConnection);
+            mContext.unregisterReceiver(mReceiver);
+        }
+
     }
 
     private boolean scanLeDevice(boolean enable) {
@@ -222,7 +227,6 @@ public class SensorTagConnector {
     }
 
     private void startBluetoothLeService() {
-
         Intent bindIntent = new Intent(mContext, BluetoothLeService.class);
         mContext.startService(bindIntent);
         boolean bindServiceResult = mContext.bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
