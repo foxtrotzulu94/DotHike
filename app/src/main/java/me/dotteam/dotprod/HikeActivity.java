@@ -60,6 +60,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 Intent intentResults = new Intent(HikeActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
                 mHDD.endCollectionService();
+                mHHM.stopSensorTag();
                 finish();
             }
         });
@@ -81,8 +82,7 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Test to see if SensorTag readings are still captured when app is in the background
         mHHM = HikeHardwareManager.getInstance(this);
-        mHHM.startSensorTagConnector(); //TODO: CHANGE THIS!!!!
-//        mHHM.addListener(new TestSensorListener());
+        mHHM.startSensorTagConnector(); //TODO: CHANGE THIS!! Throws exception if Bluetooth is NOT ON
 
         mHDD = HikeDataDirector.getInstance(this);
         mHDD.beginCollectionService();

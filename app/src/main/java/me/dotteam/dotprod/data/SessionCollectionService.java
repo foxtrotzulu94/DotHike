@@ -3,6 +3,7 @@ package me.dotteam.dotprod.data;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.IBinder;
@@ -27,11 +28,46 @@ public class SessionCollectionService extends Service implements SensorListenerI
     private final String LONG_NAME=".Hike Statistics Service";
     private final String TAG="SCS";
 
+    private TimeUpdate serviceThread;
+
     private NotificationManager mNotifier;
+    NotificationCompat.Builder mBuilder;
+    private int notificationID;
 
     private SessionEnvData recordedData;
     private LocationPoints recordedCoordinates;
     private Hike currentHike;
+
+    class TimeUpdate extends Thread{
+
+        private Context mainContext;
+        private boolean run;
+
+        public TimeUpdate(Context currContext){
+            mainContext = currContext;
+            run = true;
+        }
+
+        @Override
+        public void run(){
+            while(run){
+                try{
+                    mBuilder.setContentText(currentHike.elapsedTime());
+                    mNotifier.notify(notificationID,mBuilder.build());
+                    sleep(1000);
+                }
+                catch (Exception e){
+                    Log.e(TAG,"Service Thread was killed while Sleeping!");
+                }
+            }
+
+        }
+
+        public void end(){
+            run=false;
+        }
+    }
+
 
     @Nullable
     @Override
@@ -52,7 +88,10 @@ public class SessionCollectionService extends Service implements SensorListenerI
         currentHike.start();
 
         mNotifier = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationID = this.getApplicationInfo().uid;
         firstNotify();
+        serviceThread = new TimeUpdate(this);
+        serviceThread.start();
         Log.d("Collect","SERVICE STARTED!!!");
 
         //register yourself
@@ -61,16 +100,13 @@ public class SessionCollectionService extends Service implements SensorListenerI
     }
 
     private void firstNotify(){
-
-        NotificationCompat.Builder mBuilder =
+        mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.dothikemin)
                         .setContentTitle(LONG_NAME)
-                        .setContentText(new Hike(0,100,100*60*1000).elapsedTime())
                         .setOngoing(true);
 
-        mNotifier.notify(this.getApplicationInfo().uid,
-                mBuilder.build());
+        mNotifier.notify(notificationID,mBuilder.build());
     }
 
     /**
@@ -84,7 +120,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
         //Now hand this data off to someone.
         HikeDataDirector.getInstance(this).receiveDataFromService(this,thisSession);
-
+        serviceThread.end();
         Log.d("Collect", "Service ends...");
         mNotifier.cancelAll();
 

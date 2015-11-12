@@ -120,6 +120,13 @@ public class SensorTagConnector {
         mListeners.add(listener);
     }
 
+    public void stop(){
+        mBluetoothLeService.close();
+        mContext.stopService(new Intent(mContext, BluetoothLeService.class));
+        mContext.unbindService(mServiceConnection);
+        mContext.unregisterReceiver(mReceiver);
+    }
+
     private boolean scanLeDevice(boolean enable) {
         if (enable) {
             mScanning = mBtAdapter.startLeScan(mLeScanCallback);
