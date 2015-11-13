@@ -1,9 +1,5 @@
 package me.dotteam.dotprod;
 
-/**
- * Created by Corentin on 2015-11-11.
- */
-
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;

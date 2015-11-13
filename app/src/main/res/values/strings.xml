@@ -25,4 +25,5 @@
     <string name="textSensors">Sensors</string>
     <string name="textPastHikes">Past Hikes</string>
     <string name="textStartHike">Start Hike</string>
+    <string name="textTemperatureSetting">Temperature</string>
 </resources>
