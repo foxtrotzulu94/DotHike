@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,12 +41,21 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     private HikeLocationEntity mHLE;
     private HikeDataDirector mHDD;
 
+    // ViewPager
+    private ViewPager mPager;
+    private static final int NUM_PAGES = 3;
+    private PagerAdapter mPagerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate() Called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hike);
+
+        // Instantiate ViewPager and PagerAdapter
+        //mPager = (ViewPager) findViewById(R.id.pager);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
