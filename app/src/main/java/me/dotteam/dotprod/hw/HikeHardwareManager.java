@@ -1,16 +1,21 @@
 package me.dotteam.dotprod.hw;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.util.Log;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.concordia.sensortag.SensorTagListener;
 import ca.concordia.sensortag.SensorTagLoggerListener;
 import ca.concordia.sensortag.SensorTagManager;
+import me.dotteam.dotprod.R;
 import ti.android.ble.sensortag.Sensor;
 import ti.android.util.Point3D;
 
@@ -27,6 +32,11 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     private Context mContext;
     private static HikeHardwareManager mInstance;
 
+    // Android Sensors
+    SensorManager mSensorManager;
+    android.hardware.Sensor mPedometer;
+    PedometerEventListener mPedometerListener;
+
 
     public static HikeHardwareManager getInstance(Context context) {
         if (mInstance == null) {
@@ -39,11 +49,41 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mContext = context;
         mSensorTagManagerListener = new SensorTagManagerListener();
         mSensorListenerList = new ArrayList<SensorListenerInterface>();
+        mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
+        mPedometer = mSensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_STEP_COUNTER);
+        mPedometerListener = new PedometerEventListener();
     }
 
     public void startSensorTagConnector() {
-        mSTConnector = new SensorTagConnector(mContext);
-        mSTConnector.addListener(this);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+        dialog.setTitle(R.string.STConnectDialogFragmentTitle);
+        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d(TAG, "AlertDialog Yes");
+                mSTConnector = new SensorTagConnector(mContext);
+                mSTConnector.addListener(mInstance);
+            }
+        });
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d(TAG, "AlertDialog No");
+            }
+        });
+        dialog.create().show();
+    }
+
+    public void startPedometer() {
+        mSensorManager.registerListener(mPedometerListener, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    public void stopPedometer() {
+        mSensorManager.unregisterListener(mPedometerListener);
+    }
+
+    public void resetPedometer() {
+        mPedometerListener.mFirstStep = true;
     }
 
 
@@ -83,6 +123,29 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     public void onSensorTagDisconnect() {
         mSensorTagManager.disableUpdates();
         mSTConnected = false;
+    }
+
+    public class PedometerEventListener implements SensorEventListener {
+        private double mInitialStepCount = 0;
+        private boolean mFirstStep = true;
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            double value = event.values[0];
+            if (mFirstStep) {
+                mInitialStepCount = value - 1;
+                mFirstStep = false;
+            }
+            double stepcount = value - mInitialStepCount;
+            for (int i = 0; i < mSensorListenerList.size(); i++) {
+                mSensorListenerList.get(i).update(SensorListenerInterface.HikeSensors.PEDOMETER, stepcount);
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
+
+        }
     }
 
     public class SensorTagManagerListener extends SensorTagLoggerListener implements SensorTagListener {

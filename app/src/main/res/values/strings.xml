@@ -21,4 +21,5 @@
     <string name="textDisplayPressure">Pressure Display</string>
     <string name="title_activity_navigation">NavigationActivity</string>
     <string name="textBottonNavigationActivity">NavigationActivity</string>
+    <string name="STConnectDialogFragmentTitle">Do you wish to connect to a TI SensorTag?</string>
 </resources>

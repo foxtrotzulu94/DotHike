@@ -17,6 +17,7 @@ import java.util.List;
 
 import me.dotteam.dotprod.data.Coordinates;
 import me.dotteam.dotprod.data.LocationPoints;
+import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.loc.HikeLocationEntity;
 
 public class NavigationActivity extends AppCompatActivity implements LocationListener {
@@ -24,6 +25,9 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
     private Button mButtonBackToMainHike;
 
     private HikeLocationEntity mHLE;
+    private HikeHardwareManager mHHM;
+
+    private NavigationListener mNavListener;
 
     private float mDistanceTravelled = 0;
     private LocationPoints mLocationPoints;
@@ -35,6 +39,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
     TextView mTextBearing;
     TextView mTextAccuracy;
     TextView mTextDistanceTraveled;
+    TextView mTextStepCount;
 
 
     @Override
@@ -55,6 +60,11 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         mHLE.addListener(this);
         mHLE.startLocationUpdates();
 
+        // Get Reference to HHM and add listener
+        mHHM = HikeHardwareManager.getInstance(this);
+        mNavListener = new NavigationListener(this);
+        mHHM.addListener(mNavListener);
+
         // New LocationPoints object to save coordinates
         mLocationPoints = new LocationPoints();
 
@@ -64,6 +74,8 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
         mTextBearing = (TextView) findViewById(R.id.textBearing);
         mTextAccuracy = (TextView) findViewById(R.id.textAccuracy);
         mTextDistanceTraveled = (TextView) findViewById(R.id.textDistanceTraveled);
+        mTextStepCount = (TextView) findViewById(R.id.textStepCount);
+        mTextStepCount.setText("0");
         mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
 
     }
@@ -102,6 +114,15 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
                 mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
             }
         }
+    }
+
+    public void updateStepCount(final String steps) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTextStepCount.setText(steps);
+            }
+        });
     }
 
     @Override
