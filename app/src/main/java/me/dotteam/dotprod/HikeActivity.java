@@ -1,7 +1,5 @@
 package me.dotteam.dotprod;
 
-import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,25 +9,36 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import me.dotteam.dotprod.data.HikeDataDirector;
+import me.dotteam.dotprod.data.TestSensorListener;
 
 import me.dotteam.dotprod.hw.HikeHardwareManager;
+import me.dotteam.dotprod.loc.HikeLocationEntity;
 
-public class HikeActivity extends FragmentActivity implements OnMapReadyCallback {
+public class HikeActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
+    private String TAG = "HikeActivity";
 
     private GoogleMap mMap;
-    private String TAG = "HikeActivity";
+    private boolean mMapReady = false;
+    private PolylineOptions mMapPolylineOptions;
     private Button mButtonEndHike;
     private Button mButtonEnvCond;
     private Button mButtonNavigationActivity;
     private boolean mGotLocation = false;
 
     private HikeHardwareManager mHHM;
+    private HikeLocationEntity mHLE;
+    private HikeDataDirector mHDD;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,9 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 Intent intentResults = new Intent(HikeActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
+                mHDD.endCollectionService();
+                mHHM.stopSensorTag();
+                finish();
             }
         });
         mButtonEnvCond.setOnClickListener(new View.OnClickListener() {
@@ -67,8 +79,36 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intentNavigationActivity);
             }
         });
+
+        // Test to see if SensorTag readings are still captured when app is in the background
+        mHHM = HikeHardwareManager.getInstance(this);
+        mHHM.startSensorTagConnector(); //TODO: CHANGE THIS!! Throws exception if Bluetooth is NOT ON
+
+        mHDD = HikeDataDirector.getInstance(this);
+        mHDD.beginCollectionService();
+
+        // Get HLE reference and add listener
+        mHLE = HikeLocationEntity.getInstance(this);
+        mHLE.addListener(this);
+        mHLE.startLocationUpdates();
+
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.i(TAG, "Location Changed!"
+                + "\nLatitude: " + location.getLatitude()
+                + "\nLongitude: " + location.getLongitude()
+                + "\nAltitude: " + location.getAltitude()
+                + "\nBearing: " + location.getBearing()
+                + "\nAccuracy :" + location.getAccuracy());
+
+        if (location.getAccuracy() <= 40) {
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMapPolylineOptions.add(latLng);
+            mMap.addPolyline(mMapPolylineOptions);
+        }
+    }
 
     /**
      * Manipulates the map once available.
@@ -83,7 +123,8 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady() Called");
         mMap = googleMap;
-
+        mMapPolylineOptions = new PolylineOptions();
+        mMapReady = true;
         // Set Maps Settings
         UiSettings mapSettings = mMap.getUiSettings();
         mapSettings.setTiltGesturesEnabled(false);

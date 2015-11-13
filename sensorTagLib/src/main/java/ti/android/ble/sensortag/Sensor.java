@@ -75,7 +75,7 @@ public enum Sensor {
 
 		private double extractAmbientTemperature(byte[] v) {
 			int offset = 2;
-			return shortUnsignedAtOffset(v, offset) / 128.0;
+			return shortSignedAtOffset(v, offset) / 128.0;
 		}
 
 		private double extractTargetTemperature(byte[] v, double ambient) {

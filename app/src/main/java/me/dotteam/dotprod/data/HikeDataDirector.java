@@ -1,6 +1,8 @@
 package me.dotteam.dotprod.data;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.Random;
  * Centralized, Singleton class for managing all Data collection, storage and review
  */
 public class HikeDataDirector {
+
+    private final static String TAG ="Hike_HDD";
 
     private static HikeDataDirector mInstance;
     private Context mCreateContext;
@@ -25,7 +29,7 @@ public class HikeDataDirector {
     /**
      * Reference to a lightweight service for background data collection
      */
-    private SessionCollectionService mCollectionService;
+    private Intent mCollectionServiceIntent;
 
     /**
      * Indicates if the SessionData object is from a Persistent Storage entry
@@ -50,7 +54,7 @@ public class HikeDataDirector {
      * @return Singleton Object instance of the HikeDataDirector
      */
     public static HikeDataDirector getInstance(Context currentContext) {
-        if(mInstance==null){
+        if(mInstance==null && currentContext!=null){
             mInstance = new HikeDataDirector(currentContext);
         }
         return mInstance;
@@ -60,14 +64,42 @@ public class HikeDataDirector {
      * Method to indicate that background collection must begin
      */
     public void beginCollectionService() {
-        // TODO implement here (Spawn a SessionCollectionService entity)
+        if(mCollectionServiceIntent==null && !mIsCollectingData){
+            //Say we are collecting data and begin the service.
+            mIsCollectingData=true;
+            mCollectionServiceIntent = new Intent(mCreateContext,SessionCollectionService.class);
+            mCreateContext.startService(mCollectionServiceIntent);
+            Log.d(TAG, "Starting background collection service");
+        }
+        else{
+            Log.w(TAG,"beginCollectionService was called, but a background service might be running already!");
+        }
     }
 
     /**
      * Method to signal the end of background collection and the need to present a SessionData object
      */
     public void endCollectionService() {
-        // TODO implement here (Kill the SessionCollectionService entity)
+        if(mCollectionServiceIntent!=null){
+            mCreateContext.stopService(new Intent(mCreateContext,SessionCollectionService.class));
+            mCollectionServiceIntent=null;
+            Log.d(TAG, "Finishing the background collection service");
+        }
+        else{
+            Log.w(TAG, "beginCollectionService was called, but a background service might be running already!");
+        }
+    }
+
+    public void receiveDataFromService(Service reportingService, SessionData collectedData){
+        Log.d(TAG,"Receiving data");
+        if(reportingService!=null && collectedData!=null){
+            //The data was received, so store it and say we are NOT collecting data anymore.
+            //This allows other components to call beginCollectionService() again.
+            mSessionData = collectedData;
+            mIsCollectingData=false;
+            Log.d(TAG,"Data received!");
+            Log.e(TAG, "receiveDataFromService "+collectedData.toString());
+        }
     }
 
     /**
@@ -75,8 +107,10 @@ public class HikeDataDirector {
      * @return boolean indicating the success or failure of the operation
      */
     public boolean storeCollectedStatistics() {
-        // TODO implement here
-        return false;
+        if(mPSE==null){
+            mPSE = new PersistentStorageEntity(mCreateContext);
+        }
+        return mPSE.saveSession(mSessionData);
     }
 
     //TODO: Eventually remove

@@ -35,6 +35,10 @@
             android:name="ti.android.ble.common.BluetoothLeService"
             android:enabled="true" />
 
+        <service
+            android:name="me.dotteam.dotprod.data.SessionCollectionService"
+            android:enabled="true" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -60,6 +64,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
@@ -71,24 +76,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ResultsActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
             android:name=".EnvCondActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-
             <!-- android:noHistory="true"> -->
         </activity>
+
         <activity
             android:name=".NavigationActivity"
             android:label="@string/title_activity_navigation"
-            android:noHistory="true"
             android:screenOrientation="portrait" >
+            <!--android:noHistory="true"-->
+
         </activity>
     </application>
 

@@ -14,9 +14,13 @@ import java.util.List;
  */
 public class PersistentStorageEntity {
 
+    private final String TAG="PSE";
+
     private Context mCreateContext;
     private DBAssistant mProvider;
     private SQLiteDatabase mDB;
+
+    private List<Hike> allHikes;
 
     /**
      * Default constructor
@@ -33,26 +37,28 @@ public class PersistentStorageEntity {
      * @return List of stored Hike Objects
      */
     public List<Hike> getHikesList() {
-        List<Hike> allHikes = new ArrayList<>();
+        if(allHikes==null) {
+            //Create a New Hikes List.
+            allHikes = new ArrayList<>();
 
-        //Query and keep an index on the columns
-        Cursor cursor = mDB.query(DBAssistant.HIKE, null, null, null, null, null,"id");
-        int idColumn = cursor.getColumnIndex("id");
-        int startTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_START);
-        int endTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_END);
+            //Query and keep an index on the columns
+            Cursor cursor = mDB.query(DBAssistant.HIKE, null, null, null, null, null, "id");
+            int idColumn = cursor.getColumnIndex("id");
+            int startTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_START);
+            int endTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_END);
 
-        cursor.moveToFirst();
-        do {
-            allHikes.add(
-                    new Hike(
-                    cursor.getInt(idColumn),
-                    cursor.getLong(startTimeColumn),
-                    cursor.getLong(endTimeColumn))
-            );
-        }while (cursor.moveToNext());
+            cursor.moveToFirst();
+            do {
+                allHikes.add(
+                        new Hike(
+                                cursor.getInt(idColumn),
+                                cursor.getLong(startTimeColumn),
+                                cursor.getLong(endTimeColumn))
+                );
+            } while (cursor.moveToNext());
 
-        cursor.close();
-
+            cursor.close();
+        }
         return allHikes;
     }
 
@@ -62,8 +68,28 @@ public class PersistentStorageEntity {
      * @return a SessionData object with the indicators that it was in the DB
      */
     public SessionData loadHikeData(Hike specificHike) {
-        // TODO implement here
-        return null;
+        int hikeID = specificHike.getUniqueID();
+        if(hikeID<1){
+            return null;
+        }
+
+        //Already got hike, so...
+        //Get EnvData
+        EnvData retrievedStatistics = new EnvData(
+                retrieveEnvDataTable(DBAssistant.ENVTEMP,hikeID),
+                retrieveEnvDataTable(DBAssistant.ENVHUMD,hikeID),
+                retrieveEnvDataTable(DBAssistant.ENVPRES,hikeID));
+
+        //Get GeoPoints
+        LocationPoints retrievedPoints = new LocationPoints(retrieveCoordinates(hikeID));
+
+        if(retrievedPoints!=null && retrievedStatistics!=null){
+            return new SessionData(specificHike,retrievedStatistics,retrievedPoints);
+        }
+        else{
+            Log.d("PSE","DID NOT FIND IN DB");
+            return null;
+        }
     }
 
     /**
@@ -73,8 +99,96 @@ public class PersistentStorageEntity {
      * @return a SessionData object with the indicators that it was in the DB, null otherwise.
      */
     public SessionData loadHikeData(int hikeID) {
-        // TODO implement here
-        return null;
+        if(hikeID<1){
+            return null;
+        }
+
+        //First, load the Hike
+        Cursor cursor = mDB.query(DBAssistant.HIKE,null,DBAssistant.HIKE_ID+"=?",
+                new String[]{Integer.toString(hikeID)},null,null,null);
+        if(cursor.getCount()<1){
+            return null;
+        }
+        cursor.moveToFirst();
+        Hike loadedHike = new Hike(hikeID,
+                cursor.getLong(cursor.getColumnIndex(DBAssistant.HIKE_START)),
+                cursor.getLong(cursor.getColumnIndex(DBAssistant.HIKE_END)));
+        cursor.close();
+
+        //Then delegate the rest...
+        return loadHikeData(loadedHike);
+
+
+        //TODO: IMPLEMENT EFFICIENTLY!
+//        mDB = mProvider.getReadableDatabase();
+//
+//        //First, load the Hike
+//        Cursor cursor = mDB.query(DBAssistant.HIKE,null,DBAssistant.HIKE_ID+"=?",
+//                new String[]{Integer.toString(hikeID)},null,null,null);
+//        if(cursor.getCount()<1){
+//            return null;
+//        }
+//        cursor.moveToFirst();
+//        Hike loadedHike = new Hike(hikeID,
+//                cursor.getLong(cursor.getColumnIndex(DBAssistant.HIKE_START)),
+//                cursor.getLong(cursor.getColumnIndex(DBAssistant.HIKE_END)));
+//        cursor.close();
+
+//        cursor = mDB.query(DBAssistant.ENVHUMD)
+
+
+
+//        SessionData retVal = new SessionData();
+//        return retVal;
+    }
+
+    private EnvStatistic retrieveEnvDataTable(String tableName, int uniqueID){
+        EnvStatistic retrievedValue = new EnvStatistic();
+        //Get the data
+        Cursor cursor = mDB.query(tableName,null,DBAssistant.HIKE_ID+"=?",
+                new String[]{Integer.toString(uniqueID)}, null, null, null);
+        //Check at least an element was returned
+        if(cursor.getCount()<1){
+            return null;
+        }
+        cursor.moveToFirst();
+        //Now, Put in order:
+        //First put MAX
+        retrievedValue.insertSample(cursor.getDouble(cursor.getColumnIndex(DBAssistant.MAX_COL)));
+        //Then put MIN
+        retrievedValue.insertSample(cursor.getDouble(cursor.getColumnIndex(DBAssistant.MIN_COL)));
+        //Then insert Avg (AKA the last recorded value)
+        retrievedValue.insertSample(cursor.getDouble(cursor.getColumnIndex(DBAssistant.AVG_COL)));
+
+        cursor.close();
+
+        return retrievedValue;
+    }
+
+    private List<Coordinates> retrieveCoordinates(int uniqueID){
+        List<Coordinates> retrievedList = null;
+        Cursor cursor = mDB.query(DBAssistant.COORDS,null,DBAssistant.HIKE_ID+"=?",
+                new String[]{Integer.toString(uniqueID)},null,null,DBAssistant.HIKE_ID);
+        if (cursor.getCount() <1){
+            return null;
+        }
+        retrievedList =new ArrayList<>(cursor.getCount());
+        cursor.moveToFirst();
+        int latColumn = cursor.getColumnIndex(DBAssistant.LAT_COL);
+        int longColumn = cursor.getColumnIndex(DBAssistant.LONG_COL);
+        int altColumn = cursor.getColumnIndex(DBAssistant.ALT_COL);
+
+        do {
+            retrievedList.add(
+                    new Coordinates(cursor.getDouble(longColumn),
+                            cursor.getDouble(latColumn),
+                            cursor.getDouble(altColumn))
+            );
+        }while (cursor.moveToNext());
+
+        cursor.close();
+
+        return retrievedList;
     }
 
     /**
@@ -84,6 +198,16 @@ public class PersistentStorageEntity {
      */
     public boolean saveSession(SessionData givenSession) {
         mDB = mProvider.getWritableDatabase();
+
+        if(givenSession==null || givenSession.hikeID()>0){
+            Log.e(TAG, "Given a null SessionData. Cannot Proceed to Storage");
+            return false;
+        }
+
+//        //TODO: Need to keep our list up-to-date. Add this entry to the end after finishing!
+//        if(allHikes==null){
+//            allHikes = getHikesList();
+//        }
 
         //Get the hike as contentValue and insert it into the DB
         mDB.insert(DBAssistant.HIKE,null,givenSession.hikeToStorage());
@@ -95,9 +219,8 @@ public class PersistentStorageEntity {
                 null,null,null,"id");
 
         cursor.moveToLast();
-        Log.w("","Statement returned "+cursor.getColumnCount()+" "+cursor.getCount());
+        Log.w(TAG,"Statement returned "+cursor.getColumnCount()+" "+cursor.getCount());
         int assignedID = cursor.getInt(cursor.getColumnIndex("id"));
-
 
         //Continue insertion of objects with the associated ID.
         List<Coordinates> allCoordinates =givenSession.getGeoPoints().getCoordinateList();

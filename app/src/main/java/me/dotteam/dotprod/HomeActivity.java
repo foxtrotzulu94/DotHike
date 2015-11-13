@@ -25,7 +25,7 @@ public class HomeActivity extends AppCompatActivity{
     private LinearLayout mLinearLayoutSensors;
     private LinearLayout mLinearLayoutSettings;
     private FragmentManager fm = getSupportFragmentManager();
-
+    private HikeDataDirector testy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

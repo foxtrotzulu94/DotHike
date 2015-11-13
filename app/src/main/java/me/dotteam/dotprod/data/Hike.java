@@ -3,6 +3,8 @@ package me.dotteam.dotprod.data;
 import android.content.ContentValues;
 import android.util.Log;
 
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * Data structure to represent a Hiking Session
@@ -73,7 +75,7 @@ public class Hike {
      */
     public void end(){
         if(uniqueID<0 && endTime<0){
-            startTime=System.currentTimeMillis();
+            endTime=System.currentTimeMillis();
         }
     }
 
@@ -116,5 +118,24 @@ public class Hike {
 
     public long endTime() {
         return endTime;
+    }
+
+    public String elapsedTime(){
+        long current=0;
+        if(endTime==-1){
+            current=System.currentTimeMillis() - startTime;
+
+        }
+        else{
+            current = endTime - startTime;
+        }
+        return String.format("%02dh %02dm %02dsec",
+                TimeUnit.MILLISECONDS.toHours(current),
+                TimeUnit.MILLISECONDS.toMinutes(current%3600000),
+                TimeUnit.MILLISECONDS.toSeconds(current%60000));
+    }
+
+    public String toString(){
+        return String.format("ID: %s Elapsed: %s\n",this.uniqueID,elapsedTime());
     }
 }

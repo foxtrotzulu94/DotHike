@@ -26,6 +26,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     private boolean mSTConnected = false;
     private Context mContext;
     private static HikeHardwareManager mInstance;
+    private int samplingFrequency = 500; //In milliseconds. 1000ms = 1s. MAX:2550ms
 
 
     public static HikeHardwareManager getInstance(Context context) {
@@ -39,8 +40,23 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mContext = context;
         mSensorTagManagerListener = new SensorTagManagerListener();
         mSensorListenerList = new ArrayList<SensorListenerInterface>();
+    }
+
+    public void startSensorTagConnector() {
         mSTConnector = new SensorTagConnector(mContext);
         mSTConnector.addListener(this);
+    }
+
+    public void stopSensorTag(){
+        if(mSensorTagManager!=null) {
+            mSensorTagManager.disableUpdates();
+            if(mSensorTagManager.isServicesReady())
+                mSensorTagManager.close();
+        }
+        mSTConnector.stop();
+        mSTConnector = null;
+
+        System.gc(); //Mark for Cleanup!
     }
 
 
@@ -67,10 +83,10 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             return;
         }
 
-        mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE);
-        mSensorTagManager.enableSensor(Sensor.HUMIDITY);
-        mSensorTagManager.enableSensor(Sensor.BAROMETER);
-
+        //TODO: wrap this in a function call in case we want to dynamically change the sampling frequency
+        mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE,samplingFrequency);
+        mSensorTagManager.enableSensor(Sensor.HUMIDITY,samplingFrequency);
+        mSensorTagManager.enableSensor(Sensor.BAROMETER,samplingFrequency);
         mSensorTagManager.enableUpdates();
 
         mSTConnected = true;
@@ -85,6 +101,8 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     public class SensorTagManagerListener extends SensorTagLoggerListener implements SensorTagListener {
 
         /**
+         * Ambient Temperature
+         *
          * Called on receiving a new ambient temperature measurement from the SensorTagManager.
          * Displays the new value on the GUI.
          *
@@ -93,10 +111,6 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
 
         @Override
         public void onUpdateAmbientTemperature(SensorTagManager mgr, double temp) {
-            // ManagerListener inherits from SensorTagLoggerListener; we call the superclass
-            // method (in SensorTagLoggerListener) in order for the superclass functionality to
-            // run: in this case, it logs the value of the temperature measurement ("temp") to the
-            // Android LogCat for debugging purposes.
             super.onUpdateAmbientTemperature(mgr, temp);
 
             Log.d(TAG, "onUpdateTemperature Called");
@@ -107,35 +121,18 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         }
 
         /**
-         * CHANGE ME: Accelerometer - This is where you can receive and process a new sensor
-         * measurement. By default you will get a measurement every 1 or 2 seconds depending on
-         * the sensor (sometimes you can change this: see later example apps).
-         * <p/>
-         * Before this sensor will work you MUST enableSensor() in onCreate!
-         * <p/>
-         * See SensorTagListener.java (in the SensorTagLib project) for more details about this
-         * method.
-         * <p/>
-         * This method is optional: you don't need to put it here if you're not using this
-         * sensor!
+         *  Accelerometer
          *
          * @see ca.concordia.sensortag.SensorTagLoggerListener#onUpdateAccelerometer(ca.concordia.sensortag
          * .SensorTagManager, ti.android.util.Point3D)
          */
         @Override
         public void onUpdateAccelerometer(SensorTagManager mgr, Point3D acc) {
-            // Call the superclass's method - leave this to keep logging the new value in LogCat
             super.onUpdateAccelerometer(mgr, acc);
-
-			/*
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 * CHANGE ME: See explanation in javadoc above
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 */
         }
 
         /**
-         * CHANGE ME: Barometer - same as onUpdateAccelerometer above
+         * Barometer
          *
          * @see ca.concordia.sensortag.SensorTagLoggerListener#onUpdateBarometer(ca.concordia.sensortag
          * .SensorTagManager, double, double)
@@ -144,19 +141,13 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         public void onUpdateBarometer(SensorTagManager mgr, double pressure, double height) {
             super.onUpdateBarometer(mgr, pressure, height);
 
-			/*
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 * CHANGE ME: See explanation in javadoc above
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 */
-
             for (int i = 0; i < mSensorListenerList.size(); i++) {
                 mSensorListenerList.get(i).update(SensorListenerInterface.HikeSensors.PRESSURE, pressure);
             }
         }
 
         /**
-         * CHANGE ME: Barometer - same as onUpdateAccelerometer above
+         * Gyroscope
          *
          * @see ca.concordia.sensortag.SensorTagLoggerListener#onUpdateGyroscope(ca.concordia.sensortag
          * .SensorTagManager, ti.android.util.Point3D)
@@ -164,16 +155,10 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         @Override
         public void onUpdateGyroscope(SensorTagManager mgr, Point3D ang) {
             super.onUpdateGyroscope(mgr, ang);
-
-			/*
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 * CHANGE ME: See explanation in javadoc above
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 */
         }
 
         /**
-         * CHANGE ME: Barometer - same as onUpdateAccelerometer above
+         * Humidity
          *
          * @see ca.concordia.sensortag.SensorTagLoggerListener#onUpdateHumidity(ca.concordia.sensortag
          * .SensorTagManager, double)
@@ -188,7 +173,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         }
 
         /**
-         * CHANGE ME: Barometer - same as onUpdateAccelerometer above
+         * Infrared Temperature
          *
          * @see ca.concordia.sensortag.SensorTagLoggerListener#onUpdateInfraredTemperature(ca.concordia
          * .sensortag.SensorTagManager, double)
@@ -196,16 +181,10 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         @Override
         public void onUpdateInfraredTemperature(SensorTagManager mgr, double temp) {
             super.onUpdateInfraredTemperature(mgr, temp);
-
-			/*
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 * CHANGE ME: See explanation in javadoc above
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 */
         }
 
         /**
-         * CHANGE ME: Barometer - same as onUpdateAccelerometer above
+         * Keys
          *
          * @see ca.concordia.sensortag.SensorTagLoggerListener#onUpdateKeys(ca.concordia.sensortag.
          * SensorTagManager, boolean, boolean)
@@ -213,16 +192,10 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         @Override
         public void onUpdateKeys(SensorTagManager mgr, boolean left, boolean right) {
             super.onUpdateKeys(mgr, left, right);
-
-			/*
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 * CHANGE ME: See explanation in javadoc above
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 */
         }
 
         /**
-         * CHANGE ME: Barometer - same as onUpdateAccelerometer above
+         * Magnetometer
          *
          * @see ca.concordia.sensortag.SensorTagLoggerListener#onUpdateMagnetometer(ca.concordia.sensortag
          * .SensorTagManager, ti.android.util.Point3D)
@@ -230,12 +203,6 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         @Override
         public void onUpdateMagnetometer(SensorTagManager mgr, Point3D b) {
             super.onUpdateMagnetometer(mgr, b);
-
-			/*
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 * CHANGE ME: See explanation in javadoc above
-			 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			 */
         }
 
     }
