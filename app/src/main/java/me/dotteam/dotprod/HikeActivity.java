@@ -55,6 +55,9 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
         mButtonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Reset Pedometer
+                // TODO Save Pedometer value
+                mHHM.resetPedometer();
                 Intent intentResults = new Intent(HikeActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
             }
@@ -79,12 +82,19 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
         mHHM = HikeHardwareManager.getInstance(this);
         mHHM.startSensorTagConnector();
         mHHM.addListener(new TestSensorListener());
+        mHHM.startPedometer();
 
         // Get HLE reference and add listener
         mHLE = HikeLocationEntity.getInstance(this);
         mHLE.addListener(this);
         mHLE.startLocationUpdates();
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Log.d(TAG, "onNewIntent Called");
+        super.onNewIntent(intent);
     }
 
     @Override
