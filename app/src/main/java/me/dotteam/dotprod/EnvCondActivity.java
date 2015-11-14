@@ -1,6 +1,5 @@
 package me.dotteam.dotprod;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +12,7 @@ import me.dotteam.dotprod.hw.HikeHardwareManager;
 
 public class EnvCondActivity extends AppCompatActivity {
     private String TAG = "EnvCondActivity";
-    private EnvCondListener mSensorListener;
+    private HikeSensorListener mSensorListener;
 
 
     private Button mButtonBackToMainHike;
@@ -54,7 +53,7 @@ public class EnvCondActivity extends AppCompatActivity {
         });
 
         mHHM = HikeHardwareManager.getInstance(this);
-        mSensorListener = new EnvCondListener(this);
+        //mSensorListener = new HikeSensorListener(this);
 
         }
 

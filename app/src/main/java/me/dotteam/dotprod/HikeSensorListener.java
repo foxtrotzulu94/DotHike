@@ -7,12 +7,12 @@ import me.dotteam.dotprod.hw.SensorListenerInterface;
 /**
  * Created by as on 2015-10-23.
  */
-public class EnvCondListener implements SensorListenerInterface {
-    private EnvCondActivity owner;
+public class HikeSensorListener implements SensorListenerInterface {
+    private HikeViewPagerActivity owner;
 
-    String TAG = "EnvCondListener";
+    String TAG = "HikeSensorListener";
 
-    public EnvCondListener(EnvCondActivity owner) {
+    public HikeSensorListener(HikeViewPagerActivity owner) {
         this.owner = owner;
     }
 
@@ -34,6 +34,10 @@ public class EnvCondListener implements SensorListenerInterface {
                 owner.updatePressure(String.valueOf(value));
                 break;
             }
+            case PEDOMETER:
+                break;
+            case MAGNETOMETER:
+                break;
             default:{
                 break;
             }

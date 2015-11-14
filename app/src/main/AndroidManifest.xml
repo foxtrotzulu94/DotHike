@@ -78,6 +78,11 @@
             android:name=".HikeViewPagerActivity"
             android:label=".Hike"
             android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="me.dotteam.dotprod.MapsActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <activity
