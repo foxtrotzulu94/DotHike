@@ -87,7 +87,7 @@ public class PersistentStorageEntity {
             return new SessionData(specificHike,retrievedStatistics,retrievedPoints);
         }
         else{
-            Log.d("PSE","DID NOT FIND IN DB");
+            Log.d(TAG,"DID NOT FIND IN DB");
             return null;
         }
     }

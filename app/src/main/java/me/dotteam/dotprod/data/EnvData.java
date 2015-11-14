@@ -84,6 +84,10 @@ public class EnvData {
         return pressure.toStorage(ID);
     }
 
+    public boolean isValid(){
+        return temperature.isValid() && humidity.isValid() && pressure.isValid();
+    }
+
     public String toString(){
         return String.format("Temp: %s\nHumidity: %s\nPressure: %s",this.temperature.toString(),humidity.toString(),pressure.toString());
     }
