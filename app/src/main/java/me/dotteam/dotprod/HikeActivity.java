@@ -19,10 +19,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import me.dotteam.dotprod.data.HikeDataDirector;
-import me.dotteam.dotprod.data.TestSensorListener;
-
 import me.dotteam.dotprod.hw.HikeHardwareManager;
-import me.dotteam.dotprod.hw.TestSensorListener;
+import me.dotteam.dotprod.data.TestSensorListener;
 import me.dotteam.dotprod.loc.HikeLocationEntity;
 
 public class HikeActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
@@ -87,9 +85,9 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Test to see if SensorTag readings are still captured when app is in the background
         mHHM = HikeHardwareManager.getInstance(this);
+        mHHM.startSensorTagConnector(); //TODO: CHANGE THIS!! Throws exception if Bluetooth is NOT ON
         mHHM.addListener(new TestSensorListener());
         mHHM.startPedometer();
-        mHHM.startSensorTagConnector(); //TODO: CHANGE THIS!! Throws exception if Bluetooth is NOT ON
 
         mHDD = HikeDataDirector.getInstance(this);
         mHDD.beginCollectionService();
