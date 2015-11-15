@@ -22,4 +22,9 @@
     <string name="title_activity_navigation">NavigationActivity</string>
     <string name="textBottonNavigationActivity">NavigationActivity</string>
     <string name="STConnectDialogFragmentTitle">Do you wish to connect to a TI SensorTag?</string>
+    <string name="textSettings">Settings</string>
+    <string name="textSensors">Sensors</string>
+    <string name="textPastHikes">Past Hikes</string>
+    <string name="textStartHike">Start Hike</string>
+    <string name="textTemperatureSetting">Temperature</string>
 </resources>

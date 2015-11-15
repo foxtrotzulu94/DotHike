@@ -4,13 +4,35 @@
     tools:context="me.dotteam.dotprod.HomeActivity"
     android:weightSum="1"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@drawable/background_image_white">
 
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.8"
+        android:gravity="fill_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/textAppName"
+            android:id="@+id/textAppName"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="65sp" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="0.15">
 
         <TextView
             android:layout_width="wrap_content"
@@ -20,35 +42,134 @@
             android:id="@+id/app_build"
             android:textSize="12sp"
             android:layout_gravity="center"
-            android:gravity="center_vertical|center|center_horizontal" />
+            android:gravity="center_vertical|center|center_horizontal"
+            android:visibility="gone" />
 
-        <ImageButton
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/imageButtonStartHike"
-            android:background="#BDECB6"
-            android:layout_weight="0.2" />
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imageButtonPastHikes"
             android:layout_weight="0.2"
-            android:background="#8e8e8e" />
+            android:id="@+id/linearLayoutStartHike"
+            android:clickable="true"
+            android:background="@drawable/clickable_linear_layout">
 
-        <ImageButton
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageHiker"
+                android:layout_weight="0.8"
+                android:src="@drawable/hiker" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/textStartHike"
+                android:id="@+id/textViewStartHike"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:singleLine="false"
+                android:layout_weight="0.2"
+                android:gravity="left|center"
+                android:layout_marginLeft="5sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/imageButtonDeviceReadings"
             android:layout_weight="0.2"
-            android:background="#398dff" />
+            android:id="@+id/linearLayoutPastHikes"
+            android:clickable="true"
+            android:background="@drawable/clickable_linear_layout">
 
-        <ImageButton
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageCompas"
+                android:layout_weight="0.8"
+                android:src="@drawable/compas" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/textPastHikes"
+                android:id="@+id/textViewPastHikes"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:singleLine="false"
+                android:layout_weight="0.2"
+                android:gravity="left|center"
+                android:layout_marginLeft="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/imageButtonSettings"
             android:layout_weight="0.2"
-            android:background="#ffeaa0" />
+            android:id="@+id/linearLayoutSensors"
+            android:clickable="true"
+            android:background="@drawable/clickable_linear_layout">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageBinoculars"
+                android:layout_weight="0.8"
+                android:src="@drawable/binoculars" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/textSensors"
+                android:id="@+id/textViewSensors"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:singleLine="false"
+                android:layout_weight="0.2"
+                android:gravity="left|center"
+                android:layout_marginLeft="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:id="@+id/linearLayoutSettings"
+            android:clickable="true"
+            android:background="@drawable/clickable_linear_layout">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageGears"
+                android:layout_weight="0.8"
+                android:src="@drawable/gears" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/textSettings"
+                android:id="@+id/textViewSettings"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:singleLine="false"
+                android:layout_weight="0.2"
+                android:gravity="left|center"
+                android:layout_marginLeft="25sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

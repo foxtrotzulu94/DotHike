@@ -47,8 +47,9 @@ public class EnvCondActivity extends AppCompatActivity {
         mButtonBackToMainHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentMainHike = new Intent(EnvCondActivity.this, HikeActivity.class);
-                startActivity(intentMainHike);
+//                Intent intentMainHike = new Intent(EnvCondActivity.this, HikeActivity.class);
+//                startActivity(intentMainHike);
+                finish();
             }
         });
 

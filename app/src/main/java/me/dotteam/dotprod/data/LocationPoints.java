@@ -18,6 +18,10 @@ public class LocationPoints {
         points=new ArrayList<Coordinates>();
     }
 
+    public LocationPoints(List<Coordinates> pointList){
+        points = pointList;
+    }
+
     public void addPoint(Coordinates newPoint){
         points.add(newPoint);
     }
@@ -26,5 +30,12 @@ public class LocationPoints {
         return points;
     }
 
+    public String toString(){
+        if(points.size()>0)
+            return String.format("Location Points has %s points\nFirst: %s\nLast: %s",
+                    points.size(),points.get(0).toString(),points.get(points.size()-1).toString());
+        else
+            return String.format("Location Points has no points");
+    }
 
 }

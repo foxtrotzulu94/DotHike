@@ -31,6 +31,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     private boolean mSTConnected = false;
     private Context mContext;
     private static HikeHardwareManager mInstance;
+    private int samplingFrequency = 500; //In milliseconds. 1000ms = 1s. MAX:2550ms
 
     // Android Sensors
     SensorManager mSensorManager;
@@ -86,6 +87,18 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mPedometerListener.mFirstStep = true;
     }
 
+    public void stopSensorTag(){
+        if(mSensorTagManager!=null) {
+            mSensorTagManager.disableUpdates();
+            if(mSensorTagManager.isServicesReady())
+                mSensorTagManager.close();
+        }
+        mSTConnector.stop();
+        mSTConnector = null;
+
+        System.gc(); //Mark for Cleanup!
+    }
+
 
     public void addListener(SensorListenerInterface sensorListenerInterface){
         Log.d(TAG, "Adding Listener");
@@ -110,10 +123,10 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             return;
         }
 
-        mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE);
-        mSensorTagManager.enableSensor(Sensor.HUMIDITY);
-        mSensorTagManager.enableSensor(Sensor.BAROMETER);
-
+        //TODO: wrap this in a function call in case we want to dynamically change the sampling frequency
+        mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE,samplingFrequency);
+        mSensorTagManager.enableSensor(Sensor.HUMIDITY,samplingFrequency);
+        mSensorTagManager.enableSensor(Sensor.BAROMETER,samplingFrequency);
         mSensorTagManager.enableUpdates();
 
         mSTConnected = true;

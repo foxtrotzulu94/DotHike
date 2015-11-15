@@ -11,11 +11,8 @@ public class SessionData {
     private EnvData mCurrentStats;
     private LocationPoints mGeoPoints;
 
-    //TODO: consider removing
-    private boolean isHistoric;
-
     /**
-     * 
+     * Indicates whether or not the SessionData was loaded from Persistent Storage
      */
     private boolean isFromDB;
 
@@ -45,6 +42,8 @@ public class SessionData {
         return mHike.endTime();
     }
 
+    public int hikeID(){ return mHike.getUniqueID(); }
+
     public EnvData getCurrentStats() {
         return mCurrentStats;
     }
@@ -53,15 +52,15 @@ public class SessionData {
         return mGeoPoints;
     }
 
-    public boolean isHistoric() {
-        return isHistoric;
-    }
-
     public boolean isFromDB() {
         return isFromDB;
     }
 
     public boolean setHikeID(int ID){
         return mHike.setUniqueID(ID);
+    }
+
+    public String toString(){
+        return String.format("Session Data:\n%s\n%s\n%s",mHike.toString(),mCurrentStats.toString(),mGeoPoints.toString());
     }
 }

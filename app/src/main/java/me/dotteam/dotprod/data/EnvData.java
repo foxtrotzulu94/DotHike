@@ -30,15 +30,21 @@ public class EnvData {
         pressure = new EnvStatistic();
     }
 
-    public void updateTemp(float newSample){
+    public EnvData(EnvStatistic temperature,EnvStatistic humidity,EnvStatistic pressure){
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+    }
+
+    public void updateTemp(double newSample){
         temperature.insertSample(newSample);
     }
 
-    public void updateHumidity(float newSample){
+    public void updateHumidity(double newSample){
         humidity.insertSample(newSample);
     }
 
-    public void updatePressure(float newSample){
+    public void updatePressure(double newSample){
         pressure.insertSample(newSample);
     }
 
@@ -76,6 +82,10 @@ public class EnvData {
      */
     public ContentValues getSerializedPressure(int ID) {
         return pressure.toStorage(ID);
+    }
+
+    public String toString(){
+        return String.format("Temp: %s\nHumidity: %s\nPressure: %s",this.temperature.toString(),humidity.toString(),pressure.toString());
     }
 
 }

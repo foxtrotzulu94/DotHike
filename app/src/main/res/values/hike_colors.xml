@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General Tone colors -->
+    <item name="darken" type="color">#be2c2c2c</item>
+    <item name="transparent" type="color">#00ffffff</item>
+
+    <!-- Main Color Scheme of the App -->
+    <item name="black_tricorn" type="color">#2d2d2f</item>
+    <item name="palisade" type="color">#a99f96</item>
+    <item name="blue_grey" type="color">#90a6be</item>
+    <item name="naval" type="color">#31394c</item>
+    <item name="indigo_baltik" type="color">#4c5c6c</item>
+    <!-- (Use hues and tones of the above colors to "Paint" the app) -->
+
+</resources>
