@@ -12,7 +12,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.885"
+        android:layout_weight="0.8"
         android:gravity="fill_vertical|center_horizontal">
 
         <TextView
@@ -32,7 +32,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.105">
+        android:layout_weight="0.15">
 
         <TextView
             android:layout_width="wrap_content"

@@ -24,7 +24,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        tools:replace="android:allowBackup" >
+        tools:replace="android:allowBackup">
 
         <!--
         Service that handles all Bluetooth LE communications with the SensorTag. This comes
@@ -54,7 +54,7 @@
         <activity
             android:name=".HikeActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="me.dotteam.dotprod.MapsActivity" />
