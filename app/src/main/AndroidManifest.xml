@@ -24,7 +24,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        tools:replace="android:allowBackup">
+        tools:replace="android:allowBackup" >
 
         <!--
         Service that handles all Bluetooth LE communications with the SensorTag. This comes
@@ -34,9 +34,8 @@
         <service
             android:name="ti.android.ble.common.BluetoothLeService"
             android:enabled="true" />
-
         <service
-            android:name="me.dotteam.dotprod.data.SessionCollectionService"
+            android:name=".data.SessionCollectionService"
             android:enabled="true" />
 
         <!--
@@ -54,7 +53,7 @@
         <activity
             android:name=".HikeActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
 
             <!-- android:noHistory="true"> -->
 
@@ -64,7 +63,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
@@ -75,27 +73,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ResultsActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
-
         <activity
             android:name=".EnvCondActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
+
             <!-- android:noHistory="true"> -->
         </activity>
-
         <activity
             android:name=".NavigationActivity"
             android:label="@string/title_activity_navigation"
             android:screenOrientation="portrait" >
-            <!--android:noHistory="true"-->
 
+            <!-- android:noHistory="true" -->
+
+        </activity>
+        <activity
+            android:name=".PastHikesActivity"
+            android:label="@string/title_activity_past_hikes"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.dotteam.dotprod.HomeActivity" />
         </activity>
     </application>
 

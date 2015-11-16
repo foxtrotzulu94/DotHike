@@ -98,7 +98,7 @@ public class HikeDataDirector {
             mSessionData = collectedData;
             mIsCollectingData=false;
             Log.d(TAG,"Data received!");
-            Log.e(TAG, "receiveDataFromService "+collectedData.toString());
+            Log.e(TAG, "receiveDataFromService " + collectedData.toString());
         }
     }
 
@@ -111,6 +111,13 @@ public class HikeDataDirector {
             mPSE = new PersistentStorageEntity(mCreateContext);
         }
         return mPSE.saveSession(mSessionData);
+    }
+
+    public List<Hike> getAllStoredHikes(){
+        if(mPSE==null){
+            mPSE = new PersistentStorageEntity(mCreateContext);
+        }
+        return mPSE.getHikesList();
     }
 
     //TODO: Eventually remove

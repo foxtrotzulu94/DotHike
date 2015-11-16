@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import java.util.Date;
@@ -31,7 +30,7 @@ public class HomeActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setMemberIDs();
-        setOnClickListener();
+        setOnClickListeners();
 
         //Show build information for debugging.
         if (BuildConfig.DEBUG) {
@@ -58,7 +57,7 @@ public class HomeActivity extends AppCompatActivity{
         mLinearLayoutSettings = (LinearLayout) findViewById(R.id.linearLayoutSettings);
     }
 
-    public void setOnClickListener(){
+    public void setOnClickListeners(){
         // Intent to HikeActivity
         mLinearLayoutStartHike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +72,14 @@ public class HomeActivity extends AppCompatActivity{
             public void onClick(View v) {
                 DSettingsFragment dSettingsFragment = new DSettingsFragment();
                 dSettingsFragment.show(fm, "Settings Dialog");
+            }
+        });
+
+        mLinearLayoutPastHikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentPastHike = new Intent(HomeActivity.this, PastHikesActivity.class);
+                startActivity(intentPastHike);
             }
         });
     }

@@ -12,6 +12,11 @@ import java.util.concurrent.TimeUnit;
 public class Hike {
 
     /**
+     *
+     */
+    protected String nickName;
+
+    /**
      * Reference to the ID in Persistent Storage
      */
     protected int uniqueID;
