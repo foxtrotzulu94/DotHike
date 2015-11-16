@@ -35,7 +35,7 @@ public class EnvCondActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate Called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_env_cond);
-        mButtonBackToMainHike = (Button) findViewById(R.id.buttonBack);
+        //mButtonBackToMainHike = (Button) findViewById(R.id.buttonBack);
         mTextCurrentHumidity = (TextView) findViewById(R.id.textCurHum);
         mTextCurrentTemperature = (TextView) findViewById(R.id.textCurTemp);
         mTextCurrentPressure = (TextView) findViewById(R.id.textCurPress);

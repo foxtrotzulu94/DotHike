@@ -41,7 +41,7 @@ public class NavigationActivity extends AppCompatActivity implements LocationLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        mButtonBackToMainHike = (Button) findViewById(R.id.buttonBack);
+        //mButtonBackToMainHike = (Button) findViewById(R.id.buttonBack);
         mButtonBackToMainHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

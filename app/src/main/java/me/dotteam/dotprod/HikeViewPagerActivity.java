@@ -242,31 +242,39 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         }
 
         if (location.getAccuracy() <= 40) {
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMapPolylineOptions.add(latLng);
-            mMap.addPolyline(mMapPolylineOptions);
-
-            mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
-                    (float) location.getLatitude(), (float) location.getAltitude()));
-
             List<Coordinates> coordinatesList = mLocationPoints.getCoordinateList();
             int numberOfPoints = coordinatesList.size();
 
-            if (numberOfPoints > 1) {
+            if (numberOfPoints == 0) {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMapPolylineOptions.add(latLng);
+                mMap.addPolyline(mMapPolylineOptions);
+
+                mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
+                        (float) location.getLatitude(), (float) location.getAltitude()));
+            } else {
                 // Array to store results
                 float results[] = new float[3];
 
                 // Get previous and current longitude and latitude
-                double prevLongitude = coordinatesList.get(numberOfPoints - 2).getLongitude();
-                double prevLatitude = coordinatesList.get(numberOfPoints - 2).getLatitude();
-                double currLongitude = coordinatesList.get(numberOfPoints - 1).getLongitude();
-                double currLatitude = coordinatesList.get(numberOfPoints - 1).getLatitude();
+                double prevLongitude = coordinatesList.get(numberOfPoints - 1).getLongitude();
+                double prevLatitude = coordinatesList.get(numberOfPoints - 1).getLatitude();
+                double currLongitude = location.getLongitude();
+                double currLatitude = location.getLatitude();
 
                 // Calculate distance between both points and add it to total
                 Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, results);
-                mDistanceTravelled += results[0];
-                if (mTextDistanceTraveled != null) {
-                    mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+                if (results[0] > location.getAccuracy()) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMapPolylineOptions.add(latLng);
+                    mMap.addPolyline(mMapPolylineOptions);
+
+                    mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
+                            (float) location.getLatitude(), (float) location.getAltitude()));
+                    mDistanceTravelled += results[0];
+                    if (mTextDistanceTraveled != null) {
+                        mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+                    }
                 }
             }
         }
@@ -453,6 +461,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         mTextBearing = mNavFragment.getTextBearing();
         mTextAccuracy = mNavFragment.getTextAccuracy();
         mTextDistanceTraveled = mNavFragment.getTextDistanceTraveled();
+        mTextDistanceTraveled.setText("0.0");
     }
 
 }

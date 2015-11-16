@@ -54,8 +54,8 @@ public class HikeActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         mButtonEndHike = (Button) findViewById(R.id.buttonEndHike);
-        mButtonEnvCond = (Button) findViewById(R.id.buttonEnvCond);
-        mButtonNavigationActivity = (Button) findViewById(R.id.buttonNavigationActivity);
+        //mButtonEnvCond = (Button) findViewById(R.id.buttonEnvCond);
+        //mButtonNavigationActivity = (Button) findViewById(R.id.buttonNavigationActivity);
 
         mButtonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
