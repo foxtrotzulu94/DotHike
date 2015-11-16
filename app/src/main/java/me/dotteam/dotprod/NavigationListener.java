@@ -1,7 +1,5 @@
 package me.dotteam.dotprod;
 
-import org.w3c.dom.Text;
-
 import me.dotteam.dotprod.hw.SensorListenerInterface;
 
 /**
