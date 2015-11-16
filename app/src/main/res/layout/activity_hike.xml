@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     tools:context=".MapsActivity"
     android:weightSum="1"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/blue_grey">
 
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,13 +26,35 @@
         android:layout_weight="0.7"
         android:gravity="bottom|right">
 
-        <Button
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/buttonTextEndHike"
-            android:id="@+id/buttonEndHike"
-            android:background="#C23A22"
-            android:layout_weight="0.7" />
+            android:id="@+id/imageView"
+            android:layout_weight="0.3" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Pause Hike"
+                android:id="@+id/button"
+                android:background="@color/palisade"
+                android:layout_weight="0.3" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/buttonTextEndHike"
+                android:id="@+id/buttonEndHike"
+                android:background="@color/indigo_baltik"
+                android:layout_weight="0.7" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
