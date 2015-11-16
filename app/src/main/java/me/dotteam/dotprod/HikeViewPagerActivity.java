@@ -78,6 +78,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private TextView mTextDisplayHumidity;
     private TextView mTextDisplayTemperature;
     private TextView mTextDisplayPressure;
+    private String mHumidityString = "0.0";
+    private String mTemperatureString = "0.0";
+    private String mPressureString = "0.0";
 
     /**
      * NavigationFragment variables and UI element references
@@ -90,7 +93,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private TextView mTextDistanceTraveled;
     private TextView mTextStepCount;
     private float mDistanceTravelled = 0;
-    private int mStepCount = 0;
+    private String mStepCountString = "0";
     private Location mLocation;
     private LocationPoints mLocationPoints;
 
@@ -253,36 +256,37 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         if (location.getAccuracy() <= 40) {
             List<Coordinates> coordinatesList = mLocationPoints.getCoordinateList();
             int numberOfPoints = coordinatesList.size();
-
-            if (numberOfPoints == 0) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mMapPolylineOptions.add(latLng);
-                mMap.addPolyline(mMapPolylineOptions);
-
-                mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
-                        (float) location.getLatitude(), (float) location.getAltitude()));
-            } else {
-                // Array to store results
-                float results[] = new float[3];
-
-                // Get previous and current longitude and latitude
-                double prevLongitude = coordinatesList.get(numberOfPoints - 1).getLongitude();
-                double prevLatitude = coordinatesList.get(numberOfPoints - 1).getLatitude();
-                double currLongitude = location.getLongitude();
-                double currLatitude = location.getLatitude();
-
-                // Calculate distance between both points and add it to total
-                Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, results);
-                if (results[0] > location.getAccuracy()) {
+            if (mMapReady) {
+                if (numberOfPoints == 0) {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     mMapPolylineOptions.add(latLng);
                     mMap.addPolyline(mMapPolylineOptions);
 
                     mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
                             (float) location.getLatitude(), (float) location.getAltitude()));
-                    mDistanceTravelled += results[0];
-                    if (mTextDistanceTraveled != null) {
-                        mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+                } else {
+                    // Array to store results
+                    float results[] = new float[3];
+
+                    // Get previous and current longitude and latitude
+                    double prevLongitude = coordinatesList.get(numberOfPoints - 1).getLongitude();
+                    double prevLatitude = coordinatesList.get(numberOfPoints - 1).getLatitude();
+                    double currLongitude = location.getLongitude();
+                    double currLatitude = location.getLatitude();
+
+                    // Calculate distance between both points and add it to total
+                    Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, results);
+                    if (results[0] > location.getAccuracy()) {
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        mMapPolylineOptions.add(latLng);
+                        mMap.addPolyline(mMapPolylineOptions);
+
+                        mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
+                                (float) location.getLatitude(), (float) location.getAltitude()));
+                        mDistanceTravelled += results[0];
+                        if (mTextDistanceTraveled != null) {
+                            mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+                        }
                     }
                 }
             }
@@ -423,9 +427,15 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         mTextDisplayPressure = mEnvCondFragment.getTextDisplayPressure();
         mTextDisplayTemperature = mEnvCondFragment.getTextDisplayTemperature();
 
+        // Set Text Initial Values
+        mTextDisplayHumidity.setText(mHumidityString);
+        mTextDisplayPressure.setText(mPressureString);
+        mTextDisplayTemperature.setText(mTemperatureString);
+
     }
 
     void updateTemperature(final String temp) {
+        mTemperatureString = temp;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -437,6 +447,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     }
 
     void updateHumidity(final String hum) {
+        mHumidityString = hum;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -448,6 +459,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     }
 
     void updatePressure(final String pressure) {
+        mPressureString = pressure;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -490,16 +502,16 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
             mTextAccuracy.setText("0.0");
         }
         mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
-        mTextStepCount.setText(String.valueOf(mStepCount));
+        mTextStepCount.setText(mStepCountString);
     }
 
-    void updateStepCount(int stepcount) {
-        mStepCount = stepcount;
+    void updateStepCount(final String stepcount) {
+        mStepCountString = stepcount;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mTextStepCount != null) {
-                    mTextStepCount.setText(String.valueOf(mStepCount));
+                    mTextStepCount.setText(stepcount);
                 }
             }
         });

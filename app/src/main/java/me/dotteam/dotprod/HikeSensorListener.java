@@ -18,25 +18,26 @@ public class HikeSensorListener implements SensorListenerInterface {
 
     @Override
     public void update(HikeSensors hikesensors, double value) {
+        String valueString = String.valueOf(value);
         switch (hikesensors) {
             case TEMPERATURE: {
-                Log.d(TAG, "Temperature: " + String.valueOf(value));
-                owner.updateTemperature(String.valueOf(value));
+                Log.d(TAG, "Temperature: " + valueString);
+                owner.updateTemperature(valueString);
                 break;
             }
             case HUMIDITY: {
-                Log.d(TAG, "Humidity: " + String.valueOf(value));
-                owner.updateHumidity(String.valueOf(value));
+                Log.d(TAG, "Humidity: " + valueString);
+                owner.updateHumidity(valueString);
                 break;
             }
             case PRESSURE: {
                 Log.d(TAG, "Pressure: " + String.valueOf(value));
-                owner.updatePressure(String.valueOf(value));
+                owner.updatePressure(valueString);
                 break;
             }
             case PEDOMETER:
                 Log.d(TAG, "Step Count: " + String.valueOf(value));
-                owner.updateStepCount((int) value);
+                owner.updateStepCount(valueString);
                 break;
             case MAGNETOMETER:
                 break;

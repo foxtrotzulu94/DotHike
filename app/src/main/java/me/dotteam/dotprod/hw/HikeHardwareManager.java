@@ -124,20 +124,26 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mSensorTagManager = new SensorTagManager(mContext, btdevice);
         mSensorTagManager.addListener(mSensorTagManagerListener);
 
-        mSensorTagManager.initServices();
-        if (!mSensorTagManager.isServicesReady()) {
-            // if initServices failed or took too long, log an error (in LogCat) and exit
-            Log.e(TAG, "Discover failed - exiting");
-            return;
-        }
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                mSensorTagManager.initServices();
+                if (!mSensorTagManager.isServicesReady()) {
+                    // if initServices failed or took too long, log an error (in LogCat) and exit
+                    Log.e(TAG, "Discover failed - exiting");
+                    return;
+                }
 
-        //TODO: wrap this in a function call in case we want to dynamically change the sampling frequency
-        mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE,samplingFrequency);
-        mSensorTagManager.enableSensor(Sensor.HUMIDITY,samplingFrequency);
-        mSensorTagManager.enableSensor(Sensor.BAROMETER,samplingFrequency);
-        mSensorTagManager.enableUpdates();
+                //TODO: wrap this in a function call in case we want to dynamically change the sampling frequency
+                mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE,samplingFrequency);
+                mSensorTagManager.enableSensor(Sensor.HUMIDITY,samplingFrequency);
+                mSensorTagManager.enableSensor(Sensor.BAROMETER,samplingFrequency);
+                mSensorTagManager.enableUpdates();
 
-        mSTConnected = true;
+                mSTConnected = true;
+            }
+        };
+        t.start();
     }
 
     @Override
