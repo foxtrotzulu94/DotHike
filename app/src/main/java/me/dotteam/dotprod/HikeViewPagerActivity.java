@@ -88,7 +88,10 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private TextView mTextBearing;
     private TextView mTextAccuracy;
     private TextView mTextDistanceTraveled;
+    private TextView mTextStepCount;
     private float mDistanceTravelled = 0;
+    private int mStepCount = 0;
+    private Location mLocation;
     private LocationPoints mLocationPoints;
 
     /**
@@ -166,8 +169,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         // Instantiate HikeHardwareManager
         mHHM = HikeHardwareManager.getInstance(this);
 
-        // Connect SensorTag
-        mHHM.startSensorTagConnector(); //TODO: CHANGE THIS!! Throws exception if Bluetooth is NOT ON
+        // Start SensorTag connection and pedometer
+        mHHM.startSensors(this); //TODO: CHANGE THIS!! Throws exception if Bluetooth is NOT ON
 
         // Create Listener for HikeHardwareManager
         mSensorListener = new HikeSensorListener(this);
@@ -223,6 +226,12 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                 + "\nAltitude: " + location.getAltitude()
                 + "\nBearing: " + location.getBearing()
                 + "\nAccuracy :" + location.getAccuracy());
+
+        if (mLocation == null) {
+            mLocation = new Location(location);
+        } else {
+            mLocation = location;
+        }
 
         // Set TextViews to new values
         if (mTextLatitude != null) {
@@ -372,6 +381,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         mButtonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Reset Pedometer
+                // TODO Save Pedometer value
+                mHHM.resetPedometer();
                 Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
                 mHDD.endCollectionService();
@@ -461,7 +473,36 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         mTextBearing = mNavFragment.getTextBearing();
         mTextAccuracy = mNavFragment.getTextAccuracy();
         mTextDistanceTraveled = mNavFragment.getTextDistanceTraveled();
-        mTextDistanceTraveled.setText("0.0");
+        mTextStepCount = mNavFragment.getTextStepCount();
+
+        // Set Values to previous values
+        if (mLocation != null) {
+            mTextLatitude.setText(String.valueOf(mLocation.getLatitude()));
+            mTextLongitude.setText(String.valueOf(mLocation.getLongitude()));
+            mTextAltitude.setText(String.valueOf(mLocation.getAltitude()));
+            mTextBearing.setText(String.valueOf(mLocation.getBearing()));
+            mTextAccuracy.setText(String.valueOf(mLocation.getAccuracy()));
+        } else {
+            mTextLatitude.setText("0.0");
+            mTextLongitude.setText("0.0");
+            mTextAltitude.setText("0.0");
+            mTextBearing.setText("0.0");
+            mTextAccuracy.setText("0.0");
+        }
+        mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+        mTextStepCount.setText(String.valueOf(mStepCount));
+    }
+
+    void updateStepCount(int stepcount) {
+        mStepCount = stepcount;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mTextStepCount != null) {
+                    mTextStepCount.setText(String.valueOf(mStepCount));
+                }
+            }
+        });
     }
 
 }

@@ -55,7 +55,13 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mPedometerListener = new PedometerEventListener();
     }
 
-    public void startSensorTagConnector() {
+    public void startSensors(Context context) {
+        mContext = context;
+        startSensorTagConnector();
+        startPedometer();
+    }
+
+    private void startSensorTagConnector() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
         dialog.setTitle(R.string.STConnectDialogFragmentTitle);
         dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -75,7 +81,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         dialog.create().show();
     }
 
-    public void startPedometer() {
+    private void startPedometer() {
         mSensorManager.registerListener(mPedometerListener, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 

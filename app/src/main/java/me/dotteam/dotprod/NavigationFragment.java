@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by EricTremblay on 15-11-13.
  */
@@ -21,6 +23,7 @@ public class NavigationFragment extends Fragment {
     private TextView mTextBearing;
     private TextView mTextAccuracy;
     private TextView mTextDistanceTraveled;
+    private TextView mTextStepCount;
 
     public interface NavigationFragmentListener {
         public void onNavigationFragmentReady();
@@ -48,6 +51,7 @@ public class NavigationFragment extends Fragment {
         mTextBearing = (TextView) rootView.findViewById(R.id.textBearing);
         mTextAccuracy = (TextView) rootView.findViewById(R.id.textAccuracy);
         mTextDistanceTraveled = (TextView) rootView.findViewById(R.id.textDistanceTraveled);
+        mTextStepCount = (TextView) rootView.findViewById(R.id.textStepCount);
 
         mListener.onNavigationFragmentReady();
 
@@ -76,5 +80,9 @@ public class NavigationFragment extends Fragment {
 
     public TextView getTextDistanceTraveled() {
         return mTextDistanceTraveled;
+    }
+
+    public TextView getTextStepCount() {
+        return mTextStepCount;
     }
 }

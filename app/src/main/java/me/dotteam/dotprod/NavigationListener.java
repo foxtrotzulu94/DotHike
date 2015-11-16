@@ -23,7 +23,7 @@ public class NavigationListener implements SensorListenerInterface {
             case PRESSURE:
                 break;
             case PEDOMETER: {
-                mActivity.updateStepCount(String.valueOf(value));
+                //mActivity.updateStepCount(String.valueOf(value));
                 break;
             }
             case MAGNETOMETER:

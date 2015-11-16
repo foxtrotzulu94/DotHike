@@ -35,6 +35,8 @@ public class HikeSensorListener implements SensorListenerInterface {
                 break;
             }
             case PEDOMETER:
+                Log.d(TAG, "Step Count: " + String.valueOf(value));
+                owner.updateStepCount((int) value);
                 break;
             case MAGNETOMETER:
                 break;
