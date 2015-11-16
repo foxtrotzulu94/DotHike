@@ -152,19 +152,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.2">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonTextBackToMainHike"
-            android:id="@+id/buttonBack"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="0.9" />
-    </LinearLayout>
 </LinearLayout>
