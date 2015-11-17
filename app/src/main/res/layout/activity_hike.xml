@@ -30,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/imageView"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.3"
+            android:src="@drawable/swipe_accent_outward" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -43,16 +44,18 @@
                 android:layout_height="match_parent"
                 android:text="Pause Hike"
                 android:id="@+id/button"
-                android:background="@color/palisade"
-                android:layout_weight="0.3" />
+                android:background="@color/naval"
+                android:layout_weight="0.3"
+                android:textColor="@color/blue_grey" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/buttonTextEndHike"
                 android:id="@+id/buttonEndHike"
-                android:background="@color/indigo_baltik"
-                android:layout_weight="0.7" />
+                android:background="@color/black_tricorn"
+                android:layout_weight="0.7"
+                android:textColor="@color/blue_grey" />
 
         </LinearLayout>
 

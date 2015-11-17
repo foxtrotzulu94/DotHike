@@ -28,7 +28,8 @@
             android:text="@string/textDisplayTemperature"
             android:id="@+id/textDispTemp"
             android:gravity="center_vertical|center_horizontal"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.3"
+            android:textColor="@color/blue_grey"/>
 
     </LinearLayout>
 
@@ -52,7 +53,8 @@
             android:text="@string/textDisplayHumidity"
             android:id="@+id/textDispHum"
             android:layout_weight="0.3"
-            android:gravity="center_vertical|center_horizontal" />
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/blue_grey"/>
     </LinearLayout>
 
     <LinearLayout
@@ -76,6 +78,7 @@
             android:text="@string/textDisplayPressure"
             android:id="@+id/textDispPress"
             android:layout_weight="0.3"
-            android:gravity="center_vertical|center_horizontal" />
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/blue_grey"/>
     </LinearLayout>
 </LinearLayout>
