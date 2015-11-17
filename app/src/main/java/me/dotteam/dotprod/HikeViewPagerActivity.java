@@ -173,7 +173,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         mHHM = HikeHardwareManager.getInstance(this);
 
         // Start SensorTag connection and pedometer
-        mHHM.startSensors(this); //TODO: CHANGE THIS!! Throws exception if Bluetooth is NOT ON
+        mHHM.startSensors(this);
 
         // Create Listener for HikeHardwareManager
         mSensorListener = new HikeSensorListener(this);
