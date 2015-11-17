@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MapsActivity"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:weightSum="1"
     android:orientation="vertical">
 
@@ -12,56 +10,26 @@
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="324dp"
+        android:layout_height="match_parent"
         android:id="@+id/map"
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         tools:layout="@android:layout/simple_gallery_item"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="false"
         android:layout_weight="0.3">
     </fragment>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="0.7"
         android:gravity="bottom|right">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/textBottonNavigationActivity"
-                android:id="@+id/buttonNavigationActivity"
-                android:layout_weight="0.5" />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/buttonTextEnvCond"
-                android:id="@+id/buttonEnvCond"
-                android:layout_above="@+id/buttonEndHike"
-                android:layout_alignParentEnd="true"
-                android:layout_weight="0.5" />
-        </LinearLayout>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/buttonTextEndHike"
             android:id="@+id/buttonEndHike"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignEnd="@+id/map"
             android:background="#C23A22"
             android:layout_weight="0.7" />
 

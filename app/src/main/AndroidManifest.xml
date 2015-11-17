@@ -52,20 +52,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".HikeActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait">
-
-            <!-- android:noHistory="true"> -->
-
-            <intent-filter>
-                <action android:name="me.dotteam.dotprod.MapsActivity" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
@@ -77,26 +63,21 @@
         </activity>
 
         <activity
+            android:name=".HikeViewPagerActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".ResultsActivity"
             android:label="@string/app_name"
             android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
 
-        <activity
-            android:name=".EnvCondActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
-            <!-- android:noHistory="true"> -->
-        </activity>
-
-        <activity
-            android:name=".NavigationActivity"
-            android:label="@string/title_activity_navigation"
-            android:screenOrientation="portrait" >
-            <!--android:noHistory="true"-->
-
-        </activity>
     </application>
 
 </manifest>

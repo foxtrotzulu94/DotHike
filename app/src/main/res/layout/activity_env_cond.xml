@@ -7,16 +7,6 @@
     tools:context="me.dotteam.dotprod.EnvCondActivity"
     android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="@string/buttonTextBackToMainHike"
-        android:id="@+id/buttonBack"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="0.9"
-        android:layout_gravity="right" />
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
