@@ -19,7 +19,6 @@ import com.google.android.gms.location.LocationListener;
 
 import java.util.Date;
 
-import me.dotteam.dotprod.HikeActivity;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
 import me.dotteam.dotprod.hw.SensorListenerInterface;
