@@ -5,7 +5,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="me.dotteam.dotprod.EnvCondActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/indigo_baltik">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -18,7 +19,7 @@
             android:layout_height="match_parent"
             android:id="@+id/imageTemp"
             android:layout_weight="0.7"
-            android:src="@drawable/thermometer" />
+            android:src="@drawable/thermometer_accent" />
 
         <TextView
             android:layout_width="match_parent"
@@ -42,7 +43,7 @@
             android:layout_height="match_parent"
             android:id="@+id/imageHum"
             android:layout_weight="0.7"
-            android:src="@drawable/hygrometer" />
+            android:src="@drawable/hygrometer_accent" />
 
         <TextView
             android:layout_width="match_parent"
@@ -65,7 +66,8 @@
             android:layout_height="match_parent"
             android:id="@+id/imagePress"
             android:layout_weight="0.7"
-            android:src="@drawable/hum_meter" />
+            android:src="@drawable/hum_meter_accent"
+            android:layout_margin="7sp" />
 
         <TextView
             android:layout_width="match_parent"
