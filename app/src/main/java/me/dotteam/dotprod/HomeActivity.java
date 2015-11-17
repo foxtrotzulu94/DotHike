@@ -70,6 +70,10 @@ public class HomeActivity extends AppCompatActivity{
             public void onClick(View v) {
                 DSettingsFragment dSettingsFragment = new DSettingsFragment();
                 dSettingsFragment.show(fm, "Settings Dialog");
+                //TODO: Remove later
+                HikeDataDirector mHDD = HikeDataDirector.getInstance(HomeActivity.this);
+                mHDD.testStorage();
+                Toast.makeText(HomeActivity.this,"Testing Storage Setup", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -81,15 +85,6 @@ public class HomeActivity extends AppCompatActivity{
             }
         });
 
-        mLinearLayoutSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: Remove later
-                HikeDataDirector mHDD = HikeDataDirector.getInstance(HomeActivity.this);
-                mHDD.testStorage();
-                Toast.makeText(HomeActivity.this,"Testing Storage Setup", Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
 }
