@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity{
         mLinearLayoutStartHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentMainHike = new Intent(HomeActivity.this, HikeActivity.class);
+                Intent intentMainHike = new Intent(HomeActivity.this, HikeViewPagerActivity.class);
                 startActivity(intentMainHike);
             }
         });
