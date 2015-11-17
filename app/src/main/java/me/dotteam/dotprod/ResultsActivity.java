@@ -43,13 +43,6 @@ public class ResultsActivity extends AppCompatActivity {
         SessionData results = mHDD.getSessionData();
 
         dump.append(results.toString());
-//        if(fullList!=null){
-//            List<Long> elements = fullList.getTimestamps();
-//            for (Long timestamp: elements) {
-//                dump.append(new Date(timestamp).toString());
-//                dump.append('\n');
-//            }
-//        }
         mDumpSpace.setText(dump.toString());
 
     }

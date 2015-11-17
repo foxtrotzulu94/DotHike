@@ -46,6 +46,11 @@ public class HikeDataDirector {
 //        mPSE = new PersistentStorageEntity(); //Defer creation of a persistent storage manager.
     }
 
+    private void checkOrSetPSE(){
+        if(mPSE==null){
+            mPSE = new PersistentStorageEntity(mCreateContext);
+        }
+    }
 
 
     /**
@@ -107,17 +112,25 @@ public class HikeDataDirector {
      * @return boolean indicating the success or failure of the operation
      */
     public boolean storeCollectedStatistics() {
-        if(mPSE==null){
-            mPSE = new PersistentStorageEntity(mCreateContext);
-        }
+        checkOrSetPSE();
         return mPSE.saveSession(mSessionData);
     }
 
     public List<Hike> getAllStoredHikes(){
-        if(mPSE==null){
-            mPSE = new PersistentStorageEntity(mCreateContext);
-        }
+        checkOrSetPSE();
         return mPSE.getHikesList();
+    }
+
+    public boolean retrieveSessionFromHike(Hike selectedHike){
+        checkOrSetPSE();
+        mSessionData = mPSE.loadHikeData(selectedHike);
+        if(mSessionData!=null) {
+            mDataIsHistoric = true;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     //TODO: Eventually remove

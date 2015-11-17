@@ -20,8 +20,6 @@ public class PersistentStorageEntity {
     private DBAssistant mProvider;
     private SQLiteDatabase mDB;
 
-    private List<Hike> allHikes;
-
     /**
      * Default constructor
      */
@@ -37,28 +35,28 @@ public class PersistentStorageEntity {
      * @return List of stored Hike Objects
      */
     public List<Hike> getHikesList() {
-        if(allHikes==null) {
-            //Create a New Hikes List.
-            allHikes = new ArrayList<>();
 
-            //Query and keep an index on the columns
-            Cursor cursor = mDB.query(DBAssistant.HIKE, null, null, null, null, null, "id");
-            int idColumn = cursor.getColumnIndex("id");
-            int startTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_START);
-            int endTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_END);
+        //Create a New Hikes List.
+        List <Hike> allHikes = new ArrayList<>();
 
-            cursor.moveToFirst();
-            do {
-                allHikes.add(
-                        new Hike(
-                                cursor.getInt(idColumn),
-                                cursor.getLong(startTimeColumn),
-                                cursor.getLong(endTimeColumn))
-                );
-            } while (cursor.moveToNext());
+        //Query and keep an index on the columns
+        Cursor cursor = mDB.query(DBAssistant.HIKE, null, null, null, null, null, "id");
+        int idColumn = cursor.getColumnIndex("id");
+        int startTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_START);
+        int endTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_END);
 
-            cursor.close();
-        }
+        cursor.moveToFirst();
+        do {
+            allHikes.add(
+                    new Hike(
+                            cursor.getInt(idColumn),
+                            cursor.getLong(startTimeColumn),
+                            cursor.getLong(endTimeColumn))
+            );
+        } while (cursor.moveToNext());
+
+        cursor.close();
+
         return allHikes;
     }
 

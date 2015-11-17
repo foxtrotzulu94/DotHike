@@ -1,16 +1,30 @@
 package me.dotteam.dotprod;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import me.dotteam.dotprod.data.Hike;
 import me.dotteam.dotprod.data.HikeDataDirector;
+import me.dotteam.dotprod.data.SessionData;
 
 public class PastHikesActivity extends AppCompatActivity {
+
+    private class PastHikeOnClickListener implements AdapterView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //Tell the HDD to load the current element
+            mHDD.retrieveSessionFromHike((Hike) parent.getItemAtPosition(position));
+            //Load the new activity.
+            startActivity(new Intent(PastHikesActivity.this,PastStatisticsActivity.class));
+        }
+    }
 
     private HikeDataDirector mHDD;
 
@@ -31,6 +45,7 @@ public class PastHikesActivity extends AppCompatActivity {
 
         ArrayAdapter<Hike> listOfHikes = new HikeArrayAdapter(this,mHDD.getAllStoredHikes());
         pastHikes.setAdapter(listOfHikes);
+        pastHikes.setOnItemClickListener(new PastHikeOnClickListener());
     }
 
     @Override

@@ -14,7 +14,7 @@ public class Hike {
     /**
      *
      */
-    protected String nickName;
+    protected String nickName="MyNewHike";
 
     /**
      * Reference to the ID in Persistent Storage
@@ -138,6 +138,14 @@ public class Hike {
                 TimeUnit.MILLISECONDS.toHours(current),
                 TimeUnit.MILLISECONDS.toMinutes(current%3600000),
                 TimeUnit.MILLISECONDS.toSeconds(current%60000));
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String toString(){

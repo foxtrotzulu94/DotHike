@@ -31,7 +31,7 @@ public class LocationPoints {
     }
 
     public String toString(){
-        if(points.size()>0)
+        if(points!=null && points.size()>0)
             return String.format("Location Points has %s points\nFirst: %s\nLast: %s",
                     points.size(),points.get(0).toString(),points.get(points.size()-1).toString());
         else
