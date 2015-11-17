@@ -73,8 +73,7 @@
                 android:singleLine="false"
                 android:layout_weight="0.2"
                 android:gravity="left|center"
-                android:layout_marginLeft="5sp"
-                android:textColor="@color/blue_grey" />
+                android:layout_marginLeft="5sp" />
         </LinearLayout>
 
         <LinearLayout

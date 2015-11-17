@@ -42,7 +42,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="0.5"
                     android:gravity="center_vertical"
-                    android:textColor="@color/blue_grey" />
+                    android:textColor="@color/blue_grey"
+                    android:layout_marginLeft="10sp" />
 
             </LinearLayout>
 
@@ -67,7 +68,8 @@
                     android:id="@+id/textLongitude"
                     android:layout_weight="0.5"
                     android:gravity="center_vertical"
-                    android:textColor="@color/blue_grey"/>
+                    android:textColor="@color/blue_grey"
+                    android:layout_marginLeft="10sp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -93,7 +95,8 @@
                 android:id="@+id/textAltitude"
                 android:layout_weight="0.5"
                 android:gravity="center_vertical"
-                android:textColor="@color/blue_grey"/>
+                android:textColor="@color/blue_grey"
+                android:layout_marginLeft="10sp" />
 
         </LinearLayout>
 
