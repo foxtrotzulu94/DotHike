@@ -8,6 +8,7 @@ import android.content.ContentValues;
 public class SessionData {
 
     private Hike mHike;
+    private StepCount mStepCount;
     private EnvData mCurrentStats;
     private LocationPoints mGeoPoints;
 
@@ -18,10 +19,22 @@ public class SessionData {
 
 
     /**
-     * Default constructor
+     * Default constructor without step count
      */
+    @Deprecated
     public SessionData(Hike hikeSession, EnvData envData, LocationPoints trackpoints) {
         mHike=hikeSession;
+        mStepCount = new StepCount(0);
+        mCurrentStats = envData;
+        mGeoPoints=trackpoints;
+    }
+
+    /**
+     * New Default Constructor
+     */
+    public SessionData(Hike hikeSession, StepCount steps, EnvData envData, LocationPoints trackpoints) {
+        mHike=hikeSession;
+        mStepCount = steps;
         mCurrentStats = envData;
         mGeoPoints=trackpoints;
     }
@@ -52,6 +65,10 @@ public class SessionData {
         return mGeoPoints;
     }
 
+    public StepCount getStepCount(){
+        return mStepCount;
+    }
+
     public boolean isFromDB() {
         return isFromDB;
     }
@@ -65,6 +82,10 @@ public class SessionData {
     }
 
     public String toString(){
-        return String.format("Session Data:\n%s\n%s\n%s",mHike.toString(),mCurrentStats.toString(),mGeoPoints.toString());
+        return String.format("Session Data:\n%s\n%s\n%s\n%s",
+                mHike.toString(),
+                mStepCount.toString(),
+                mCurrentStats.toString(),
+                mGeoPoints.toString());
     }
 }

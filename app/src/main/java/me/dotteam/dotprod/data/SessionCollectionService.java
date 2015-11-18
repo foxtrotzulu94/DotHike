@@ -39,6 +39,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
     NotificationCompat.Builder mBuilder;
     private int notificationID;
 
+    private double stepCount=0.0; //This would later get transformed into an integer. But this avoids a costly casting when updating
     private EnvData recordedData;
     private LocationPoints recordedCoordinates;
     private Hike currentHike;
@@ -122,7 +123,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
     public void onDestroy(){
         //End the hike, package the data
         currentHike.end();
-        SessionData thisSession = new SessionData(currentHike,recordedData,recordedCoordinates);
+        SessionData thisSession = new SessionData(currentHike, new StepCount(stepCount),recordedData,recordedCoordinates);
 
         //Now hand this data off to someone.
         HikeDataDirector.getInstance(this).receiveDataFromService(this,thisSession);
@@ -155,6 +156,9 @@ public class SessionCollectionService extends Service implements SensorListenerI
             case PRESSURE:{
                 recordedData.updatePressure(value);
                 break;
+            }
+            case PEDOMETER:{
+                stepCount = value;
             }
         }
     }
