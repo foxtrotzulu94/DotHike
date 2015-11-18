@@ -3,8 +3,10 @@ package me.dotteam.dotprod;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,8 +19,10 @@ import me.dotteam.dotprod.data.SessionData;
 public class PastHikesActivity extends AppCompatActivity {
 
     private class PastHikeOnClickListener implements AdapterView.OnItemClickListener{
+        private final String TAG = "PastHikeClick";
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d(TAG, "onItemClick");
             //Tell the HDD to load the current element
             mHDD.retrieveSessionFromHike((Hike) parent.getItemAtPosition(position));
             //Load the new activity.
@@ -47,6 +51,8 @@ public class PastHikesActivity extends AppCompatActivity {
         pastHikes.setAdapter(listOfHikes);
         pastHikes.setOnItemClickListener(new PastHikeOnClickListener());
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

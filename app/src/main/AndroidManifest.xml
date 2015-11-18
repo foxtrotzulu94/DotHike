@@ -82,6 +82,7 @@
         <activity
             android:name=".PastHikesActivity"
             android:label="@string/title_activity_past_hikes"
+            android:screenOrientation="portrait"
             android:parentActivityName=".HomeActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
