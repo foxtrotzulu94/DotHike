@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.List;
 
 import me.dotteam.dotprod.data.Hike;
 import me.dotteam.dotprod.data.HikeDataDirector;
@@ -29,9 +32,11 @@ public class PastHikesActivity extends AppCompatActivity {
     private HikeDataDirector mHDD;
 
     ListView pastHikes;
+    TextView titleText;
 
     private void retrieveInterfaceElements(){
         pastHikes = (ListView) findViewById(R.id.listView_pastHikes);
+        titleText = (TextView) findViewById(R.id.textView_pastHikesTitle);
     }
 
     @Override
@@ -42,10 +47,15 @@ public class PastHikesActivity extends AppCompatActivity {
         retrieveInterfaceElements();
 
         mHDD = HikeDataDirector.getInstance(this);
-
-        ArrayAdapter<Hike> listOfHikes = new HikeArrayAdapter(this,mHDD.getAllStoredHikes());
-        pastHikes.setAdapter(listOfHikes);
-        pastHikes.setOnItemClickListener(new PastHikeOnClickListener());
+        List<Hike> storedHikes = mHDD.getAllStoredHikes();
+        if(storedHikes!=null) {
+            ArrayAdapter<Hike> listOfHikes = new HikeArrayAdapter(this, storedHikes);
+            pastHikes.setAdapter(listOfHikes);
+            pastHikes.setOnItemClickListener(new PastHikeOnClickListener());
+        }
+        else{
+            titleText.setText(titleText.getText().toString()+"\n No Hikes to Display");
+        }
     }
 
     @Override
