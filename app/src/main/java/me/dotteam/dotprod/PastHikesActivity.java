@@ -52,6 +52,8 @@ public class PastHikesActivity extends AppCompatActivity {
             ArrayAdapter<Hike> listOfHikes = new HikeArrayAdapter(this, storedHikes);
             pastHikes.setAdapter(listOfHikes);
             pastHikes.setOnItemClickListener(new PastHikeOnClickListener());
+            Runtime.getRuntime().gc();
+            System.gc();
         }
         else{
             titleText.setText(titleText.getText().toString()+"\n No Hikes to Display");
