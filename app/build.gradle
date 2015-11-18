@@ -21,6 +21,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dependencies {
+        compile 'com.redinput.compassview:compassview:1.0'
+    }
 }
 
 def getGitCommit() {
