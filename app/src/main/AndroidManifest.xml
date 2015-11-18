@@ -67,6 +67,8 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -77,7 +79,22 @@
             android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
-
+        <activity
+            android:name=".PastHikesActivity"
+            android:label="@string/title_activity_past_hikes"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.dotteam.dotprod.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".PastStatisticsActivity"
+            android:label="@string/title_activity_past_statistics"
+            android:parentActivityName=".HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.dotteam.dotprod.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

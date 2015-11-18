@@ -9,8 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.Formatter;
@@ -31,8 +31,9 @@ public class HomeActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         setMemberIDs();
-        setOnClickListener();
+        setOnClickListeners();
 
+        //TODO: Recover and put on settings or something.
         //Show build information for debugging.
         if (BuildConfig.DEBUG) {
             TextView buildField = (TextView) findViewById(R.id.app_build);
@@ -45,10 +46,6 @@ public class HomeActivity extends AppCompatActivity{
                     BuildConfig.GIT_BRANCH);
             buildField.setText(formatter.toString());
         }
-
-        Log.d("Home", "Testing DB");
-        HikeDataDirector HDD = HikeDataDirector.getInstance(this);
-        HDD.testStorage();
     }
 
     public void setMemberIDs(){
@@ -58,7 +55,7 @@ public class HomeActivity extends AppCompatActivity{
         mLinearLayoutSettings = (LinearLayout) findViewById(R.id.linearLayoutSettings);
     }
 
-    public void setOnClickListener(){
+    public void setOnClickListeners(){
         // Intent to HikeActivity
         mLinearLayoutStartHike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,29 +70,21 @@ public class HomeActivity extends AppCompatActivity{
             public void onClick(View v) {
                 DSettingsFragment dSettingsFragment = new DSettingsFragment();
                 dSettingsFragment.show(fm, "Settings Dialog");
+                //TODO: Remove later
+                HikeDataDirector mHDD = HikeDataDirector.getInstance(HomeActivity.this);
+                mHDD.testStorage();
+                Toast.makeText(HomeActivity.this,"Testing Storage Setup", Toast.LENGTH_LONG).show();
             }
         });
+
+        mLinearLayoutPastHikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentPastHike = new Intent(HomeActivity.this, PastHikesActivity.class);
+                startActivity(intentPastHike);
+            }
+        });
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

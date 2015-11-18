@@ -2,9 +2,13 @@ package me.dotteam.dotprod.data;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -103,7 +107,8 @@ public class SessionCollectionService extends Service implements SensorListenerI
     private void firstNotify(){
         mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.dothikemin)
+                        .setSmallIcon(R.drawable.hikerservice)
+                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.dothikemin))
                         .setContentTitle(LONG_NAME)
                         .setOngoing(true);
 

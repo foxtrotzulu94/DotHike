@@ -124,10 +124,14 @@ public class SensorTagConnector {
         scanLeDevice(false);
         if(mBluetoothLeService!=null) {
             mBluetoothLeService.close();
-            mBluetoothLeService = null;
+            mBluetoothLeService.stopService(new Intent(mContext, BluetoothLeService.class));
+//            mBluetoothLeService = null;
             mContext.stopService(new Intent(mContext, BluetoothLeService.class));
             mContext.unbindService(mServiceConnection);
             mContext.unregisterReceiver(mReceiver);
+        }
+        if(mBtAdapter.isEnabled()){
+            mBtAdapter.disable();
         }
 
     }

@@ -27,4 +27,6 @@
     <string name="textPastHikes">Past Hikes</string>
     <string name="textStartHike">Start Hike</string>
     <string name="textTemperatureSetting">Temperature</string>
+    <string name="title_activity_past_hikes">PastHikesActivity</string>
+    <string name="title_activity_past_statistics">PastStatisticsActivity</string>
 </resources>

@@ -71,6 +71,10 @@ public class EnvStatistic {
         return retVal;
     }
 
+    public boolean isValid(){
+        return max!=0 && avg!=Float.NaN && min != Float.POSITIVE_INFINITY;
+    }
+
     public String toString(){
         return String.format("High: %.3f, Avg: %.3f, Low: %.3f",max,avg,min);
     }

@@ -38,18 +38,11 @@ public class ResultsActivity extends AppCompatActivity {
             }
         });
         mHDD=HikeDataDirector.getInstance(this);
-//        String dump="";
+
         StringBuilder dump = new StringBuilder();
         SessionData results = mHDD.getSessionData();
-//        SessionEnvData fullList = (SessionEnvData) results.getCurrentStats();
+
         dump.append(results.toString());
-//        if(fullList!=null){
-//            List<Long> elements = fullList.getTimestamps();
-//            for (Long timestamp: elements) {
-//                dump.append(new Date(timestamp).toString());
-//                dump.append('\n');
-//            }
-//        }
         mDumpSpace.setText(dump.toString());
 
     }
