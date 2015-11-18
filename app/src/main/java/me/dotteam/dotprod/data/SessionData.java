@@ -60,6 +60,10 @@ public class SessionData {
         return mHike.setUniqueID(ID);
     }
 
+    public boolean isValid(){
+        return mHike.startTime()>0 && mCurrentStats.isValid();
+    }
+
     public String toString(){
         return String.format("Session Data:\n%s\n%s\n%s",mHike.toString(),mCurrentStats.toString(),mGeoPoints.toString());
     }

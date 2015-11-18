@@ -84,8 +84,29 @@ public class EnvData {
         return pressure.toStorage(ID);
     }
 
+    public boolean isValid(){
+        return temperature.isValid() && humidity.isValid() && pressure.isValid();
+    }
+
     public String toString(){
-        return String.format("Temp: %s\nHumidity: %s\nPressure: %s",this.temperature.toString(),humidity.toString(),pressure.toString());
+        StringBuilder stringstream = new StringBuilder();
+        if(temperature!=null){
+            stringstream.append(String.format("Temp: %s\n",temperature.toString()));
+        }
+        else{ stringstream.append("No Temperature Data\n"); }
+
+        if(humidity!=null){
+            stringstream.append(String.format("Humidity: %s\n",humidity.toString()));
+        }
+        else{ stringstream.append("No Ambient Humidity Data\n"); }
+
+        if(pressure!=null){
+            stringstream.append(String.format("Pressure: %s\n",pressure.toString()));
+        }
+        else{ stringstream.append("No Pressure Data\n"); }
+
+
+        return stringstream.toString();
     }
 
 }
