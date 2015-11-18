@@ -26,12 +26,26 @@
         android:layout_weight="0.7"
         android:gravity="bottom|right">
 
-        <ImageView
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/imageView"
-            android:layout_weight="0.3"
-            android:src="@drawable/swipe_accent_outward" />
+            android:layout_weight="0.3">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageNavArrow"
+                android:layout_weight="0.5"
+                android:src="@drawable/nav_arrow" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageEnvArrow"
+                android:layout_weight="0.5"
+                android:src="@drawable/env_arrow" />
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -42,10 +56,10 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Pause Hike"
-                android:id="@+id/button"
+                android:text="@string/buttonTextPauseHike"
+                android:id="@+id/buttonPauseHike"
                 android:background="@color/naval"
-                android:layout_weight="0.3"
+                android:layout_weight="0.2"
                 android:textColor="@color/blue_grey" />
 
             <Button
@@ -54,7 +68,7 @@
                 android:text="@string/buttonTextEndHike"
                 android:id="@+id/buttonEndHike"
                 android:background="@color/black_tricorn"
-                android:layout_weight="0.7"
+                android:layout_weight="0.8"
                 android:textColor="@color/blue_grey" />
 
         </LinearLayout>

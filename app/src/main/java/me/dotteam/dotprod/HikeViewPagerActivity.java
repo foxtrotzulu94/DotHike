@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private boolean mMapReady = false;
     private PolylineOptions mMapPolylineOptions;
     private Button mButtonEndHike;
+    private ImageView mImageViewEnvArrow;
+    private ImageView mImageViewNavArrow;
     private boolean mGotLocation = false;
 
     /**
@@ -380,6 +383,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
         // Get references to UI elements
         mButtonEndHike = mHikeFragment.getButtonEndHike();
+        mImageViewEnvArrow = mHikeFragment.getImageViewEnvArrow();
+        mImageViewNavArrow = mHikeFragment.getImageViewNavArrow();
 
         // Set callback for End Hike Button
         mButtonEndHike.setOnClickListener(new View.OnClickListener() {
@@ -393,6 +398,22 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                 mHDD.endCollectionService();
                 mHHM.stopSensorTag();
                 finish();
+            }
+        });
+
+        //Set callback for Nav-Arrow ImageView
+        mImageViewNavArrow.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                mPager.setCurrentItem(0);
+            }
+        });
+
+        //Set callback for Env-Arrow ImageView
+        mImageViewEnvArrow.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                mPager.setCurrentItem(2);
             }
         });
     }

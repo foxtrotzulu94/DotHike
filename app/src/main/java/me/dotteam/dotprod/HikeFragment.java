@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,6 +28,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class HikeFragment extends Fragment implements OnMapReadyCallback {
     private String TAG = "HikeFragment";
     private Button mButtonEndHike;
+    private ImageView mImageViewEnvArrow;
+    private ImageView mImageViewNavArrow;
 
     private HikeFragmentListener mListener;
 
@@ -67,6 +70,8 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         }
 
         mButtonEndHike = (Button) rootView.findViewById(R.id.buttonEndHike);
+        mImageViewEnvArrow = (ImageView) rootView.findViewById(R.id.imageEnvArrow);
+        mImageViewNavArrow = (ImageView) rootView.findViewById(R.id.imageNavArrow);
 
         mListener.onHikeFragmentReady();
         return rootView;
@@ -90,5 +95,13 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
     public Button getButtonEndHike() {
         return mButtonEndHike;
+    }
+
+    public ImageView getImageViewEnvArrow(){
+        return mImageViewEnvArrow;
+    }
+
+    public  ImageView getImageViewNavArrow(){
+        return mImageViewNavArrow;
     }
 }
