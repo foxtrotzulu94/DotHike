@@ -21,6 +21,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
+
+    dependencies {
+        compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
+    }
 }
 
 def getGitCommit() {

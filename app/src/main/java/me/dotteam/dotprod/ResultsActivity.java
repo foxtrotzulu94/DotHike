@@ -6,9 +6,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.DataSet;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,17 +26,34 @@ import me.dotteam.dotprod.data.SessionData;
 import me.dotteam.dotprod.data.SessionEnvData;
 
 public class ResultsActivity extends AppCompatActivity {
-    private Button mButtonResultsDone;
-    private TextView mDumpSpace;
+
+    private static final int ALTITUDE_CHART_HEIGHT=500;//DP
+    private static final int STATISTIC_CHART_HEIGHT=100;//DP
+
     private HikeDataDirector mHDD;
+
+    Button mButtonResultsDone;
+    TextView mDumpSpace;
+    LinearLayout mAltitudeChartContainer;
+    LinearLayout mTempChartContainer;
+    LinearLayout mHumidityChartContainer;
+    LinearLayout mPressureChartContainer;
+
+    private void setMemberIDs(){
+        mButtonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
+        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
+        mAltitudeChartContainer=(LinearLayout) findViewById(R.id.linlayout_heightResults);
+        mTempChartContainer=(LinearLayout) findViewById(R.id.linlayout_TempStat);
+        mHumidityChartContainer=(LinearLayout) findViewById(R.id.linlayout_HumidityStat);
+        mPressureChartContainer=(LinearLayout) findViewById(R.id.linlayout_PressureStat);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-        mButtonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
-        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
+        setMemberIDs();
 
         mButtonResultsDone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +67,22 @@ public class ResultsActivity extends AppCompatActivity {
 
         StringBuilder dump = new StringBuilder();
         SessionData results = mHDD.getSessionData();
+
+        LineChart chart = new LineChart(this);
+        List<Entry> entries = new ArrayList<>();
+        entries.add(new Entry(33, 0));
+        entries.add(new Entry(31, 1));
+        entries.add(new Entry(3, 2));
+        LineDataSet testy = new LineDataSet(entries,"testy");
+
+        chart.setData(new LineData(new String[]{"Developers", "Developers", "Developers"}, testy));
+        chart.setDescription("");
+        chart.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        chart.setMinimumHeight(ALTITUDE_CHART_HEIGHT);
+        mAltitudeChartContainer.addView(chart);
+        mAltitudeChartContainer.setMinimumHeight(ALTITUDE_CHART_HEIGHT);
 
         dump.append(results.toString());
         mDumpSpace.setText(dump.toString());
