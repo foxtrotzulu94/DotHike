@@ -37,7 +37,7 @@ public class PersistentStorageEntity {
     public List<Hike> getHikesList() {
 
         //Create a New Hikes List.
-        List <Hike> allHikes = new ArrayList<>();
+        List <Hike> allHikes = null;
 
         //Query and keep an index on the columns
         Cursor cursor = mDB.query(DBAssistant.HIKE, null, null, null, null, null, "id");
@@ -45,15 +45,19 @@ public class PersistentStorageEntity {
         int startTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_START);
         int endTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_END);
 
-        cursor.moveToFirst();
-        do {
-            allHikes.add(
-                    new Hike(
-                            cursor.getInt(idColumn),
-                            cursor.getLong(startTimeColumn),
-                            cursor.getLong(endTimeColumn))
-            );
-        } while (cursor.moveToNext());
+        if(cursor.getCount()>0) {
+            allHikes = new ArrayList<>(cursor.getCount());
+
+            cursor.moveToFirst();
+            do {
+                allHikes.add(
+                        new Hike(
+                                cursor.getInt(idColumn),
+                                cursor.getLong(startTimeColumn),
+                                cursor.getLong(endTimeColumn))
+                );
+            } while (cursor.moveToNext());
+        }
 
         cursor.close();
 

@@ -29,4 +29,6 @@
     <string name="textTemperatureSetting">Temperature</string>
     <string name="title_activity_past_hikes">PastHikesActivity</string>
     <string name="title_activity_past_statistics">PastStatisticsActivity</string>
+    <string name="title_activity_exception">ExceptionActivity</string>
+    <string name="exception_caught_title">Whoops! Something happened that we did not plan for</string>
 </resources>

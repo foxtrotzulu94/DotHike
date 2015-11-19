@@ -9,7 +9,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.GridView;
+
+import java.util.List;
 
 import me.dotteam.dotprod.data.Hike;
 import me.dotteam.dotprod.data.HikeDataDirector;
@@ -46,11 +50,13 @@ public class PastHikesActivity extends AppCompatActivity {
      * Reference to GridView
      */
     GridView pastHikes;
+    TextView titleText;
 
     /**
      * Method to retrieve UI elements and assign them to the associated data member
      */
     private void retrieveInterfaceElements(){
+        titleText = (TextView) findViewById(R.id.textView_pastHikesTitle);
         pastHikes = (GridView) findViewById(R.id.listView_pastHikes);
     }
 
@@ -64,15 +70,20 @@ public class PastHikesActivity extends AppCompatActivity {
 
         // Get referenece to HikeDataDirector
         mHDD = HikeDataDirector.getInstance(this);
-
-        // Create adapter for GridView
-        ArrayAdapter<Hike> listOfHikes = new HikeArrayAdapter(this,mHDD.getAllStoredHikes());
-
-        // Assign adapter to GridView
-        pastHikes.setAdapter(listOfHikes);
-
-        // Assign onClickListener to GridView
-        pastHikes.setOnItemClickListener(new PastHikeOnClickListener());
+        List<Hike> storedHikes = mHDD.getAllStoredHikes();
+        if(storedHikes!=null) {
+            // Create adapter for GridView
+            ArrayAdapter<Hike> listOfHikes = new HikeArrayAdapter(this, storedHikes);
+            // Assign adapter to GridView
+            pastHikes.setAdapter(listOfHikes);
+            // Assign onClickListener to GridView
+            pastHikes.setOnItemClickListener(new PastHikeOnClickListener());
+            Runtime.getRuntime().gc();
+            System.gc();
+        }
+        else{
+            titleText.setText(titleText.getText().toString()+"\n No Hikes to Display");
+        }
     }
 
     @Override
