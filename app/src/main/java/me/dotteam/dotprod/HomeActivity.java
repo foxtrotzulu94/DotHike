@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
 
+import me.dotteam.dotprod.data.Hike;
 import me.dotteam.dotprod.data.HikeDataDirector;
 
 public class HomeActivity extends AppCompatActivity{
@@ -32,6 +33,7 @@ public class HomeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_home);
         setMemberIDs();
         setOnClickListeners();
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
         //TODO: Recover and put on settings or something.
         //Show build information for debugging.
@@ -74,6 +76,13 @@ public class HomeActivity extends AppCompatActivity{
                 HikeDataDirector mHDD = HikeDataDirector.getInstance(HomeActivity.this);
                 mHDD.testStorage();
                 Toast.makeText(HomeActivity.this,"Testing Storage Setup", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        mLinearLayoutSensors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer integers[] = new Integer[Integer.MAX_VALUE];
             }
         });
 
