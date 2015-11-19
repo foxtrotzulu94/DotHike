@@ -430,18 +430,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
     }
 
-    @Override
-    public void stopCompassUpdates(){
-        if(mHHM!=null)
-            mHHM.endCompass();
-    }
-
-    @Override
-    public void resumeCompassUpdates(){
-        if (mHHM!=null)
-            mHHM.startCompass();
-    }
-
     private void mapZoomCameraToCurrentLocation() {
         runOnUiThread(new Runnable() {
             @Override
