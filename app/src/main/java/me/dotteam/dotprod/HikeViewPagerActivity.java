@@ -20,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.redinput.compassview.CompassView;
 
@@ -113,6 +114,11 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
      * Reference to HikeLocationEntity
      */
     private HikeLocationEntity mHLE;
+
+    /**
+     * Boundaries for Map Zoom
+     */
+    private LatLngBounds mLatLngBounds;
 
     /**
      * Reference to HikeDataDirector
@@ -288,6 +294,10 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
             if (mMapReady) {
                 if (numberOfPoints == 0) {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+                    boundsBuilder.include(latLng);
+                    mLatLngBounds = boundsBuilder.build();
+                    mapZoomCameraToLocation(latLng);
                     mMapPolylineOptions.add(latLng);
                     mMap.addPolyline(mMapPolylineOptions);
 
@@ -307,6 +317,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                     Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, results);
                     if (results[0] > location.getAccuracy()) {
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        mLatLngBounds.including(latLng);
                         mMapPolylineOptions.add(latLng);
                         mMap.addPolyline(mMapPolylineOptions);
 
@@ -347,62 +358,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         // Set Map Type to Terrain
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                // Attempt to find and zoom to current location
-                mapZoomCameraToCurrentLocation();
-
-                // If finding current location failed, start a thread to retry
-                if (!mGotLocation) {
-                    //TODO: Deprecate this thread. We can make the map zoom into position with onLocationChange
-                    Thread t = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d(TAG, "Entered find current location thread");
-                            int counter = 0;
-                            // This will attempt to find location numberOfAttempts times
-                            int numberofAttempts = 5; //Number of attempts
-                            int waitBetweenAttempts = 1000; // how long to wait between attempts in milliseconds
-                            while (counter < numberofAttempts) {
-                                try {
-                                    Thread.sleep(waitBetweenAttempts);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                // Attempt to find current location
-                                mapZoomCameraToCurrentLocation();
-
-                                // If attempt was successful, break out of while loop to exit thread
-                                if (mGotLocation) {
-                                    Log.d(TAG, "Current location found");
-                                    break;
-                                }
-                                // If attempt failed, increment counter
-                                else {
-                                    counter++;
-                                }
-                            }
-
-                            // If the counter is equal numberOfAttempts, give up
-                            if (counter == numberofAttempts) {
-                                Log.e(TAG, "Current location could not be found");
-
-                                // Show a Toast to inform user
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(HikeViewPagerActivity.this, "Current location could not be found", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-                        }
-                    });
-                    t.start();
-
-                }
-            }
-        });
     }
 
     @Override
@@ -430,19 +385,20 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
     }
 
-    private void mapZoomCameraToCurrentLocation() {
+    private void mapZoomCameraToLocation(final LatLng latlng) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                final Location location = mMap.getMyLocation();
-                if (location != null) {
-                    final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    mGotLocation = true;
-                }
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+                mGotLocation = true;
             }
         });
+    }
+
+    private void mapZoomCameraToLocation(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        mapZoomCameraToLocation(latLng);
     }
 
     void updateTemperature(final String temp) {
