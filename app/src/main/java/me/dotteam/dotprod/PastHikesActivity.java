@@ -6,36 +6,52 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import me.dotteam.dotprod.data.Hike;
 import me.dotteam.dotprod.data.HikeDataDirector;
-import me.dotteam.dotprod.data.SessionData;
 
+/**
+ * Activity which displays list of past hikes and allows the user to select a past hike
+ * and view the statistics and data of that hike.
+ */
 public class PastHikesActivity extends AppCompatActivity {
 
+    /**
+     * GridView's onClickListener. Calls intent to activity containing statistics and data of selected hike
+     */
     private class PastHikeOnClickListener implements AdapterView.OnItemClickListener{
         private final String TAG = "PastHikeClick";
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.d(TAG, "onItemClick");
+
             //Tell the HDD to load the current element
             mHDD.retrieveSessionFromHike((Hike) parent.getItemAtPosition(position));
+
             //Load the new activity.
             startActivity(new Intent(PastHikesActivity.this,PastStatisticsActivity.class));
         }
     }
 
+    /**
+     * Reference to HikeDataDirector
+     */
     private HikeDataDirector mHDD;
 
-    ListView pastHikes;
+    /**
+     * Reference to GridView
+     */
+    GridView pastHikes;
 
+    /**
+     * Method to retrieve UI elements and assign them to the associated data member
+     */
     private void retrieveInterfaceElements(){
-        pastHikes = (ListView) findViewById(R.id.listView_pastHikes);
+        pastHikes = (GridView) findViewById(R.id.listView_pastHikes);
     }
 
     @Override
@@ -43,16 +59,21 @@ public class PastHikesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_past_hikes);
 
+        // Get UI elements
         retrieveInterfaceElements();
 
+        // Get referenece to HikeDataDirector
         mHDD = HikeDataDirector.getInstance(this);
 
+        // Create adapter for GridView
         ArrayAdapter<Hike> listOfHikes = new HikeArrayAdapter(this,mHDD.getAllStoredHikes());
+
+        // Assign adapter to GridView
         pastHikes.setAdapter(listOfHikes);
+
+        // Assign onClickListener to GridView
         pastHikes.setOnItemClickListener(new PastHikeOnClickListener());
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
