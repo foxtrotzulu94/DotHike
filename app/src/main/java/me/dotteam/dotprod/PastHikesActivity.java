@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.GridView;
 
+import java.util.Collections;
 import java.util.List;
 
 import me.dotteam.dotprod.data.Hike;
@@ -69,7 +70,11 @@ public class PastHikesActivity extends AppCompatActivity {
 
         // Get referenece to HikeDataDirector
         mHDD = HikeDataDirector.getInstance(this);
+
+        // Get all saved hikes and reverse the list
         List<Hike> storedHikes = mHDD.getAllStoredHikes();
+        Collections.reverse(storedHikes);
+
         if(storedHikes!=null) {
             // Create adapter for GridView
             ArrayAdapter<Hike> listOfHikes = new HikeArrayAdapter(this, storedHikes);
