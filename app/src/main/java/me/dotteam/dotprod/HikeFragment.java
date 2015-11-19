@@ -1,38 +1,84 @@
 package me.dotteam.dotprod;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
-import android.util.Property;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.redinput.compassview.CompassView;
 
-import java.lang.reflect.Field;
 import java.util.Random;
 
 /**
  * Created by EricTremblay on 15-11-13.
  */
 public class HikeFragment extends Fragment implements OnMapReadyCallback {
+
+    private class CompassAnimator extends Thread{
+
+        CompassView animatedCompass;
+        float currentDegrees = 0.0f;
+        float finalDegrees = 0.0f;
+        float dampingPercentage = 0.3f;
+        boolean runningThread =false;
+
+        @Override
+        public void run(){
+            runningThread =true;
+            while(runningThread){
+                if (currentDegrees!=finalDegrees){
+                    currentDegrees = lerp(currentDegrees,finalDegrees,dampingPercentage);
+                    updateUI(currentDegrees);
+                }
+                else{
+                    runningThread = false;
+                }
+
+                try{
+                    sleep(16); //60 FPS updating!
+                }
+                catch (InterruptedException e){
+                    runningThread = false;
+                }
+
+            }
+        }
+
+        private float lerp(float start, float end, float percentage){
+            return start+( percentage*(end-start)  );
+        }
+
+        private void updateUI(final float value){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mCompassView.setDegrees(value);
+                }
+            });
+        }
+
+        public void setNewValue(float newValue){
+            finalDegrees = newValue % 360;
+            if(!runningThread)
+                this.start();
+        }
+
+        public void setAndStop(float newValue){
+            updateUI(newValue);
+            runningThread = false;
+        }
+    }
+
+
     private String TAG = "HikeFragment";
     private Button mButtonEndHike;
 
@@ -42,11 +88,13 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mGoogleMap;
     private CompassView mCompassView;
 
-    private float curVal=0;
+    private CompassAnimator mCompassAnimator;
 
     public interface HikeFragmentListener {
         void onMapReady(GoogleMap googleMap);
         void onHikeFragmentReady();
+        void stopCompassUpdates();
+        void resumeCompassUpdates();
     }
 
     @Override
@@ -57,34 +105,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement HikeFragmentListener");
         }
-
-
-        Thread testy = new Thread(){
-            @Override
-            public void run(){
-                final Random randy = new Random();
-                for (int i = 0; i < 100; i++) {
-                    curVal+=randy.nextFloat();
-                    activity.runOnUiThread(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    float value = curVal;
-                                    mCompassView.setDegrees(curVal);
-                                }
-                            }
-                    );
-
-                    try{
-                        sleep(300);
-                    }
-                    catch (Exception e){
-                        //Diaper Pattern
-                    }
-                }
-            }
-        };
-        testy.start();
+        mCompassAnimator = new CompassAnimator();
     }
 
     @Override
@@ -102,10 +123,10 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         }
         if (mSupportMapFragment != null) {
             mSupportMapFragment.getMapAsync(this);
-
         }
 
         mButtonEndHike = (Button) rootView.findViewById(R.id.buttonEndHike);
+
         mCompassView = (CompassView) rootView.findViewById(R.id.compass);
         mCompassView.setRangeDegrees(180);
         mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_naval));
@@ -114,13 +135,21 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         mCompassView.setTextColor(Color.BLACK);
         mCompassView.setShowMarker(true);
         mCompassView.setTextSize(37);
-        mCompassView.setDegrees(90);
-
-
+        mCompassView.setDegrees(0);
 
         mListener.onHikeFragmentReady();
         return rootView;
     }
+
+//    @Override
+//    public void onResume(){
+//        mListener.resumeCompassUpdates();
+//    }
+//
+//    @Override
+//    public void onPause(){
+//        mListener.stopCompassUpdates();
+//    }
 
     /**
      * Manipulates the map once available.
@@ -137,6 +166,12 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    public void updateCompass(double value){
+        //Tell the animator thread to begin
+        if(mCompassAnimator!=null){
+            mCompassAnimator.setNewValue((float) value);
+        }
+    }
 
     public Button getButtonEndHike() {
         return mButtonEndHike;

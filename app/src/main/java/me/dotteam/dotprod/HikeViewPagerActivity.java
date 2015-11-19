@@ -21,8 +21,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.redinput.compassview.CompassView;
 
 import java.util.List;
+import java.util.Random;
 
 import me.dotteam.dotprod.data.Coordinates;
 import me.dotteam.dotprod.data.HikeDataDirector;
@@ -67,10 +69,10 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
      * HikeFragment variables and UI element references
      */
     private GoogleMap mMap;
-    private boolean mMapReady = false;
     private PolylineOptions mMapPolylineOptions;
     private Button mButtonEndHike;
     private boolean mGotLocation = false;
+    private boolean mMapReady = false;
 
     /**
      * EnvCondFragment variables and UI element references
@@ -195,6 +197,31 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
         // Start Location Updates
         mHLE.startLocationUpdates();
+
+        Thread testy = new Thread(){
+            @Override
+            public void run(){
+                try {
+                    sleep(5000);
+                }
+                catch (Exception e){
+                    //Do Nothing
+                }
+                Log.d(TAG, "run Starting randy");
+                Random randy = new Random();
+                for (int i = 0; i < 100; i++) {
+                    try{
+                        sleep(250);
+                    }
+                    catch (Exception e){
+                        //Do nothing
+                    }
+                    mHikeFragment.updateCompass(randy.nextDouble() * 360.0);
+                    Log.d(TAG, "Updating Compass now");
+                }
+            }
+        };
+//        testy.start();
     }
 
     @Override
@@ -326,6 +353,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
                 // If finding current location failed, start a thread to retry
                 if (!mGotLocation) {
+                    //TODO: Deprecate this thread. We can make the map zoom into position with onLocationChange
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -369,6 +397,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                         }
                     });
                     t.start();
+
                 }
             }
         });
@@ -395,6 +424,20 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                 finish();
             }
         });
+
+
+    }
+
+    @Override
+    public void stopCompassUpdates(){
+        if(mHHM!=null)
+            mHHM.endCompass();
+    }
+
+    @Override
+    public void resumeCompassUpdates(){
+        if (mHHM!=null)
+            mHHM.startCompass();
     }
 
     private void mapZoomCameraToCurrentLocation() {
@@ -410,28 +453,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                 }
             }
         });
-    }
-
-    /// ===========================================
-    //
-    //  EnvCondFragment Methods and Callbacks
-    //
-    /// ===========================================
-
-    @Override
-    public void onEnvCondFragmentReady() {
-        Log.d(TAG, "onEnvCondFragmentReady() Called");
-
-        // Get references to UI elements
-        mTextDisplayHumidity = mEnvCondFragment.getTextDisplayHumidity();
-        mTextDisplayPressure = mEnvCondFragment.getTextDisplayPressure();
-        mTextDisplayTemperature = mEnvCondFragment.getTextDisplayTemperature();
-
-        // Set Text Initial Values
-        mTextDisplayHumidity.setText(mHumidityString);
-        mTextDisplayPressure.setText(mPressureString);
-        mTextDisplayTemperature.setText(mTemperatureString);
-
     }
 
     void updateTemperature(final String temp) {
@@ -469,6 +490,45 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
             }
         });
     }
+    void updateStepCount(final String stepcount) {
+        mStepCountString = stepcount;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mTextStepCount != null) {
+                    mTextStepCount.setText(stepcount);
+                }
+            }
+        });
+    }
+
+    void updateCompass(double degrees){
+        //Send it of to the fragment
+        mHikeFragment.updateCompass(degrees);
+    }
+
+
+    /// ===========================================
+    //
+    //  EnvCondFragment Methods and Callbacks
+    //
+    /// ===========================================
+
+    @Override
+    public void onEnvCondFragmentReady() {
+        Log.d(TAG, "onEnvCondFragmentReady() Called");
+
+        // Get references to UI elements
+        mTextDisplayHumidity = mEnvCondFragment.getTextDisplayHumidity();
+        mTextDisplayPressure = mEnvCondFragment.getTextDisplayPressure();
+        mTextDisplayTemperature = mEnvCondFragment.getTextDisplayTemperature();
+
+        // Set Text Initial Values
+        mTextDisplayHumidity.setText(mHumidityString);
+        mTextDisplayPressure.setText(mPressureString);
+        mTextDisplayTemperature.setText(mTemperatureString);
+
+    }
 
     /// ===========================================
     //
@@ -505,16 +565,5 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         mTextStepCount.setText(mStepCountString);
     }
 
-    void updateStepCount(final String stepcount) {
-        mStepCountString = stepcount;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mTextStepCount != null) {
-                    mTextStepCount.setText(stepcount);
-                }
-            }
-        });
-    }
 
 }
