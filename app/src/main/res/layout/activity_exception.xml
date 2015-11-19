@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="[STACK TRACE HERE]"
-            android:id="@+id/textView_stackTrace" />
+            android:id="@+id/textView_stackTrace"
+            android:textSize="8sp"/>
     </ScrollView>
 
     <LinearLayout

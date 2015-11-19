@@ -50,6 +50,12 @@ public class HomeActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finish();
+    }
+
     public void setMemberIDs(){
         mLinearLayoutStartHike = (LinearLayout) findViewById(R.id.linearLayoutStartHike);
         mLinearLayoutPastHikes = (LinearLayout) findViewById(R.id.linearLayoutPastHikes);
@@ -91,6 +97,7 @@ public class HomeActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intentPastHike = new Intent(HomeActivity.this, PastHikesActivity.class);
                 startActivity(intentPastHike);
+                System.gc();
             }
         });
 
