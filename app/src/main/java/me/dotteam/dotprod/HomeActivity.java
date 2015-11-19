@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
 
+import me.dotteam.dotprod.data.Hike;
 import me.dotteam.dotprod.data.HikeDataDirector;
 
 public class HomeActivity extends AppCompatActivity{
@@ -32,6 +33,7 @@ public class HomeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_home);
         setMemberIDs();
         setOnClickListeners();
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
         //TODO: Recover and put on settings or something.
         //Show build information for debugging.
@@ -46,6 +48,12 @@ public class HomeActivity extends AppCompatActivity{
                     BuildConfig.GIT_BRANCH);
             buildField.setText(formatter.toString());
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        finish();
     }
 
     public void setMemberIDs(){
@@ -77,11 +85,20 @@ public class HomeActivity extends AppCompatActivity{
             }
         });
 
+        mLinearLayoutSensors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //NOTE: Uncomment to cause an unconditional exception.
+                //Integer integers[] = new Integer[Integer.MAX_VALUE];
+            }
+        });
+
         mLinearLayoutPastHikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentPastHike = new Intent(HomeActivity.this, PastHikesActivity.class);
                 startActivity(intentPastHike);
+                System.gc();
             }
         });
 
