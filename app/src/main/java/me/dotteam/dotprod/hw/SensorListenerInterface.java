@@ -6,8 +6,12 @@ package me.dotteam.dotprod.hw;
 
 public interface SensorListenerInterface {
 
-    public enum HikeSensors{
-        TEMPERATURE, HUMIDITY, PRESSURE, PEDOMETER, MAGNETOMETER
+    enum HikeSensors{
+        TEMPERATURE,
+        HUMIDITY,
+        PRESSURE,
+        PEDOMETER,
+        COMPASS
     }
 
     void update(HikeSensors hikesensors, double value);

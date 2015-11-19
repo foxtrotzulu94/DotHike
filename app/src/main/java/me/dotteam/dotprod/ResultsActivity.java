@@ -69,6 +69,7 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intentHome = new Intent(ResultsActivity.this, HomeActivity.class);
+                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intentHome);
                 mHDD.storeCollectedStatistics();
             }

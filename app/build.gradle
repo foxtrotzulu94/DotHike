@@ -28,6 +28,7 @@ android {
 
     dependencies {
         compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
+        compile 'com.redinput.compassview:compassview:1.0'
     }
 }
 
