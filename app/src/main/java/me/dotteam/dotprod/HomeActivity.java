@@ -27,6 +27,13 @@ public class HomeActivity extends AppCompatActivity{
     private LinearLayout mLinearLayoutSettings;
     private FragmentManager fm = getSupportFragmentManager();
 
+    public void setMemberIDs(){
+        mLinearLayoutStartHike = (LinearLayout) findViewById(R.id.linearLayoutStartHike);
+        mLinearLayoutPastHikes = (LinearLayout) findViewById(R.id.linearLayoutPastHikes);
+        mLinearLayoutSensors = (LinearLayout) findViewById(R.id.linearLayoutSensors);
+        mLinearLayoutSettings = (LinearLayout) findViewById(R.id.linearLayoutSettings);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,13 +61,6 @@ public class HomeActivity extends AppCompatActivity{
     public void onBackPressed(){
         super.onBackPressed();
         finish();
-    }
-
-    public void setMemberIDs(){
-        mLinearLayoutStartHike = (LinearLayout) findViewById(R.id.linearLayoutStartHike);
-        mLinearLayoutPastHikes = (LinearLayout) findViewById(R.id.linearLayoutPastHikes);
-        mLinearLayoutSensors = (LinearLayout) findViewById(R.id.linearLayoutSensors);
-        mLinearLayoutSettings = (LinearLayout) findViewById(R.id.linearLayoutSettings);
     }
 
     public void setOnClickListeners(){
