@@ -13,16 +13,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.redinput.compassview.CompassView;
 
 import java.util.List;
 import java.util.Random;
@@ -116,11 +113,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private HikeLocationEntity mHLE;
 
     /**
-     * Boundaries for Map Zoom
-     */
-    private LatLngBounds mLatLngBounds;
-
-    /**
      * Reference to HikeDataDirector
      */
     private HikeDataDirector mHDD;
@@ -202,7 +194,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         mHLE.addListener(this);
 
         // Start Location Updates
-        mHLE.startLocationUpdates();
+        mHLE.startLocationUpdates(this);
 
         Thread testy = new Thread(){
             @Override
@@ -294,9 +286,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
             if (mMapReady) {
                 if (numberOfPoints == 0) {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
-                    boundsBuilder.include(latLng);
-                    mLatLngBounds = boundsBuilder.build();
                     mapZoomCameraToLocation(latLng);
                     mMapPolylineOptions.add(latLng);
                     mMap.addPolyline(mMapPolylineOptions);
@@ -317,7 +306,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                     Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, results);
                     if (results[0] > location.getAccuracy()) {
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        mLatLngBounds.including(latLng);
                         mMapPolylineOptions.add(latLng);
                         mMap.addPolyline(mMapPolylineOptions);
 
