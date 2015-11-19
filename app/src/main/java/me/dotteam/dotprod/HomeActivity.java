@@ -88,7 +88,8 @@ public class HomeActivity extends AppCompatActivity{
         mLinearLayoutSensors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer integers[] = new Integer[Integer.MAX_VALUE];
+                //NOTE: Uncomment to cause an unconditional exception.
+                //Integer integers[] = new Integer[Integer.MAX_VALUE];
             }
         });
 
