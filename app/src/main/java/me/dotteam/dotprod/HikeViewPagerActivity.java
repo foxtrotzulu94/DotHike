@@ -231,6 +231,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
         // Add Listener to HHM
         mHHM.addListener(mSensorListener);
+        mHHM.startCompass();
     }
 
     @Override
@@ -240,6 +241,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
         // Remove Listener from HHM
         mHHM.removeListener(mSensorListener);
+        mHHM.endCompass();
     }
 
     @Override

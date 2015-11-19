@@ -28,12 +28,14 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         CompassView animatedCompass;
         float currentDegrees = 0.0f;
         float finalDegrees = 0.0f;
-        float dampingPercentage = 0.3f;
+        float dampingPercentage = 0.05f;
         boolean runningThread =false;
+        boolean isInitialized=false;
 
         @Override
         public void run(){
             runningThread =true;
+            isInitialized=true;
             while(runningThread){
                 if (currentDegrees!=finalDegrees){
                     currentDegrees = lerp(currentDegrees,finalDegrees,dampingPercentage);
@@ -44,7 +46,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
                 }
 
                 try{
-                    sleep(16); //60 FPS updating!
+                    sleep(34); //30 FPS, no compass needs to be at 60...
                 }
                 catch (InterruptedException e){
                     runningThread = false;
@@ -68,13 +70,21 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
         public void setNewValue(float newValue){
             finalDegrees = newValue % 360;
-            if(!runningThread)
+            if(!isAlive() && !runningThread)
                 this.start();
         }
 
         public void setAndStop(float newValue){
             updateUI(newValue);
             runningThread = false;
+        }
+
+        public void stopAnimation(){
+            setAndStop(finalDegrees);
+        }
+
+        public boolean isInitialized(){
+            return isInitialized;
         }
     }
 
@@ -134,22 +144,18 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
         mCompassView.setTextColor(Color.BLACK);
         mCompassView.setShowMarker(true);
-        mCompassView.setTextSize(37);
+        mCompassView.setTextSize(30);
         mCompassView.setDegrees(0);
 
         mListener.onHikeFragmentReady();
         return rootView;
     }
 
-//    @Override
-//    public void onResume(){
-//        mListener.resumeCompassUpdates();
-//    }
-//
-//    @Override
-//    public void onPause(){
-//        mListener.stopCompassUpdates();
-//    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mCompassAnimator.stopAnimation();
+    }
 
     /**
      * Manipulates the map once available.
