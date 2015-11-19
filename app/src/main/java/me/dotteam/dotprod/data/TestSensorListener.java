@@ -22,7 +22,7 @@ public class TestSensorListener implements SensorListenerInterface {
             case PRESSURE:{
                 Log.d(TAG, "Pressure: " + String.valueOf(value));
             }
-            case MAGNETOMETER:{
+            case COMPASS:{
                 Log.d(TAG, "Magnetometer: " + String.valueOf(value));
             }
             default:{
