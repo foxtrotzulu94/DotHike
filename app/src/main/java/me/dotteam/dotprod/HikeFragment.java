@@ -140,18 +140,13 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
         mCompassView = (CompassView) rootView.findViewById(R.id.compass);
         mCompassView.setRangeDegrees(180);
-        mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_naval));
-        mCompassView.setLineColor(getResources().getColor(R.color.hike_black_tricorn));
+        mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_indigo_baltik));
+        mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
         mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
-        mCompassView.setTextColor(Color.BLACK);
+        mCompassView.setTextColor(getResources().getColor(R.color.hike_palisade));
         mCompassView.setShowMarker(true);
-        mCompassView.setTextSize(30);
+        mCompassView.setTextSize(40);
         mCompassView.setDegrees(0);
-
-//        mButtonEndHike.setEnabled(false); //End Hike button is by default Disabled
-//        mButtonEndHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.2f));
-//        mButtonPauseHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.8f));
-
 
         mListener.onHikeFragmentReady();
         return rootView;
@@ -185,8 +180,20 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         return mButtonEndHike;
     }
 
+    public void setButtonEndHIke(float weight){
+        mButtonEndHike.setLayoutParams(
+                new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, weight
+                ));
+    }
+
     public Button getButtonPauseHike() {
         return mButtonPauseHike;
+    }
+
+    public void setButtonPauseHIke(float weight){
+        mButtonPauseHike.setLayoutParams(
+                new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, weight
+                ));
     }
 
     public ImageView getImageViewEnvArrow(){

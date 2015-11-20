@@ -22,7 +22,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.redinput.compassview.CompassView;
 
 import java.util.List;
 import java.util.Random;
@@ -77,6 +76,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private ImageView mImageViewNavArrow;
     private boolean mGotLocation = false;
     private boolean mHikeCurrentlyPaused = false;
+    private boolean mEndHikeButtonLocked = true;
+    private boolean mPauseHikeButtonLocked = false;
     private boolean mMapReady = false;
 
     /**
@@ -429,14 +430,24 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 //
 //            }
             public void onClick(View v) {
-                // Reset Pedometer
-                // TODO Save Pedometer value
-                mHHM.resetPedometer();
-                Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
-                startActivity(intentResults);
-                mHDD.endCollectionService();
-                mHHM.stopSensorTag();
-                finish();
+                //Button currently locked
+                if(!mEndHikeButtonLocked) {
+                    // Reset Pedometer
+                    // TODO Save Pedometer value
+                    mHHM.resetPedometer();
+                    Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
+                    startActivity(intentResults);
+                    mHDD.endCollectionService();
+                    mHHM.stopSensorTag();
+                    finish();
+                 //Unlocking Button
+                } else{
+                    mEndHikeButtonLocked = false;
+                    mPauseHikeButtonLocked = true;
+
+                    mHikeFragment.setButtonEndHIke(0.2f);
+                    mHikeFragment.setButtonPauseHIke(0.8f);
+                }
             }
         });
 
@@ -444,16 +455,24 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         mButtonPauseHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if(!mHikeCurrentlyPaused){
-                   //Pause the collection and saving of data
-                   mHDD.setPauseCollection(true);
-                   mHikeCurrentlyPaused = true;
-               }
-               else {
-                   //UnPause the collection and saving of data
-                   mHDD.setPauseCollection(false);
-                   mHikeCurrentlyPaused = false;
-               }
+                if(!mPauseHikeButtonLocked) {
+                    if (!mHikeCurrentlyPaused) {
+                        //Pause the collection and saving of data
+                        mHDD.IsPaused(true);
+                        mHikeCurrentlyPaused = true;
+                    } else {
+                        //UnPause the collection and saving of data
+                        mHDD.IsPaused(false);
+                        mHikeCurrentlyPaused = false;
+                    }
+                //Unlocking Button
+                } else{
+                    mEndHikeButtonLocked = true;
+                    mPauseHikeButtonLocked = false;
+
+                    mHikeFragment.setButtonEndHIke(0.8f);
+                    mHikeFragment.setButtonPauseHIke(0.2f);
+                }
             }
         });
 

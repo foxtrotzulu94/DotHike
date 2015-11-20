@@ -1,14 +1,10 @@
 package me.dotteam.dotprod.data;
 
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -16,8 +12,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
-
-import java.util.Date;
 
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
@@ -144,7 +138,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
      */
     @Override
     public void update(HikeSensors hikesensors, double value) {
-        if(!mHDD.getPauseCollection()) {
+        if(!mHDD.IsPaused()) {
             Log.d("SCS", String.format("Got update %s: %s", hikesensors.toString(), value));
             switch (hikesensors) {
                 case TEMPERATURE: {
@@ -169,7 +163,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
      */
     @Override
     public void onLocationChanged(Location location) {
-        if(!mHDD.getPauseCollection()) {
+        if(!mHDD.IsPaused()) {
             //Store the new point in our recorded coordinates list
             Log.d(TAG, "onLocationChanged Added " + location.toString());
             this.recordedCoordinates.addPoint(new Coordinates(
