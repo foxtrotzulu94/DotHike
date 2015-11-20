@@ -151,6 +151,7 @@ public class HikeDataDirector {
                 Hike mockHike = new Hike();
                 EnvData mockStats = new EnvData();
                 LocationPoints mockGeo = new LocationPoints();
+                float lastHeight=0;
 
                 //Start the hike
                 mockHike.start();
@@ -158,7 +159,8 @@ public class HikeDataDirector {
                     mockStats.updateHumidity(randy.nextFloat());
                     mockStats.updateTemp(randy.nextFloat());
                     mockStats.updatePressure(randy.nextFloat());
-                    mockGeo.addPoint(new Coordinates(randy.nextFloat(), randy.nextFloat(), randy.nextFloat()));
+                    lastHeight += randy.nextFloat();
+                    mockGeo.addPoint(new Coordinates(randy.nextFloat(), randy.nextFloat(), lastHeight));
                 }
                 mockHike.end();
                 //End the Hike

@@ -14,7 +14,7 @@ import me.dotteam.dotprod.data.SessionData;
 /**
  * Created by foxtrot on 16/11/15.
  */
-public class PastStatisticsActivity extends AppCompatActivity {
+public class PastStatisticsActivity extends ResultsActivity {
     private Button mButtonResultsDone;
     private TextView mDumpSpace;
     private HikeDataDirector mHDD;
@@ -23,19 +23,19 @@ public class PastStatisticsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_results);
-        mHDD = HikeDataDirector.getInstance(this);
-        collectedSessionData = mHDD.getSessionData();
-
-        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
+//        setContentView(R.layout.activity_results);
+//        mHDD = HikeDataDirector.getInstance(this);
+//        collectedSessionData = mHDD.getSessionData();
+//
+//        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
         mButtonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
-
-        StringBuilder dump = new StringBuilder();
-        SessionData results = mHDD.getSessionData();
-
-        dump.append(results.toString());
-        mDumpSpace.setText(dump.toString());
-
+//
+//        StringBuilder dump = new StringBuilder();
+//        SessionData results = mHDD.getSessionData();
+//
+//        dump.append(results.toString());
+//        mDumpSpace.setText(dump.toString());
+//
         mButtonResultsDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

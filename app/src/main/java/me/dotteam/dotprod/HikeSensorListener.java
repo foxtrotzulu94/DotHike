@@ -7,7 +7,9 @@ import me.dotteam.dotprod.hw.SensorListenerInterface;
 /**
  * Created by as on 2015-10-23.
  */
+//TODO: This should probably be an inner class of the HikeViewPager
 public class HikeSensorListener implements SensorListenerInterface {
+
     private HikeViewPagerActivity owner;
 
     String TAG = "HikeSensorListener";
@@ -36,7 +38,8 @@ public class HikeSensorListener implements SensorListenerInterface {
             case PEDOMETER:
                 owner.updateStepCount(valueString);
                 break;
-            case MAGNETOMETER:
+            case COMPASS:
+                owner.updateCompass(value);
                 break;
             default:{
                 break;
