@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +30,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class HikeFragment extends Fragment implements OnMapReadyCallback {
     private String TAG = "HikeFragment";
     private Button mButtonEndHike;
+    private Button mButtonPauseHike;
     private ImageView mImageViewEnvArrow;
     private ImageView mImageViewNavArrow;
 
@@ -70,8 +73,14 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         }
 
         mButtonEndHike = (Button) rootView.findViewById(R.id.buttonEndHike);
+        mButtonPauseHike = (Button) rootView.findViewById(R.id.buttonPauseHike);
         mImageViewEnvArrow = (ImageView) rootView.findViewById(R.id.imageEnvArrow);
         mImageViewNavArrow = (ImageView) rootView.findViewById(R.id.imageNavArrow);
+
+//        mButtonEndHike.setEnabled(false); //End Hike button is by default Disabled
+//        mButtonEndHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.2f));
+//        mButtonPauseHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.8f));
+
 
         mListener.onHikeFragmentReady();
         return rootView;
@@ -95,6 +104,10 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
     public Button getButtonEndHike() {
         return mButtonEndHike;
+    }
+
+    public Button getButtonPauseHike() {
+        return mButtonPauseHike;
     }
 
     public ImageView getImageViewEnvArrow(){

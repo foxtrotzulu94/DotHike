@@ -71,9 +71,11 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private boolean mMapReady = false;
     private PolylineOptions mMapPolylineOptions;
     private Button mButtonEndHike;
+    private Button mButtonPauseHike;
     private ImageView mImageViewEnvArrow;
     private ImageView mImageViewNavArrow;
     private boolean mGotLocation = false;
+    private boolean mHikeCurrentlyPaused = false;
 
     /**
      * EnvCondFragment variables and UI element references
@@ -383,12 +385,19 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
         // Get references to UI elements
         mButtonEndHike = mHikeFragment.getButtonEndHike();
+        mButtonPauseHike = mHikeFragment.getButtonPauseHike();
         mImageViewEnvArrow = mHikeFragment.getImageViewEnvArrow();
         mImageViewNavArrow = mHikeFragment.getImageViewNavArrow();
 
         // Set callback for End Hike Button
         mButtonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
+//            public void onClick(View v){
+//                mButtonEndHike.setEnabled(true);
+//                mButtonEndHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.2f));
+//                mButtonPauseHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.8f));
+//
+//            }
             public void onClick(View v) {
                 // Reset Pedometer
                 // TODO Save Pedometer value
@@ -398,6 +407,23 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                 mHDD.endCollectionService();
                 mHHM.stopSensorTag();
                 finish();
+            }
+        });
+
+        // Set callback for Pause Hike Button
+        mButtonPauseHike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               if(!mHikeCurrentlyPaused){
+                   //Pause the collection and saving of data
+                   mHDD.setPauseCollection(true);
+                   mHikeCurrentlyPaused = true;
+               }
+               else {
+                   //UnPause the collection and saving of data
+                   mHDD.setPauseCollection(false);
+                   mHikeCurrentlyPaused = false;
+               }
             }
         });
 

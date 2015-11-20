@@ -19,6 +19,7 @@ public class HikeDataDirector {
     private static HikeDataDirector mInstance;
     private Context mCreateContext;
     private PersistentStorageEntity mPSE;
+    private boolean mPauseCollection = false;
 
     /**
      * Reference to the SessionData object currently in memory
@@ -131,6 +132,14 @@ public class HikeDataDirector {
         else {
             return false;
         }
+    }
+
+    public void setPauseCollection(boolean b){
+        mPauseCollection = b;
+    }
+
+    public boolean getPauseCollection(){
+        return mPauseCollection;
     }
 
     //TODO: Eventually remove

@@ -42,6 +42,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
     private EnvData recordedData;
     private LocationPoints recordedCoordinates;
     private Hike currentHike;
+    private HikeDataDirector mHDD;
 
     class TimeUpdate extends Thread{
 
@@ -91,6 +92,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
         recordedCoordinates = new LocationPoints();
         currentHike = new Hike();
         currentHike.start();
+        mHDD = HikeDataDirector.getInstance(this);
 
         mNotifier = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationID = this.getApplicationInfo().uid;
@@ -142,19 +144,21 @@ public class SessionCollectionService extends Service implements SensorListenerI
      */
     @Override
     public void update(HikeSensors hikesensors, double value) {
-        Log.d("SCS",String.format("Got update %s: %s",hikesensors.toString(),value));
-        switch (hikesensors){
-            case TEMPERATURE:{
-                recordedData.updateTemp(value);
-                break;
-            }
-            case HUMIDITY:{
-                recordedData.updateHumidity(value);
-                break;
-            }
-            case PRESSURE:{
-                recordedData.updatePressure(value);
-                break;
+        if(!mHDD.getPauseCollection()) {
+            Log.d("SCS", String.format("Got update %s: %s", hikesensors.toString(), value));
+            switch (hikesensors) {
+                case TEMPERATURE: {
+                    recordedData.updateTemp(value);
+                    break;
+                }
+                case HUMIDITY: {
+                    recordedData.updateHumidity(value);
+                    break;
+                }
+                case PRESSURE: {
+                    recordedData.updatePressure(value);
+                    break;
+                }
             }
         }
     }
@@ -165,12 +169,14 @@ public class SessionCollectionService extends Service implements SensorListenerI
      */
     @Override
     public void onLocationChanged(Location location) {
-        //Store the new point in our recorded coordinates list
-        Log.d(TAG, "onLocationChanged Added "+location.toString());
-        this.recordedCoordinates.addPoint(new Coordinates(
-                location.getLongitude(),
-                location.getLatitude(),
-                location.getAltitude()
-        ));
+        if(!mHDD.getPauseCollection()) {
+            //Store the new point in our recorded coordinates list
+            Log.d(TAG, "onLocationChanged Added " + location.toString());
+            this.recordedCoordinates.addPoint(new Coordinates(
+                    location.getLongitude(),
+                    location.getLatitude(),
+                    location.getAltitude()
+            ));
+        }
     }
 }
