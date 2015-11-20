@@ -20,7 +20,7 @@ public class HikeSensorListener implements SensorListenerInterface {
 
     @Override
     public void update(HikeSensors hikesensors, double value) {
-        String valueString = String.valueOf(value);
+        String valueString = String.format("%.2f",value);
         Log.d(TAG, hikesensors.toString() + ": " + valueString);
         switch (hikesensors) {
             case TEMPERATURE: {
