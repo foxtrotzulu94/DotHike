@@ -15,20 +15,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.google.android.gms.location.LocationListener;
-
 import java.util.Date;
 
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
 import me.dotteam.dotprod.hw.SensorListenerInterface;
 import me.dotteam.dotprod.loc.HikeLocationEntity;
+import me.dotteam.dotprod.loc.HikeLocationListener;
 
 /**
  * Lightweight class used for Sensor Data Collection as a service.
  * Is the bridge between the {@link HikeDataDirector} and the HikeHardwareManager
  */
-public class SessionCollectionService extends Service implements SensorListenerInterface,LocationListener{
+public class SessionCollectionService extends Service implements SensorListenerInterface, HikeLocationListener {
 
     private final String LONG_NAME=".Hike Statistics Service";
     private final String TAG="SCS";
@@ -132,7 +131,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
         //de-register yourself
         HikeHardwareManager.getInstance(this).removeListener(this);
-        HikeLocationEntity.getInstance(this).addListener(this);
+        HikeLocationEntity.getInstance(this).removeListener(this);
     }
 
     /**

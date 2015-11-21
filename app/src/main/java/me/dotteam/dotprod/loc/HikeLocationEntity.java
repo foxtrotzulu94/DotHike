@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,16 +24,20 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsApi;
+import com.google.android.gms.maps.LocationSource;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.dotteam.dotprod.HikeViewPagerActivity;
+import me.dotteam.dotprod.HomeActivity;
 
 /**
  * Handles Location Requests to GoogleApiClient and provides an easy way for any object to obtain Location Updates using one common entity.
  *
  * Created by EricTremblay on 15-11-05.
  */
-public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     /**
      * Class TAG
      */
@@ -44,6 +49,11 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     private final int DEFAULT_INTERVAL = 5000;
     private final int DEFAULT_FASTEST_INTERVAL = 1000;
     private final int DEFAULT_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
+
+    /**
+     * List of Listeners
+     */
+    private List<HikeLocationListener> mListeners;
 
     /**
      * Location Request Object
@@ -73,11 +83,6 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     private GoogleApiClient mGoogleApiClient;
 
     /**
-     * List of Currently Subscribed LocationListeners
-     */
-    private List<LocationListener> mLocationListeners;
-
-    /**
      * Boolean to save the GoogleApiClient connection state
      */
     private boolean mGoogleApiClientConnected = false;
@@ -86,6 +91,11 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * Boolean to save whether updates are on or off
      */
     private boolean mRequestingLocationUpdates = false;
+
+    /**
+     * Constant for Location Services Check
+     */
+    int REQUEST_CHECK_SETTINGS =  1;
 
     /**
      * Singleton method to obtain or generate current instance
@@ -104,14 +114,14 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * @param context Context from which the object creation is being requested
      */
     private HikeLocationEntity(Context context) {
-        // Create LocationListener List
-        mLocationListeners = new ArrayList<>();
-
         // Save Context
         mContext = context;
 
         // Build GoogleApiClient
         buildGoogleApiClient();
+
+        // Create list of listeners
+        mListeners = new ArrayList<>();
 
         // Create Location Request and set variables to default values
         mLocationRequest = new LocationRequest();
@@ -150,6 +160,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
                         case LocationSettingsStatusCodes.SUCCESS:
                             // All location settings are satisfied. The client can initialize location
                             // requests here.
+
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             // Location settings are not satisfied. But could be fixed by showing the user
@@ -159,14 +170,14 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
 
                             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContext);
                             dialogBuilder.setTitle("Turn on Location?")
-                                    .setMessage("In order for an optimal .Hike experience, please turn on your cellphone's location services. Do you wish to turn on location services now?")
+                                    .setMessage("In order for an optimal .Hike experience, please turn on your cellphone's location services. Do you wish to turn on location services?")
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             mContext.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                                         }
                                     })
-                                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    .setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             stopLocationUpdates();
@@ -178,14 +189,15 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
                         case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                             // Location settings are not satisfied. However, we have no way to fix the
                             // settings so we won't show the dialog.
+                            Log.i(TAG, "Location services error - Settings Chance Unavailable");
                             break;
                     }
                 }
             });
 
-            for (int i = 0; i < mLocationListeners.size(); i++) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, mLocationListeners.get(i));
-            }
+            // Add location listener
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
         } else {
             Log.i(TAG, "GoogleApiClient is not connected. Unable to start location updates");
         }
@@ -198,9 +210,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
         Log.d(TAG, "Stopping location updates");
         mRequestingLocationUpdates = false;
         if (mGoogleApiClientConnected) {
-            for (int i = 0; i < mLocationListeners.size(); i++) {
-                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, mLocationListeners.get(i));
-            }
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         } else {
             Log.i(TAG, "GoogleApiClient is not connected. Unable to stop location updates");
         }
@@ -224,12 +234,9 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * Start location updates for the LocationListener if the GoogleApiClient is connected and the location updates have been started
      * @param listener LocationListener to be registered
      */
-    public void addListener(LocationListener listener) {
+    public void addListener(HikeLocationListener listener) {
         Log.d(TAG, "Adding listener " + listener.toString());
-        mLocationListeners.add(listener);
-        if (mGoogleApiClientConnected && mRequestingLocationUpdates) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, listener);
-        }
+        mListeners.add(listener);
     }
 
     /**
@@ -237,12 +244,9 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      * This LocationListener will cease receiving any location updates
      * @param listener LocationListener to unregister
      */
-    public void removeListener(LocationListener listener) {
+    public void removeListener(HikeLocationListener listener) {
         Log.d(TAG, "Removing listener " + listener.toString());
-        mLocationListeners.remove(listener);
-        if (mGoogleApiClientConnected && mRequestingLocationUpdates) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, listener);
-        }
+        mListeners.remove(listener);
     }
 
     /**
@@ -325,6 +329,13 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      */
     public boolean isRequestingLocationUpdates() {
         return mRequestingLocationUpdates;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        for (int i = 0; i < mListeners.size(); i++) {
+            mListeners.get(i).onLocationChanged(location);
+        }
     }
 
     @Override

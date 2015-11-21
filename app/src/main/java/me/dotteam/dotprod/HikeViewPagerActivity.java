@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
@@ -29,12 +28,13 @@ import me.dotteam.dotprod.data.HikeDataDirector;
 import me.dotteam.dotprod.data.LocationPoints;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.loc.HikeLocationEntity;
+import me.dotteam.dotprod.loc.HikeLocationListener;
 
 /**
  * Hike ViewPager Activity
  * Created by EricTremblay on 15-11-13.
  */
-public class HikeViewPagerActivity extends FragmentActivity implements LocationListener, HikeFragment.HikeFragmentListener, NavigationFragment.NavigationFragmentListener, EnvCondFragment.EnvCondFragmentListener {
+public class HikeViewPagerActivity extends FragmentActivity implements HikeLocationListener, HikeFragment.HikeFragmentListener, NavigationFragment.NavigationFragmentListener, EnvCondFragment.EnvCondFragmentListener {
     /**
      * Activity's TAG for logging
      */
@@ -118,6 +118,11 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private HikeDataDirector mHDD;
 
     /**
+     * Reference to itself
+     */
+    HikeViewPagerActivity mThis;
+
+    /**
      * A simple pager adapter that represents 3 ScreenSlidePageFragment objects, in
      * sequence.
      */
@@ -155,6 +160,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         Log.d(TAG, "onCreate() Called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_pager);
+
+        mThis = this;
 
         // Instantiate Fragments
         mHikeFragment = new HikeFragment();
@@ -362,6 +369,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                 // Reset Pedometer
                 // TODO Save Pedometer value
                 mHHM.resetPedometer();
+                mHLE.removeListener(mThis);
                 Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
                 mHDD.endCollectionService();
