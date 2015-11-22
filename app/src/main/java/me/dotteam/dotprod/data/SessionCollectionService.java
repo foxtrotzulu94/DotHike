@@ -1,6 +1,7 @@
 package me.dotteam.dotprod.data;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
 
+import me.dotteam.dotprod.HikeViewPagerActivity;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
 import me.dotteam.dotprod.hw.SensorListenerInterface;
@@ -91,8 +93,8 @@ public class SessionCollectionService extends Service implements SensorListenerI
         mNotifier = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationID = this.getApplicationInfo().uid;
         firstNotify();
-        serviceThread = new TimeUpdate(this);
-        serviceThread.start();
+//        serviceThread = new TimeUpdate(this);
+//        serviceThread.start();
         Log.d("Collect","SERVICE STARTED!!!");
 
         //register yourself
@@ -106,7 +108,13 @@ public class SessionCollectionService extends Service implements SensorListenerI
                         .setSmallIcon(R.drawable.hikerservice)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.dothikemin))
                         .setContentTitle(LONG_NAME)
-                        .setOngoing(true);
+                        .setOngoing(true)
+                        .setUsesChronometer(true);
+
+        mBuilder.setContentIntent(
+                PendingIntent.getActivity(
+                        this,0,new Intent(this, HikeViewPagerActivity.class),PendingIntent.FLAG_UPDATE_CURRENT)
+                );
 
         mNotifier.notify(notificationID,mBuilder.build());
     }
@@ -122,7 +130,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
         //Now hand this data off to someone.
         HikeDataDirector.getInstance(this).receiveDataFromService(this,thisSession);
-        serviceThread.end();
+//        serviceThread.end();
         Log.d("Collect", "Service ends...");
         mNotifier.cancelAll();
 

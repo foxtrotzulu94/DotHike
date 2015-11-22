@@ -252,7 +252,12 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
     @Override
     public void onBackPressed() {
-        mPager.setCurrentItem(1);
+        if(mPager.getCurrentItem()!=1) {
+            mPager.setCurrentItem(1);
+        }
+//        else{
+//            //TODO: make this the same as ending the hike!
+//        }
     }
 
     @Override
