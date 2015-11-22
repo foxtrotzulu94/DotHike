@@ -1,14 +1,11 @@
 package me.dotteam.dotprod.data;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -17,8 +14,7 @@ import android.util.Log;
 
 import com.google.android.gms.location.LocationListener;
 
-import java.util.Date;
-
+import me.dotteam.dotprod.HikeViewPagerActivity;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
 import me.dotteam.dotprod.hw.SensorListenerInterface;
@@ -43,6 +39,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
     private EnvData recordedData;
     private LocationPoints recordedCoordinates;
     private Hike currentHike;
+    private HikeDataDirector mHDD;
 
     class TimeUpdate extends Thread{
 
@@ -92,12 +89,13 @@ public class SessionCollectionService extends Service implements SensorListenerI
         recordedCoordinates = new LocationPoints();
         currentHike = new Hike();
         currentHike.start();
+        mHDD = HikeDataDirector.getInstance(this);
 
         mNotifier = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationID = this.getApplicationInfo().uid;
         firstNotify();
-        serviceThread = new TimeUpdate(this);
-        serviceThread.start();
+//        serviceThread = new TimeUpdate(this);
+//        serviceThread.start();
         Log.d("Collect","SERVICE STARTED!!!");
 
         //register yourself
@@ -111,7 +109,13 @@ public class SessionCollectionService extends Service implements SensorListenerI
                         .setSmallIcon(R.drawable.hikerservice)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.dothikemin))
                         .setContentTitle(LONG_NAME)
-                        .setOngoing(true);
+                        .setOngoing(true)
+                        .setUsesChronometer(true);
+
+        mBuilder.setContentIntent(
+                PendingIntent.getActivity(
+                        this,0,new Intent(this, HikeViewPagerActivity.class),PendingIntent.FLAG_UPDATE_CURRENT)
+                );
 
         mNotifier.notify(notificationID,mBuilder.build());
     }
@@ -127,7 +131,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
         //Now hand this data off to someone.
         HikeDataDirector.getInstance(this).receiveDataFromService(this,thisSession);
-        serviceThread.end();
+//        serviceThread.end();
         Log.d("Collect", "Service ends...");
         mNotifier.cancelAll();
 
@@ -143,19 +147,21 @@ public class SessionCollectionService extends Service implements SensorListenerI
      */
     @Override
     public void update(HikeSensors hikesensors, double value) {
-        Log.d("SCS",String.format("Got update %s: %s",hikesensors.toString(),value));
-        switch (hikesensors){
-            case TEMPERATURE:{
-                recordedData.updateTemp(value);
-                break;
-            }
-            case HUMIDITY:{
-                recordedData.updateHumidity(value);
-                break;
-            }
-            case PRESSURE:{
-                recordedData.updatePressure(value);
-                break;
+        if(!mHDD.IsPaused()) {
+            Log.d("SCS", String.format("Got update %s: %s", hikesensors.toString(), value));
+            switch (hikesensors) {
+                case TEMPERATURE: {
+                    recordedData.updateTemp(value);
+                    break;
+                }
+                case HUMIDITY: {
+                    recordedData.updateHumidity(value);
+                    break;
+                }
+                case PRESSURE: {
+                    recordedData.updatePressure(value);
+                    break;
+                }
             }
             case PEDOMETER:{
                 stepCount = value;
@@ -169,12 +175,14 @@ public class SessionCollectionService extends Service implements SensorListenerI
      */
     @Override
     public void onLocationChanged(Location location) {
-        //Store the new point in our recorded coordinates list
-        Log.d(TAG, "onLocationChanged Added "+location.toString());
-        this.recordedCoordinates.addPoint(new Coordinates(
-                location.getLongitude(),
-                location.getLatitude(),
-                location.getAltitude()
-        ));
+        if(!mHDD.IsPaused()) {
+            //Store the new point in our recorded coordinates list
+            Log.d(TAG, "onLocationChanged Added " + location.toString());
+            this.recordedCoordinates.addPoint(new Coordinates(
+                    location.getLongitude(),
+                    location.getLatitude(),
+                    location.getAltitude()
+            ));
+        }
     }
 }
