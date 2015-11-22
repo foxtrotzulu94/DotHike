@@ -161,7 +161,7 @@ public class HikeDataDirector {
                     mPSE=new PersistentStorageEntity(mCreateContext);
                     mPSE.reset();
                 }
-                if(mPSE.saveSession(new SessionData(mockHike, mockStats,mockGeo))){
+                if(mPSE.saveSession(new SessionData(mockHike, new StepCount(99), mockStats,mockGeo))){
                     Log.d("HDD", "Save Successful");
 
                     //If the save was successful, call them back for a load.

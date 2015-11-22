@@ -47,6 +47,10 @@ public class SessionData {
         return mHike.toStorage();
     }
 
+    public ContentValues hikeNameToStorage(){
+        return mHike.nameToStorage();
+    }
+
     public long hikeStartTime(){
         return mHike.startTime();
     }

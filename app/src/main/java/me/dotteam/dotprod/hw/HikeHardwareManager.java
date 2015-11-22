@@ -144,7 +144,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         }
     }
 
-    public void endCompass(){
+    public void stopCompass(){
         mSensorManager.unregisterListener(mCompassListener,mAccelerometer);
         mSensorManager.unregisterListener(mCompassListener,mMagnetometer);
     }

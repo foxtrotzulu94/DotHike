@@ -21,7 +21,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.redinput.compassview.CompassView;
 
 import java.util.List;
 import java.util.Random;
@@ -241,7 +240,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
         // Remove Listener from HHM
         mHHM.removeListener(mSensorListener);
-        mHHM.endCompass();
+        mHHM.stopCompass();
     }
 
     @Override

@@ -241,11 +241,14 @@ public class PersistentStorageEntity {
         for(int i=0; i<allCoordinates.size();++i) {
             mDB.insert(DBAssistant.COORDS, null,allCoordinates.get(i).toStorage(assignedID));
         }
+        //Insert all EnvStatistics
         mDB.insert(DBAssistant.ENVTEMP,null,givenSession.getCurrentStats().getSerializedTemp(assignedID));
         mDB.insert(DBAssistant.ENVHUMD,null,givenSession.getCurrentStats().getSerializedHumidity(assignedID));
         mDB.insert(DBAssistant.ENVPRES,null,givenSession.getCurrentStats().getSerializedPressure(assignedID));
-
+        //Insert Step Count
         mDB.insert(DBAssistant.STEPS,null,givenSession.getStepCount().toStorage(assignedID));
+        //If there's a name, save it
+        mDB.insert(DBAssistant.HIKE_NAME,null,givenSession.hikeNameToStorage()); //TODO: Change later. All hike data should be inserted in one-shot
 
         //CHANGE if operation fails at any point!
         return true;
