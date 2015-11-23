@@ -158,7 +158,7 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     protected void setupPressureChart(){
-        EnvStatistic pressure = mHDD.getSessionData().getCurrentStats().getTemperature();
+        EnvStatistic pressure = mHDD.getSessionData().getCurrentStats().getPressure();
         if(pressure!=null && pressure.isValid()){
             mPressureChart = new BarChart(this);
             List<BarEntry> statVals = new ArrayList<>(3);
@@ -188,7 +188,7 @@ public class ResultsActivity extends AppCompatActivity {
         }
     }
     protected void setupHumidityChart(){
-        EnvStatistic humidity = mHDD.getSessionData().getCurrentStats().getTemperature();
+        EnvStatistic humidity = mHDD.getSessionData().getCurrentStats().getHumidity();
         if(humidity!=null && humidity.isValid()){
             mHumidityChart = new BarChart(this);
             List<BarEntry> statVals = new ArrayList<>(3);

@@ -103,6 +103,13 @@ public class Hike {
         return retVal;
     }
 
+    public ContentValues nameToStorage(){
+        ContentValues retVal = new ContentValues(2);
+        retVal.put(DBAssistant.HIKE_ID,this.uniqueID);
+        retVal.put(DBAssistant.NICKNAME,nickName);
+        return retVal;
+    }
+
     public int getUniqueID() {
         return uniqueID;
     }

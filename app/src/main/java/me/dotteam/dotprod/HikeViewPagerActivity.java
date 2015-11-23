@@ -247,7 +247,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
         // Remove Listener from HHM
         mHHM.removeListener(mSensorListener);
-        mHHM.endCompass();
+        mHHM.stopCompass();
     }
 
     @Override
