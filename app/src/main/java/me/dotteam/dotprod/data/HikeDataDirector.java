@@ -19,6 +19,7 @@ public class HikeDataDirector {
     private static HikeDataDirector mInstance;
     private Context mCreateContext;
     private PersistentStorageEntity mPSE;
+    private boolean mPauseCollection = false;
 
     /**
      * Reference to the SessionData object currently in memory
@@ -133,6 +134,14 @@ public class HikeDataDirector {
         }
     }
 
+    public void IsPaused(boolean b){
+        mPauseCollection = b;
+    }
+
+    public boolean IsPaused(){
+        return mPauseCollection;
+    }
+
     //TODO: Eventually remove
     public void testStorage(){
         Thread backgroundCheck = new Thread(){
@@ -142,6 +151,7 @@ public class HikeDataDirector {
                 Hike mockHike = new Hike();
                 EnvData mockStats = new EnvData();
                 LocationPoints mockGeo = new LocationPoints();
+                float lastHeight=0;
 
                 //Start the hike
                 mockHike.start();
@@ -149,7 +159,8 @@ public class HikeDataDirector {
                     mockStats.updateHumidity(randy.nextFloat());
                     mockStats.updateTemp(randy.nextFloat());
                     mockStats.updatePressure(randy.nextFloat());
-                    mockGeo.addPoint(new Coordinates(randy.nextFloat(), randy.nextFloat(), randy.nextFloat()));
+                    lastHeight += randy.nextFloat();
+                    mockGeo.addPoint(new Coordinates(randy.nextFloat(), randy.nextFloat(), lastHeight));
                 }
                 mockHike.end();
                 //End the Hike
@@ -159,7 +170,7 @@ public class HikeDataDirector {
                     mPSE=new PersistentStorageEntity(mCreateContext);
                     mPSE.reset();
                 }
-                if(mPSE.saveSession(new SessionData(mockHike, mockStats,mockGeo))){
+                if(mPSE.saveSession(new SessionData(mockHike, new StepCount(99), mockStats,mockGeo))){
                     Log.d("HDD", "Save Successful");
 
                     //If the save was successful, call them back for a load.

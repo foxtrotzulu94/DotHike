@@ -1,6 +1,7 @@
 package me.dotteam.dotprod.data;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -37,7 +38,7 @@ public class PersistentStorageEntity {
     public List<Hike> getHikesList() {
 
         //Create a New Hikes List.
-        List <Hike> allHikes = new ArrayList<>();
+        List <Hike> allHikes = null;
 
         //Query and keep an index on the columns
         Cursor cursor = mDB.query(DBAssistant.HIKE, null, null, null, null, null, "id");
@@ -45,15 +46,19 @@ public class PersistentStorageEntity {
         int startTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_START);
         int endTimeColumn = cursor.getColumnIndex(DBAssistant.HIKE_END);
 
-        cursor.moveToFirst();
-        do {
-            allHikes.add(
-                    new Hike(
-                            cursor.getInt(idColumn),
-                            cursor.getLong(startTimeColumn),
-                            cursor.getLong(endTimeColumn))
-            );
-        } while (cursor.moveToNext());
+        if(cursor.getCount()>0) {
+            allHikes = new ArrayList<>(cursor.getCount());
+
+            cursor.moveToFirst();
+            do {
+                allHikes.add(
+                        new Hike(
+                                cursor.getInt(idColumn),
+                                cursor.getLong(startTimeColumn),
+                                cursor.getLong(endTimeColumn))
+                );
+            } while (cursor.moveToNext());
+        }
 
         cursor.close();
 
@@ -81,8 +86,11 @@ public class PersistentStorageEntity {
         //Get GeoPoints
         LocationPoints retrievedPoints = new LocationPoints(retrieveCoordinates(hikeID));
 
+        //And finally, get steps
+        StepCount retrievedStepCount = retrieveSteps(hikeID);
+
         if(retrievedPoints!=null && retrievedStatistics!=null){
-            return new SessionData(specificHike,retrievedStatistics,retrievedPoints);
+            return new SessionData(specificHike,retrievedStepCount,retrievedStatistics,retrievedPoints);
         }
         else{
             Log.d(TAG,"DID NOT FIND IN DB");
@@ -189,6 +197,17 @@ public class PersistentStorageEntity {
         return retrievedList;
     }
 
+    private StepCount retrieveSteps(int uniqueID){
+        StepCount retrievedSteps = null;
+        Cursor cursor = mDB.query(DBAssistant.STEPS,null,DBAssistant.HIKE_ID+"=?",
+                new String[]{Integer.toString(uniqueID)},null,null,DBAssistant.HIKE_ID);
+        if (cursor.getCount()>0){
+            cursor.moveToFirst();
+            retrievedSteps = new StepCount(cursor.getInt(cursor.getColumnIndex(DBAssistant.STEP_COUNT)));
+        }
+        return retrievedSteps;
+    }
+
     /**
      * Send a {@link SessionData} object to be stored in the database
      * @param givenSession the SessionData object to be stored
@@ -201,11 +220,6 @@ public class PersistentStorageEntity {
             Log.e(TAG, "Given a null SessionData. Cannot Proceed to Storage");
             return false;
         }
-
-//        //TODO: Need to keep our list up-to-date. Add this entry to the end after finishing!
-//        if(allHikes==null){
-//            allHikes = getHikesList();
-//        }
 
         //Get the hike as contentValue and insert it into the DB
         mDB.insert(DBAssistant.HIKE,null,givenSession.hikeToStorage());
@@ -220,14 +234,21 @@ public class PersistentStorageEntity {
         Log.w(TAG,"Statement returned "+cursor.getColumnCount()+" "+cursor.getCount());
         int assignedID = cursor.getInt(cursor.getColumnIndex("id"));
 
+        givenSession.setHikeID(assignedID);
+
         //Continue insertion of objects with the associated ID.
         List<Coordinates> allCoordinates =givenSession.getGeoPoints().getCoordinateList();
         for(int i=0; i<allCoordinates.size();++i) {
             mDB.insert(DBAssistant.COORDS, null,allCoordinates.get(i).toStorage(assignedID));
         }
+        //Insert all EnvStatistics
         mDB.insert(DBAssistant.ENVTEMP,null,givenSession.getCurrentStats().getSerializedTemp(assignedID));
         mDB.insert(DBAssistant.ENVHUMD,null,givenSession.getCurrentStats().getSerializedHumidity(assignedID));
         mDB.insert(DBAssistant.ENVPRES,null,givenSession.getCurrentStats().getSerializedPressure(assignedID));
+        //Insert Step Count
+        mDB.insert(DBAssistant.STEPS,null,givenSession.getStepCount().toStorage(assignedID));
+        //If there's a name, save it
+        mDB.insert(DBAssistant.HIKE_NAME,null,givenSession.hikeNameToStorage()); //TODO: Change later. All hike data should be inserted in one-shot
 
         //CHANGE if operation fails at any point!
         return true;
