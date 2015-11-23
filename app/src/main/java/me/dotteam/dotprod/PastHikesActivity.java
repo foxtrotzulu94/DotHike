@@ -73,7 +73,9 @@ public class PastHikesActivity extends AppCompatActivity {
 
         // Get all saved hikes and reverse the list
         List<Hike> storedHikes = mHDD.getAllStoredHikes();
-        Collections.reverse(storedHikes);
+        if (storedHikes != null && storedHikes.size() > 1) {
+            Collections.reverse(storedHikes);
+        }
 
         if(storedHikes!=null) {
             // Create adapter for GridView
