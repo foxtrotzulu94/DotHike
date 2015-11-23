@@ -162,10 +162,11 @@ public class SessionCollectionService extends Service implements SensorListenerI
                     recordedData.updatePressure(value);
                     break;
                 }
+                case PEDOMETER:{
+                    stepCount = value;
+                }
             }
-            case PEDOMETER:{
-                stepCount = value;
-            }
+
         }
     }
 
