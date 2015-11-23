@@ -97,6 +97,7 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
         }
 
         // Get reference to GestureOverlayView
+        // Note: This is used to capture the touch events on the MapViews and TextViews
         GestureOverlayView overlayView = (GestureOverlayView) convertView.findViewById(R.id.gesture_overlay_view);
 
         // Set its onClickListener to call parent's onItemClick

@@ -5,6 +5,7 @@
     android:layout_height="fill_parent"
     android:minHeight="200dp">
 
+    <!--Note: This is used to capture the touch events on the MapViews and TextViews-->
     <android.gesture.GestureOverlayView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
