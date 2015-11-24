@@ -81,6 +81,7 @@ public class HomeActivity extends AppCompatActivity{
                 //TODO: Remove later
                 HikeDataDirector mHDD = HikeDataDirector.getInstance(HomeActivity.this);
                 mHDD.testStorage();
+                mHDD.deleteCurrentSessionData();
                 Toast.makeText(HomeActivity.this,"Testing Storage Setup", Toast.LENGTH_LONG).show();
             }
         });
