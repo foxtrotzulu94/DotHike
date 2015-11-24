@@ -144,7 +144,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         }
     }
 
-    public void endCompass(){
+    public void stopCompass(){
         mSensorManager.unregisterListener(mCompassListener,mAccelerometer);
         mSensorManager.unregisterListener(mCompassListener,mMagnetometer);
     }
@@ -184,7 +184,6 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
                 if (!mSensorTagManager.isServicesReady()) {
                     // if initServices failed or took too long, log an error (in LogCat) and exit
                     Log.e(TAG, "Discover failed - exiting");
-                    Toast.makeText(mContext, "SensorTag failed to finish connecting", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

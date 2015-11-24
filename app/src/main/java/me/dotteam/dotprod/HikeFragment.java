@@ -10,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -84,6 +88,9 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
     private String TAG = "HikeFragment";
     private Button mButtonEndHike;
+    private Button mButtonPauseHike;
+    private ImageView mImageViewEnvArrow;
+    private ImageView mImageViewNavArrow;
 
     private HikeFragmentListener mListener;
 
@@ -127,15 +134,18 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         }
 
         mButtonEndHike = (Button) rootView.findViewById(R.id.buttonEndHike);
+        mButtonPauseHike = (Button) rootView.findViewById(R.id.buttonPauseHike);
+        mImageViewEnvArrow = (ImageView) rootView.findViewById(R.id.imageEnvArrow);
+        mImageViewNavArrow = (ImageView) rootView.findViewById(R.id.imageNavArrow);
 
         mCompassView = (CompassView) rootView.findViewById(R.id.compass);
         mCompassView.setRangeDegrees(180);
-        mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_naval));
-        mCompassView.setLineColor(getResources().getColor(R.color.hike_black_tricorn));
+        mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_indigo_baltik));
+        mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
         mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
-        mCompassView.setTextColor(Color.BLACK);
+        mCompassView.setTextColor(getResources().getColor(R.color.hike_palisade));
         mCompassView.setShowMarker(true);
-        mCompassView.setTextSize(30);
+        mCompassView.setTextSize(40);
         mCompassView.setDegrees(0);
 
         mListener.onHikeFragmentReady();
@@ -168,6 +178,30 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
     public Button getButtonEndHike() {
         return mButtonEndHike;
+    }
+
+    public void setButtonEndHIke(float weight){
+        mButtonEndHike.setLayoutParams(
+                new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, weight
+                ));
+    }
+
+    public Button getButtonPauseHike() {
+        return mButtonPauseHike;
+    }
+
+    public void setButtonPauseHIke(float weight){
+        mButtonPauseHike.setLayoutParams(
+                new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, weight
+                ));
+    }
+
+    public ImageView getImageViewEnvArrow(){
+        return mImageViewEnvArrow;
+    }
+
+    public  ImageView getImageViewNavArrow(){
+        return mImageViewNavArrow;
     }
 
     public CompassView getUICompass(){

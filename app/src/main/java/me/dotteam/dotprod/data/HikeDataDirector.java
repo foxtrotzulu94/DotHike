@@ -19,6 +19,7 @@ public class HikeDataDirector {
     private static HikeDataDirector mInstance;
     private Context mCreateContext;
     private PersistentStorageEntity mPSE;
+    private boolean mPauseCollection = false;
 
     /**
      * Reference to the SessionData object currently in memory
@@ -133,6 +134,14 @@ public class HikeDataDirector {
         }
     }
 
+    public void IsPaused(boolean b){
+        mPauseCollection = b;
+    }
+
+    public boolean IsPaused(){
+        return mPauseCollection;
+    }
+
     //TODO: Eventually remove
     public void testStorage(){
         Thread backgroundCheck = new Thread(){
@@ -161,7 +170,7 @@ public class HikeDataDirector {
                     mPSE=new PersistentStorageEntity(mCreateContext);
                     mPSE.reset();
                 }
-                if(mPSE.saveSession(new SessionData(mockHike, mockStats,mockGeo))){
+                if(mPSE.saveSession(new SessionData(mockHike, new StepCount(99), mockStats,mockGeo))){
                     Log.d("HDD", "Save Successful");
 
                     //If the save was successful, call them back for a load.

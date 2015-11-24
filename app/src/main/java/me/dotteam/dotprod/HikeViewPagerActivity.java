@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -69,7 +70,13 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     private GoogleMap mMap;
     private PolylineOptions mMapPolylineOptions;
     private Button mButtonEndHike;
+    private Button mButtonPauseHike;
+    private ImageView mImageViewEnvArrow;
+    private ImageView mImageViewNavArrow;
     private boolean mGotLocation = false;
+    private boolean mHikeCurrentlyPaused = false;
+    private boolean mEndHikeButtonLocked = true;
+    private boolean mPauseHikeButtonLocked = false;
     private boolean mMapReady = false;
 
     /**
@@ -246,12 +253,17 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
 
         // Remove Listener from HHM
         mHHM.removeListener(mSensorListener);
-        mHHM.endCompass();
+        mHHM.stopCompass();
     }
 
     @Override
     public void onBackPressed() {
-        mPager.setCurrentItem(1);
+        if(mPager.getCurrentItem()!=1) {
+            mPager.setCurrentItem(1);
+        }
+//        else{
+//            //TODO: make this the same as ending the hike!
+//        }
     }
 
     @Override
@@ -333,25 +345,83 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
 
         // Get references to UI elements
         mButtonEndHike = mHikeFragment.getButtonEndHike();
+        mButtonPauseHike = mHikeFragment.getButtonPauseHike();
+        mImageViewEnvArrow = mHikeFragment.getImageViewEnvArrow();
+        mImageViewNavArrow = mHikeFragment.getImageViewNavArrow();
 
         // Set callback for End Hike Button
         mButtonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
+//            public void onClick(View v){
+//                mButtonEndHike.setEnabled(true);
+//                mButtonEndHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.2f));
+//                mButtonPauseHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.8f));
+//
+//            }
             public void onClick(View v) {
-                // Reset Pedometer
-                // TODO Save Pedometer value
-                mHHM.resetPedometer();
-                mHLE.removeListener(mThis);
-                mHLE.stopLocationUpdates();
-                Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
-                startActivity(intentResults);
-                mHDD.endCollectionService();
-                mHHM.stopSensorTag();
-                finish();
+                //Button currently locked
+                if (!mEndHikeButtonLocked) {
+                    // Reset Pedometer
+                    // TODO Save Pedometer value
+                    mHHM.resetPedometer();
+                    mHLE.removeListener(mThis);
+                    mHLE.stopLocationUpdates();
+                    Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
+                    startActivity(intentResults);
+                    mHDD.endCollectionService();
+                    mHHM.stopSensorTag();
+                    finish();
+                    //Unlocking Button
+                } else {
+                    mEndHikeButtonLocked = false;
+                    mPauseHikeButtonLocked = true;
+
+                    mHikeFragment.setButtonEndHIke(0.2f);
+                    mHikeFragment.setButtonPauseHIke(0.8f);
+                }
             }
         });
 
+        // Set callback for Pause Hike Button
+        mButtonPauseHike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!mPauseHikeButtonLocked) {
+                    if (!mHikeCurrentlyPaused) {
+                        //Pause the collection and saving of data
+                        mHDD.IsPaused(true);
+                        mHikeCurrentlyPaused = true;
+                    } else {
+                        //UnPause the collection and saving of data
+                        mHDD.IsPaused(false);
+                        mHikeCurrentlyPaused = false;
+                    }
+                //Unlocking Button
+                } else{
+                    mEndHikeButtonLocked = true;
+                    mPauseHikeButtonLocked = false;
 
+                    mHikeFragment.setButtonEndHIke(0.8f);
+                    mHikeFragment.setButtonPauseHIke(0.2f);
+                }
+            }
+        });
+
+        //Set callback for Nav-Arrow ImageView
+        mImageViewNavArrow.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                mPager.setCurrentItem(0);
+            }
+        });
+
+        //Set callback for Env-Arrow ImageView
+        mImageViewEnvArrow.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                mPager.setCurrentItem(2);
+            }
+        });
     }
 
     private void mapZoomCameraToLocation(final LatLng latlng) {
