@@ -7,6 +7,6 @@ import android.location.Location;
  */
 public interface HikeLocationListener {
 
-    public void onLocationChanged(Location location);
+    public void onLocationChanged(Location location, float distance);
 
 }

@@ -163,7 +163,8 @@ public class SessionCollectionService extends Service implements SensorListenerI
      * @param location The object describing longitude and latitude
      */
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(Location location, float distance) {
+        // TODO: Save distance traveled
         //Store the new point in our recorded coordinates list
         Log.d(TAG, "onLocationChanged Added "+location.toString());
         this.recordedCoordinates.addPoint(new Coordinates(

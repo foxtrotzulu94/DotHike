@@ -255,21 +255,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        // Log values
-        Log.i(TAG, "Location Changed!"
-                + "\nLatitude: " + location.getLatitude()
-                + "\nLongitude: " + location.getLongitude()
-                + "\nAltitude: " + location.getAltitude()
-                + "\nBearing: " + location.getBearing()
-                + "\nAccuracy :" + location.getAccuracy());
-
-        if (mLocation == null) {
-            mLocation = new Location(location);
-        } else {
-            mLocation = location;
-        }
-
+    public void onLocationChanged(Location location, float distance) {
+        Log.d(TAG, "onLocationChanged");
         // Set TextViews to new values
         if (mTextLatitude != null) {
             mTextLatitude.setText(String.valueOf(location.getLatitude()));
@@ -287,43 +274,28 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             mTextAccuracy.setText(String.valueOf(location.getAccuracy()));
         }
 
-        if (location.getAccuracy() <= 40) {
-            List<Coordinates> coordinatesList = mLocationPoints.getCoordinateList();
-            int numberOfPoints = coordinatesList.size();
+        if (mLocation == null) {
+            mLocation = new Location(location);
+
             if (mMapReady) {
-                if (numberOfPoints == 0) {
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mapZoomCameraToLocation(latLng);
-                    mMapPolylineOptions.add(latLng);
-                    mMap.addPolyline(mMapPolylineOptions);
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mapZoomCameraToLocation(latLng);
+                mMapPolylineOptions.add(latLng);
+                mMap.addPolyline(mMapPolylineOptions);
+            }
+        } else {
+            mLocation = location;
 
-                    mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
-                            (float) location.getLatitude(), (float) location.getAltitude()));
-                } else {
-                    // Array to store results
-                    float results[] = new float[3];
+            if (mMapReady) {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMapPolylineOptions.add(latLng);
+                mMap.addPolyline(mMapPolylineOptions);
+            }
 
-                    // Get previous and current longitude and latitude
-                    double prevLongitude = coordinatesList.get(numberOfPoints - 1).getLongitude();
-                    double prevLatitude = coordinatesList.get(numberOfPoints - 1).getLatitude();
-                    double currLongitude = location.getLongitude();
-                    double currLatitude = location.getLatitude();
+            mDistanceTravelled += distance;
 
-                    // Calculate distance between both points and add it to total
-                    Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, results);
-                    if (results[0] > location.getAccuracy()) {
-                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        mMapPolylineOptions.add(latLng);
-                        mMap.addPolyline(mMapPolylineOptions);
-
-                        mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
-                                (float) location.getLatitude(), (float) location.getAltitude()));
-                        mDistanceTravelled += results[0];
-                        if (mTextDistanceTraveled != null) {
-                            mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
-                        }
-                    }
-                }
+            if (mTextDistanceTraveled != null) {
+                mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
             }
         }
     }
@@ -370,6 +342,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                 // TODO Save Pedometer value
                 mHHM.resetPedometer();
                 mHLE.removeListener(mThis);
+                mHLE.stopLocationUpdates();
                 Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
                 mHDD.endCollectionService();

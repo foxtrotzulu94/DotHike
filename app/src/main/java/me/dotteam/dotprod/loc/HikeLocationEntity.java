@@ -93,9 +93,14 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     private boolean mRequestingLocationUpdates = false;
 
     /**
-     * Constant for Location Services Check
+     * Last Known Location
      */
-    int REQUEST_CHECK_SETTINGS =  1;
+    private Location mLastKnownLocation;
+
+    /**
+     * Minimum location accuracy
+     */
+    private int MIN_LOCATION_ACCURACY = 40;
 
     /**
      * Singleton method to obtain or generate current instance
@@ -209,6 +214,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     public void stopLocationUpdates() {
         Log.d(TAG, "Stopping location updates");
         mRequestingLocationUpdates = false;
+        mLastKnownLocation =null;
         if (mGoogleApiClientConnected) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         } else {
@@ -333,8 +339,49 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
 
     @Override
     public void onLocationChanged(Location location) {
-        for (int i = 0; i < mListeners.size(); i++) {
-            mListeners.get(i).onLocationChanged(location);
+        // Log values
+        Log.i(TAG, "Location Changed!"
+                + "\nLatitude: " + location.getLatitude()
+                + "\nLongitude: " + location.getLongitude()
+                + "\nAltitude: " + location.getAltitude()
+                + "\nBearing: " + location.getBearing()
+                + "\nAccuracy :" + location.getAccuracy());
+
+        // Check if the accuracy is good enough
+        if (location.getAccuracy() <= MIN_LOCATION_ACCURACY) {
+            // Check if its the first point
+            if (mLastKnownLocation == null) {
+                mLastKnownLocation = new Location(location);
+
+                // Notify listeners
+                for (int i = 0; i < mListeners.size(); i++) {
+                    mListeners.get(i).onLocationChanged(location, 0);
+                }
+            } else {
+                // Get previous location
+                double prevLatitude = mLastKnownLocation.getLatitude();
+                double prevLongitude = mLastKnownLocation.getLongitude();
+
+                // Array to store distance result
+                float results[] = new float[3];
+
+                // Get distance current location and last known location
+                Location.distanceBetween(prevLatitude, prevLongitude, location.getLatitude(), location.getLongitude(), results);
+
+                // Log distance result
+                Log.d(TAG, "Distance: " + String.valueOf(results[0]));
+
+                // Check if distance is greater than accuracy
+                if (results[0] > location.getAccuracy()) {
+                    // update last known location
+                    mLastKnownLocation = location;
+
+                    // Notify listeners
+                    for (int i = 0; i < mListeners.size(); i++) {
+                        mListeners.get(i).onLocationChanged(location, results[0]);
+                    }
+                }
+            }
         }
     }
 
