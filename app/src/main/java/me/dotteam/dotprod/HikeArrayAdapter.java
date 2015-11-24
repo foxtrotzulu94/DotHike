@@ -45,11 +45,7 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
      */
     Context mContext;
 
-    /**
-     * Map with a hike's unique identify for the key and the data is a list of coordinates
-     * associated with that hike. This is necessary to obtain the coordinates within the onMapReadyCallback.
-     */
-    Map<Integer, List<Coordinates>> mAllCoordinates;
+    Map<Integer, MapReady> mMapCallbacks;
 
     /**
      * Default Constructor
@@ -59,7 +55,7 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
     public HikeArrayAdapter(Context context, List<Hike> allHikes){
         super(context,R.layout.lite_map_fragment,allHikes);
         mContext = context;
-        mAllCoordinates = new HashMap<>();
+        mMapCallbacks = new HashMap<>();
     }
 
     @Override
@@ -144,18 +140,25 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
         hdd.retrieveSessionFromHike(hike);
         List<Coordinates> coordinatesList = hdd.getSessionData().getGeoPoints().getCoordinateList();
 
-        // Save coordinates in HashMap
-        mAllCoordinates.put(id, coordinatesList);
+        // Get callback object
+        MapReady mapReadyCallback = mMapCallbacks.get(id);
+
+        if (mapReadyCallback == null) {
+            mapReadyCallback = new MapReady(id);
+            mMapCallbacks.put(id, mapReadyCallback);
+        }
+
+        mapReadyCallback.mCoordinatesList = coordinatesList;
 
         // Create GoogleMap object and pass callback
-        holder.mMapView.getMapAsync(new MapReady(id));
+        holder.mMapView.getMapAsync(mapReadyCallback);
 
         // Return View
         return convertView;
     }
 
     /**
-     * Used to hold objects that are assocaited with GridViewItems.
+     * Used to hold objects that are associated with GridViewItems.
      * This avoids having to create them every time.
      * This is saved as a view's tag so that it can be easily recalled.
      */
@@ -176,6 +179,9 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
          */
         Integer mHikeId;
 
+        // List of Coordinates for associated Hike
+        List<Coordinates> mCoordinatesList;
+
         /**
          * Default Constructor
          * @param id unique hike id
@@ -195,9 +201,6 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
             UiSettings mapSettings = googleMap.getUiSettings();
             mapSettings.setMapToolbarEnabled(false);
 
-            // Get coordinates from HashMap using hike id
-            List<Coordinates> coordinates = mAllCoordinates.get(mHikeId);
-
             // Create Polyline object
             PolylineOptions mapPolylineOptions = new PolylineOptions();
 
@@ -205,10 +208,10 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
             // that all points are visible
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
 
-            if (coordinates != null) {
-                for (int i = 0; i < coordinates.size(); i++) {
+            if (mCoordinatesList != null) {
+                for (int i = 0; i < mCoordinatesList.size(); i++) {
                     // Get latitude and longitude
-                    LatLng latLng = new LatLng(coordinates.get(i).getLatitude(), coordinates.get(i).getLongitude());
+                    LatLng latLng = new LatLng(mCoordinatesList.get(i).getLatitude(), mCoordinatesList.get(i).getLongitude());
 
                     // Add to LatLngBounds object
                     boundsBuilder.include(latLng);
