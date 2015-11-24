@@ -77,13 +77,9 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
             LayoutInflater li = (LayoutInflater) super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = li.inflate(R.layout.lite_map_fragment,parent,false);
 
-            // Get reference to MapView
+            // Get reference to MapView and set it up
             MapView mapView = (MapView) convertView.findViewById(R.id.view_map);
-
-            // call onCreate
             mapView.onCreate(null);
-
-            // Make Map non-clickable
             mapView.setClickable(false);
 
             // Create new MapViewHolder object
@@ -92,7 +88,8 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
 
             // Save MapViewHolder to view's tag
             convertView.setTag(holder);
-        } else {
+        }
+        else {
             // Recall MapViewHolder
             holder = (MapViewHolder) convertView.getTag();
         }
