@@ -5,13 +5,28 @@
     tools:context="me.dotteam.dotprod.PastHikesActivity"
     android:orientation="vertical">
 
-    <TextView android:text="Past Hikes" android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView_pastHikesTitle"
-        android:textSize="50sp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold"
-        android:textColor="#FFFFFFFF" />
+        android:gravity="center">
+
+        <TextView android:text="Past Hikes" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_pastHikesTitle"
+            android:textSize="50sp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:textColor="#FFFFFFFF"
+            android:layout_weight="0.1" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RESET"
+            android:id="@+id/button_resetPastHikes" />
+    </LinearLayout>
 
     <GridView
         android:layout_width="match_parent"

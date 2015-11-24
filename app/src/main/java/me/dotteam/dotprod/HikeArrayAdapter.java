@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -106,6 +107,20 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
             public void onClick(View v) {
                 Log.d(TAG, "onClick");
                 mParent.performItemClick(v, position, getItemId(position));
+            }
+        });
+        overlayView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d(TAG, "onLongClick");
+                //HACK: Since there is no performItemLongClick, we get the method reference and
+                //          call it ourselves
+                AdapterView.OnItemLongClickListener result = mParent.getOnItemLongClickListener();
+                if(result!=null){
+                    Log.d(TAG, "onLongClick Calling result method!");
+                    result.onItemLongClick(mParent, v, position, getItemId(position));
+                }
+                return true;
             }
         });
 
