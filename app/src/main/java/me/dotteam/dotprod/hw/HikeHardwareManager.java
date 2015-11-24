@@ -38,12 +38,15 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     private boolean mSTConnected = false;
     private int samplingFrequency = 500; //In milliseconds. 1000ms = 1s. MAX:2550ms
 
+    private boolean dedicatedPedometer = false;
+
     // Android Sensors
     SensorManager mSensorManager;
     android.hardware.Sensor mPedometer;
     android.hardware.Sensor mAccelerometer;
     android.hardware.Sensor mMagnetometer;
     PedometerEventListener mPedometerListener;
+    AccelerometerAsPedometerListener mFallbackPedometerListener;
     CompassEventListener mCompassListener;
 
 
@@ -71,6 +74,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
 
         mPedometerListener = new PedometerEventListener();
         mCompassListener = new CompassEventListener();
+        mFallbackPedometerListener = new AccelerometerAsPedometerListener();
     }
 
     public void startSensors(Context context) {
@@ -116,18 +120,26 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
 
     private void startPedometer() {
         if(mPedometer!=null){
+            dedicatedPedometer = true;
             if(mPedometerListener==null){
                 mPedometerListener = new PedometerEventListener();
             }
             mSensorManager.registerListener(mPedometerListener, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
         }
         else{
-            Log.e(TAG, "startPedometer Failed! Maybe this sensor is not on the device?");
+            Log.w(TAG, "startPedometer Failed! Maybe this sensor is not on the device?");
+            Log.w(TAG, "startPedometer Falling back to accelerometer");
+            mSensorManager.registerListener(mFallbackPedometerListener,mAccelerometer,SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
     public void stopPedometer() {
-        mSensorManager.unregisterListener(mPedometerListener);
+        if(dedicatedPedometer) {
+            mSensorManager.unregisterListener(mPedometerListener);
+        }
+        else{
+            mSensorManager.unregisterListener(mFallbackPedometerListener);
+        }
     }
 
     public void resetPedometer() {
@@ -148,9 +160,6 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mSensorManager.unregisterListener(mCompassListener,mAccelerometer);
         mSensorManager.unregisterListener(mCompassListener,mMagnetometer);
     }
-
-
-
 
     public void addListener(SensorListenerInterface sensorListenerInterface){
         Log.d(TAG, "Adding Listener");
@@ -222,14 +231,175 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
                 mFirstStep = false;
             }
             double stepcount = value - mInitialStepCount;
-            for (int i = 0; i < mSensorListenerList.size(); i++) {
-                mSensorListenerList.get(i).update(SensorListenerInterface.HikeSensors.PEDOMETER, stepcount);
-            }
+            broadcastUpdate(SensorListenerInterface.HikeSensors.PEDOMETER, stepcount);
         }
 
         @Override
         public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
             //Do nothing
+        }
+    }
+
+    /**
+     * Fail safe class to provide step count readings in the absence of a built-in pedometer
+     * This class is heavily inspired by code written by M.A. Chan, B.Eng in the DataSampling app
+     * used in Concordia's ELEC390/COEN390 course.
+     * The Authors have maintained all original comments and notices, where applicable
+     */
+    public class AccelerometerAsPedometerListener implements SensorEventListener{
+
+        /**
+         * ELEC390 and COEN390: TI SensorTag Library for Android
+         * Author: Marc-Alexandre Chan <marcalexc@arenthil.net>
+         *     Modified by: Javier E. Fajardo <foxtrotzulu94@gmail.com>
+         * Institution: Concordia University
+         */
+
+        public final static int ACC_EVENT_COOLDOWN_MS = 250;
+
+        /** High pass filter time constant. */
+        public final static int ACC_FILTER_TAU_MS = 100;
+
+        /** Acceleration magnitude threshold. A "shake" is detected if the magnitude of the acceleration
+         * vector, after filtering, is above this value. */
+        public final static double ACC_THRESHOLD = 0.6;
+
+        /** Previous acceleration value. */
+        private float[] mLastAcc = null;
+
+        /** Previous acceleration output value of the high-pass filter. */
+        private float[] mLastFiltAcc = null;
+        /**
+         * When this value is less than ACC_EVENT_COOLDOWN_MS, we are in cooldown mode and do not detect
+         * acceleration shake events. This is set to 0 whenever an event is detected, and incremented by
+         * the sample period at every new sample received while in cooldown mode. When this value is
+         * equal to or greater than ACC_EVENT_COOLDOWN_MS, we are in normal detection mode.
+         */
+        private int mCooldownCounterMs = ACC_EVENT_COOLDOWN_MS;
+        private int SensorUpdatePeriod = 200;
+
+        private double stepsTaken=0;
+
+        private double normalizedValue=0.0f;
+        
+        private long waitStart = 0;
+        private long waitTime = 60000;
+
+        /**
+         * This method filters the accelerometer values according to M.A. Chan's Code
+         */
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if (mLastAcc == null) {
+                waitStart = System.currentTimeMillis()+waitTime;
+                
+                Log.d(TAG, "onSensorChanged First try");
+                mLastAcc = new float[3];
+                System.arraycopy(event.values, 0, mLastAcc, 0, event.values.length);
+                mLastFiltAcc = new float[]{0,0,0};
+            }
+
+            // Apply the high-pass filter.
+            mLastFiltAcc = applyFilter(SensorUpdatePeriod, event.values, mLastAcc, mLastFiltAcc);
+            System.arraycopy(event.values, 0, mLastAcc, 0, event.values.length);
+            Log.v(TAG, "ACC FILTER: " + String.format("%.2f,%.2f,%.2f", event.values[0], event.values[1], event.values[2]) + " -> " +
+                    String.format("%.2f,%.2f,%.2f", mLastAcc[0], mLastAcc[1], mLastAcc[2]));
+
+            // If the cooldown timer is already expired, we can try and detect a shake
+            if (mCooldownCounterMs >= ACC_EVENT_COOLDOWN_MS) {
+
+                // if the magnitude of the acceleration exceeds the shake threshold
+                normalizedValue = Math.sqrt(
+                                mLastFiltAcc[0]*mLastFiltAcc[0] +
+                                mLastFiltAcc[1]*mLastFiltAcc[1] +
+                                mLastFiltAcc[2]*mLastFiltAcc[2]);
+                if (normalizedValue > ACC_THRESHOLD) {
+                    Log.d(TAG, "Accelerometer shake detected");
+                    // reset/start the cooldown timer
+                    mCooldownCounterMs=0;
+                    stepsTaken+=1;
+                    broadcastUpdate(SensorListenerInterface.HikeSensors.PEDOMETER, stepsTaken);
+                }
+                else{
+                    Log.e(TAG, String.format("Check: %.3f < %s",normalizedValue,ACC_THRESHOLD));
+                }
+            }
+            else{
+                mCooldownCounterMs +=SensorUpdatePeriod;
+            }
+
+        }
+        private float[] applyFilter(long samplePeriodMs, float[] newInput, float[] prevInput,
+                                    float[] prevOutput) {
+		/**
+		 * The accelerometer always detects a 1.0g gravity component, but we don't know what the
+		 * SensorTag's orientation is so we don't necessarily know which direction the gravity
+		 * component is.
+		 *
+		 * We can assume that it is slow moving (the user won't be rotating the SensorTag very
+		 * quickly ... or if they do we can detect that as a "shake" anyway!). A high-pass filter
+		 * will therefore remove the acceleration element and allow us to only capture faster
+		 * events.
+		 *
+		 * The implementation here is a simple first-order high-pass filter:
+		 *
+		 * H(s) = (s RC) / (1 + s RC)
+		 *
+		 * where RC is the time constant the cutoff frequency is f_c = 1/(2*pi*RC).
+		 *
+		 * By applying the bilinear transformation we can get a discrete time implementation of this
+		 * filter, expressed here in the time domain:
+		 *
+		 * y[n] := k * (y[n-1] + x[n] - x[n-1])
+		 *
+		 * where x[n] is the filter input signal, y[n] is the output signal, n is the sample index,
+		 * and k is an arbitrary real constant which is related to the time constant. The system
+		 * time constant tau is equal to:
+		 *
+		 * tau = T k / (1 - k)
+		 *
+		 * where T is the sample period of the signal in seconds.
+		 *
+		 * We implement this filter below individually to each of the acceleration components, using
+		 * a history of one sample point (since the filter never needs to go more than one sample
+		 * point behind).
+		 *
+		 * More information:
+		 * https://en.wikipedia.org/wiki/High-pass_filter#Discrete-time_realization
+		 */
+
+            // Calculate the needed parameters
+            float k = (float) ACC_FILTER_TAU_MS / (ACC_FILTER_TAU_MS + samplePeriodMs);
+
+            // These variable names are used just to make the code closer to the description above
+            float[] yn, yn1, xn, xn1;
+            yn1 = prevOutput;
+            xn = newInput;
+            xn1 = prevInput;
+
+            // Apply the filter to each component of the 3D vector separately
+            yn = new float[]{
+                    k * (yn1[0] + xn[0] - xn1[0]),
+                    k * (yn1[1] + xn[1] - xn1[1]),
+                    k * (yn1[2] + xn[2] - xn1[2])};
+
+            Log.v(TAG, "ACC FILTER: " + String.format("%.2f,%.2f,%.2f",xn[0],xn[1],xn[2]) + " -> " +
+                    String.format("%.2f,%.2f,%.2f",yn[0],yn[1],yn[2]));
+
+            return yn;
+        }
+
+        @Override
+        public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
+            //Do nothing
+        }
+
+        private float normalize(float[] vector){
+            float retVal = 0;
+            for (int i = 0; i < vector.length; i++) {
+                retVal+= (vector[i]*vector[i]);
+            }
+            return (float) Math.sqrt(retVal);
         }
     }
 
