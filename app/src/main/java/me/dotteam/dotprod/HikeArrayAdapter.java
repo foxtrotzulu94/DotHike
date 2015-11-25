@@ -135,20 +135,22 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
         // Set Hike duration
         hikeDuration.setText(hike.elapsedTime());
 
-        // Get Location Points
-        HikeDataDirector hdd = HikeDataDirector.getInstance(mContext);
-        hdd.retrieveSessionFromHike(hike);
-        List<Coordinates> coordinatesList = hdd.getSessionData().getGeoPoints().getCoordinateList();
-
         // Get callback object
         MapReady mapReadyCallback = mMapCallbacks.get(id);
 
         if (mapReadyCallback == null) {
+
+            // Get Location Points
+            HikeDataDirector hdd = HikeDataDirector.getInstance(mContext);
+            hdd.retrieveSessionFromHike(hike);
+            List<Coordinates> coordinatesList = hdd.getSessionData().getGeoPoints().getCoordinateList();
+
             mapReadyCallback = new MapReady(id);
+
+            mapReadyCallback.mCoordinatesList = coordinatesList;
+
             mMapCallbacks.put(id, mapReadyCallback);
         }
-
-        mapReadyCallback.mCoordinatesList = coordinatesList;
 
         // Create GoogleMap object and pass callback
         holder.mMapView.getMapAsync(mapReadyCallback);
