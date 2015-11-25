@@ -255,14 +255,14 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
          * Institution: Concordia University
          */
 
-        public final static int ACC_EVENT_COOLDOWN_MS = 250;
+        public final static int ACC_EVENT_COOLDOWN_MS = 500;
 
         /** High pass filter time constant. */
-        public final static int ACC_FILTER_TAU_MS = 100;
+        public final static int ACC_FILTER_TAU_MS = 50;
 
         /** Acceleration magnitude threshold. A "shake" is detected if the magnitude of the acceleration
          * vector, after filtering, is above this value. */
-        public final static double ACC_THRESHOLD = 0.6;
+        public final static double ACC_THRESHOLD = 0.8;
 
         /** Previous acceleration value. */
         private float[] mLastAcc = null;
@@ -281,9 +281,9 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         private double stepsTaken=0;
 
         private double normalizedValue=0.0f;
-        
-        private long waitStart = 0;
-        private long waitTime = 60000;
+
+        private final static double EPSILON = 0.00001;
+
 
         /**
          * This method filters the accelerometer values according to M.A. Chan's Code
@@ -291,7 +291,6 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (mLastAcc == null) {
-                waitStart = System.currentTimeMillis()+waitTime;
                 
                 Log.d(TAG, "onSensorChanged First try");
                 mLastAcc = new float[3];
@@ -302,17 +301,13 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             // Apply the high-pass filter.
             mLastFiltAcc = applyFilter(SensorUpdatePeriod, event.values, mLastAcc, mLastFiltAcc);
             System.arraycopy(event.values, 0, mLastAcc, 0, event.values.length);
-            Log.v(TAG, "ACC FILTER: " + String.format("%.2f,%.2f,%.2f", event.values[0], event.values[1], event.values[2]) + " -> " +
-                    String.format("%.2f,%.2f,%.2f", mLastAcc[0], mLastAcc[1], mLastAcc[2]));
 
             // If the cooldown timer is already expired, we can try and detect a shake
             if (mCooldownCounterMs >= ACC_EVENT_COOLDOWN_MS) {
 
                 // if the magnitude of the acceleration exceeds the shake threshold
-                normalizedValue = Math.sqrt(
-                                mLastFiltAcc[0]*mLastFiltAcc[0] +
-                                mLastFiltAcc[1]*mLastFiltAcc[1] +
-                                mLastFiltAcc[2]*mLastFiltAcc[2]);
+                normalizedValue=(magnitude(mLastFiltAcc));
+
                 if (normalizedValue > ACC_THRESHOLD) {
                     Log.d(TAG, "Accelerometer shake detected");
                     // reset/start the cooldown timer
@@ -320,9 +315,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
                     stepsTaken+=1;
                     broadcastUpdate(SensorListenerInterface.HikeSensors.PEDOMETER, stepsTaken);
                 }
-                else{
-                    Log.e(TAG, String.format("Check: %.3f < %s",normalizedValue,ACC_THRESHOLD));
-                }
+
             }
             else{
                 mCooldownCounterMs +=SensorUpdatePeriod;
@@ -383,8 +376,8 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
                     k * (yn1[1] + xn[1] - xn1[1]),
                     k * (yn1[2] + xn[2] - xn1[2])};
 
-            Log.v(TAG, "ACC FILTER: " + String.format("%.2f,%.2f,%.2f",xn[0],xn[1],xn[2]) + " -> " +
-                    String.format("%.2f,%.2f,%.2f",yn[0],yn[1],yn[2]));
+//            Log.v(TAG, "ACC FILTER: " + String.format("%.2f,%.2f,%.2f", xn[0], xn[1], xn[2]) + " -> " +
+//                    String.format("%.2f,%.2f,%.2f", yn[0], yn[1], yn[2]));
 
             return yn;
         }
@@ -394,12 +387,26 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             //Do nothing
         }
 
-        private float normalize(float[] vector){
+        private float magnitude(float[] vector){
             float retVal = 0;
             for (int i = 0; i < vector.length; i++) {
                 retVal+= (vector[i]*vector[i]);
             }
             return (float) Math.sqrt(retVal);
+        }
+
+        private float[] normalize(float[] vector){
+            float maxVal = 0;
+            float[] retVal = new float[vector.length];
+            for (int i = 0; i < vector.length; i++) {
+                if(Math.abs(vector[i])>maxVal){
+                    maxVal=Math.abs(vector[i]);
+                }
+            }
+            for (int i = 0; i < vector.length; i++) {
+                retVal[i] = (vector[i]/maxVal);
+            }
+            return retVal;
         }
     }
 
