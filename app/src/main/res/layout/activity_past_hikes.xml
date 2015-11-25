@@ -1,19 +1,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
+    android:background="#31394c"
     tools:context="me.dotteam.dotprod.PastHikesActivity"
     android:orientation="vertical">
 
-    <TextView android:text="All Hikes Debug" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView_pastHikesTitle" />
-
-    <ListView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView android:text="Past Hikes" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_pastHikesTitle"
+            android:textSize="50sp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:textColor="#FFFFFFFF"
+            android:layout_weight="0.1" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RESET"
+            android:id="@+id/button_resetPastHikes" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/textView_deleteHint"
+        android:textColor="@color/hike_palisade"
+        android:text="@string/viewAndDeleteHint" />
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="2"
+        android:verticalSpacing="1dp"
+        android:horizontalSpacing="1dp"
         android:id="@+id/listView_pastHikes" />
 
 </LinearLayout>
