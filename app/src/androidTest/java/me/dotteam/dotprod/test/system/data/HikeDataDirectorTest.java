@@ -11,4 +11,10 @@ public class HikeDataDirectorTest extends ApplicationTestCase<Application> {
     public HikeDataDirectorTest(){
         super(Application.class);
     }
+
+    protected void setUp() throws Exception{
+
+    }
+
+
 }
