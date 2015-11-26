@@ -195,6 +195,7 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             Log.d(TAG, "onMapReady: " + mHikeId);
+            googleMap.clear();
 
             // Set MapType to Terrain
             googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
@@ -229,7 +230,9 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
                 LatLngBounds bounds = boundsBuilder.build();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
             }
-
+            else {
+                googleMap.animateCamera(CameraUpdateFactory.zoomTo(0));
+            }
         }
     }
 
