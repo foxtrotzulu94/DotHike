@@ -195,7 +195,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
                             // Location settings are not satisfied. However, we have no way to fix the
                             // settings so we won't show the dialog.
                             Log.i(TAG, "Location services error - Settings Chance Unavailable");
-                            Toast.makeText(mContext, "An error occurred! Location services will not be available.", Toast.LENGTH_LONG);
+                            Toast.makeText(mContext, "An error occurred! Location services will not be available.", Toast.LENGTH_LONG).show();
                             break;
                     }
                 }
