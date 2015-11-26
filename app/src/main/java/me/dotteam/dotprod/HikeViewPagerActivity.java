@@ -210,30 +210,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         // Start Location Updates
         mHLE.startLocationUpdates(this);
 
-        Thread testy = new Thread(){
-            @Override
-            public void run(){
-                try {
-                    sleep(5000);
-                }
-                catch (Exception e){
-                    //Do Nothing
-                }
-                Log.d(TAG, "run Starting randy");
-                Random randy = new Random();
-                for (int i = 0; i < 100; i++) {
-                    try{
-                        sleep(250);
-                    }
-                    catch (Exception e){
-                        //Do nothing
-                    }
-                    mHikeFragment.updateCompass(randy.nextDouble() * 360.0);
-                    Log.d(TAG, "Updating Compass now");
-                }
-            }
-        };
-//        testy.start();
     }
 
     @Override
