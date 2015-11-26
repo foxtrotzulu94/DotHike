@@ -428,12 +428,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         // Set callback for End Hike Button
         mButtonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
-//            public void onClick(View v){
-//                mButtonEndHike.setEnabled(true);
-//                mButtonEndHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.2f));
-//                mButtonPauseHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.8f));
-//
-//            }
             public void onClick(View v) {
                 //Button currently locked
                 if(!mEndHikeButtonLocked) {
@@ -444,6 +438,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
                     startActivity(intentResults);
                     mHDD.endCollectionService();
                     mHHM.stopSensorTag();
+                    mHHM.stopPedometer();
                     finish();
                  //Unlocking Button
                 } else{
