@@ -51,6 +51,11 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     private final int DEFAULT_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
     /**
+     * Minimum location accuracy
+     */
+    private int MIN_LOCATION_ACCURACY = 40;
+
+    /**
      * List of Listeners
      */
     private List<HikeLocationListener> mListeners;
@@ -98,11 +103,6 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     private Location mLastKnownLocation;
 
     /**
-     * Minimum location accuracy
-     */
-    private int MIN_LOCATION_ACCURACY = 40;
-
-    /**
      * Singleton method to obtain or generate current instance
      * @param context Context from which the instance is being requested
      * @return Singleton Object instance of HikeLocationEntity
@@ -148,6 +148,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
         mContext = context;
 
         mRequestingLocationUpdates = true;
+
         if (mGoogleApiClientConnected) {
 
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
@@ -170,8 +171,6 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             // Location settings are not satisfied. But could be fixed by showing the user
                             // a dialog.
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
 
                             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContext);
                             dialogBuilder.setTitle("Turn on Location?")
