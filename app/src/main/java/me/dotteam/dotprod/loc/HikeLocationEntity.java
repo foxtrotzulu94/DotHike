@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -194,6 +195,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
                             // Location settings are not satisfied. However, we have no way to fix the
                             // settings so we won't show the dialog.
                             Log.i(TAG, "Location services error - Settings Chance Unavailable");
+                            Toast.makeText(mContext, "An error occurred! Location services will not be available.", Toast.LENGTH_LONG);
                             break;
                     }
                 }

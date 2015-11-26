@@ -125,11 +125,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     private HikeDataDirector mHDD;
 
     /**
-     * Reference to itself
-     */
-    HikeViewPagerActivity mThis;
-
-    /**
      * A simple pager adapter that represents 3 ScreenSlidePageFragment objects, in
      * sequence.
      */
@@ -167,8 +162,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         Log.d(TAG, "onCreate() Called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_pager);
-
-        mThis = this;
 
         // Instantiate Fragments
         mHikeFragment = new HikeFragment();
@@ -358,7 +351,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                     // Reset Pedometer
                     // TODO Save Pedometer value
                     mHHM.resetPedometer();
-                    mHLE.removeListener(mThis);
+                    mHLE.removeListener(HikeViewPagerActivity.this);
                     mHLE.stopLocationUpdates();
                     Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
                     startActivity(intentResults);
