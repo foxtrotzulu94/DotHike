@@ -123,29 +123,6 @@ public class PersistentStorageEntity {
 
         //Then delegate the rest...
         return loadHikeData(loadedHike);
-
-
-        //TODO: IMPLEMENT EFFICIENTLY!
-//        mDB = mProvider.getReadableDatabase();
-//
-//        //First, load the Hike
-//        Cursor cursor = mDB.query(DBAssistant.HIKE,null,DBAssistant.HIKE_ID+"=?",
-//                new String[]{Integer.toString(hikeID)},null,null,null);
-//        if(cursor.getCount()<1){
-//            return null;
-//        }
-//        cursor.moveToFirst();
-//        Hike loadedHike = new Hike(hikeID,
-//                cursor.getLong(cursor.getColumnIndex(DBAssistant.HIKE_START)),
-//                cursor.getLong(cursor.getColumnIndex(DBAssistant.HIKE_END)));
-//        cursor.close();
-
-//        cursor = mDB.query(DBAssistant.ENVHUMD)
-
-
-
-//        SessionData retVal = new SessionData();
-//        return retVal;
     }
 
     private EnvStatistic retrieveEnvDataTable(String tableName, int uniqueID){
@@ -255,11 +232,82 @@ public class PersistentStorageEntity {
     }
 
     /**
+     * Deletes all information associated to a SessionData object
+     * @param givenSession the SessionData object to be deleted
+     * @return True if successfully deleted, false otherwise
+     */
+    public boolean deleteSession(SessionData givenSession){
+        mDB = mProvider.getWritableDatabase();
+
+        if(givenSession.hikeID()>0){
+            //Verify the ID is in the DB
+            Cursor cursor = mDB.query(DBAssistant.HIKE,null,"id=?",
+                    new String[]{Integer.toString(givenSession.hikeID())},null,null,null);
+            if(cursor.getCount()!=1){
+                //DB is inconsistent in this case, or the Hike was not saved.
+                return false;
+            }
+
+            //Now we send this to all tables for deletion
+            String[] idParam= new String[]{String.valueOf(givenSession.hikeID())};
+
+            //Delete from all tables
+            for (int i = 1; i < DBAssistant.VALID_TABLES.length ; i++) {
+                mDB.delete(DBAssistant.VALID_TABLES[i],
+                        DBAssistant.HIKE_ID+"=?",
+                        idParam);
+            }
+
+            //Finally, delete from hikes
+            mDB.delete(DBAssistant.HIKE,"id=?",idParam);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Delete all information associated to a hike
+     * This would be similar to calling {@link #deleteSession(SessionData)} deleteSession } with a constructed SessionData object
+     * @param givenHike The hike to delete
+     * @return True if successfully deleted, false otherwise
+     */
+    public boolean deleteHike(Hike givenHike){
+        mDB = mProvider.getWritableDatabase();
+
+        if(givenHike.getUniqueID()>0){
+            //Verify the ID is in the DB
+            Cursor cursor = mDB.query(DBAssistant.HIKE,null,"id=?",
+                    new String[]{Integer.toString(givenHike.getUniqueID())},null,null,null);
+            if(cursor.getCount()!=1){
+                //DB is inconsistent in this case, or the Hike was not saved.
+                return false;
+            }
+
+            //Now we send this to all tables for deletion
+            String[] idParam= new String[]{String.valueOf(givenHike.getUniqueID())};
+
+            //Delete from all tables
+            for (int i = 1; i < DBAssistant.VALID_TABLES.length ; i++) {
+                mDB.delete(DBAssistant.VALID_TABLES[i],
+                        DBAssistant.HIKE_ID+"=?",
+                        idParam);
+            }
+
+            //Finally, delete from hikes
+            mDB.delete(DBAssistant.HIKE,"id=?",idParam);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Request a complete deletion of any stored data
      * WARNING: This entirely eliminates and recreates the database. ALL DATA IS LOST.
      */
     public void reset(){
-        mProvider.onUpgrade(mDB,-1,1);
+        mProvider.onUpgrade(mDB,-1,DBAssistant.SCHEME_VERSION);
     }
 
 }

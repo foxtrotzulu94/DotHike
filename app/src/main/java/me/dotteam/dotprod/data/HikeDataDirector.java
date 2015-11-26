@@ -168,7 +168,7 @@ public class HikeDataDirector {
                 //Dump the values in the database
                 if(mPSE==null){
                     mPSE=new PersistentStorageEntity(mCreateContext);
-                    mPSE.reset();
+//                    mPSE.reset();
                 }
                 if(mPSE.saveSession(new SessionData(mockHike, new StepCount(99), mockStats,mockGeo))){
                     Log.d("HDD", "Save Successful");
@@ -187,6 +187,29 @@ public class HikeDataDirector {
             }
         };
         backgroundCheck.start();
+    }
+
+    public boolean deleteCurrentSessionData(){
+        checkOrSetPSE();
+        if(mSessionData!=null){
+            boolean retVal =  mPSE.deleteSession(mSessionData);
+            if(retVal)
+                mSessionData=null;
+            return retVal;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public boolean deleteStoredHike(Hike aHike){
+        checkOrSetPSE();
+        return mPSE.deleteHike(aHike);
+    }
+
+    public void deleteAllData(){
+        checkOrSetPSE();
+        mPSE.reset();
     }
 
     public boolean isCollectingData() {
