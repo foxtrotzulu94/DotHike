@@ -7,6 +7,15 @@ import android.test.ApplicationTestCase;
  * Created by foxtrot on 22/11/15.
  */
 public class PersistentStorageEntityTest extends ApplicationTestCase<Application> {
+
+//    private Hike aHike;
+//    private String someName;
+//    private List<Coordinates> someCoordinates;
+//    private StepCount someSteps;
+//    private EnvStatistic statTemp;
+//    private EnvStatistic statHumidity;
+//    private EnvStatistic statPressure;
+
     public PersistentStorageEntityTest(){
         super(Application.class);
     }

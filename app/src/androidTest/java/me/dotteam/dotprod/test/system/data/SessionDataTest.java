@@ -13,6 +13,14 @@ import me.dotteam.dotprod.data.DBAssistant;
  */
 public class SessionDataTest extends ApplicationTestCase<Application> {
 
+//    private Hike aHike;
+//    private String someName;
+//    private List<Coordinates> someCoordinates;
+//    private StepCount someSteps;
+//    private EnvStatistic statTemp;
+//    private EnvStatistic statHumidity;
+//    private EnvStatistic statPressure;
+
     public SessionDataTest(){
         super(Application.class);
     }

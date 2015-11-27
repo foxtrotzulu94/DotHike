@@ -16,5 +16,15 @@ public class HikeDataDirectorTest extends ApplicationTestCase<Application> {
 
     }
 
+    public void testDatabase() throws Exception{
 
+    }
+
+    public void testPartialCollection() throws Exception{
+
+    }
+
+    public void testHikeRetrieval() throws Exception{
+
+    }
 }

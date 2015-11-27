@@ -17,13 +17,7 @@ public class DBAssistantTest extends ApplicationTestCase<Application> {
     private DBAssistant subject;
     private String subjectName;
 
-//    private Hike aHike;
-//    private String someName;
-//    private List<Coordinates> someCoordinates;
-//    private StepCount someSteps;
-//    private EnvStatistic statTemp;
-//    private EnvStatistic statHumidity;
-//    private EnvStatistic statPressure;
+
 
 
     public DBAssistantTest(){

@@ -14,7 +14,11 @@ import me.dotteam.dotprod.data.Coordinates;
 import me.dotteam.dotprod.data.DBAssistant;
 
 /**
- * Created by foxtrot on 22/11/15.
+ * Full Unit Test of the Coordinate Class.
+ * Test:
+ * - Insertion (Through initial constructor)
+ * - Serialization for DB Storage
+ * - Serialization into String
  */
 public class CoordinatesTest extends ApplicationTestCase<Application> {
 
