@@ -20,6 +20,9 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,10 +33,11 @@ import me.dotteam.dotprod.data.EnvStatistic;
 import me.dotteam.dotprod.data.HikeDataDirector;
 import me.dotteam.dotprod.data.SessionData;
 
-public class ResultsActivity extends AppCompatActivity {
+public class ResultsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int ALTITUDE_CHART_HEIGHT=500;//DP
     private static final int STATISTIC_CHART_HEIGHT=300;//DP
+    private static final int MAP_HEIGHT=500;//DP
 
     protected HikeDataDirector mHDD;
 
@@ -44,6 +48,7 @@ public class ResultsActivity extends AppCompatActivity {
 
     protected Button mButtonResultsDone;
     protected TextView mDumpSpace;
+    protected LinearLayout mMapContainer;
     protected LinearLayout mAltitudeChartContainer;
     protected LinearLayout mTempChartContainer;
     protected LinearLayout mHumidityChartContainer;
@@ -52,6 +57,8 @@ public class ResultsActivity extends AppCompatActivity {
     private void setMemberIDs(){
         mButtonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
         mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
+
+        mMapContainer = (LinearLayout) findViewById(R.id.linlayout_Map);
         mAltitudeChartContainer=(LinearLayout) findViewById(R.id.linlayout_heightResults);
         mTempChartContainer=(LinearLayout) findViewById(R.id.linlayout_TempStat);
         mHumidityChartContainer=(LinearLayout) findViewById(R.id.linlayout_HumidityStat);
@@ -80,6 +87,7 @@ public class ResultsActivity extends AppCompatActivity {
         SessionData results = mHDD.getSessionData();
 
         //Setup all the charts!
+        setupMap();
         setupAltitudeChart();
         setupTemperatureChart();
         setupHumidityChart();
@@ -87,6 +95,19 @@ public class ResultsActivity extends AppCompatActivity {
 
         dump.append(results.toString());
         mDumpSpace.setText(dump.toString());
+    }
+    protected void setupMap(){
+        MapView mapView = new MapView(this);
+
+        mapView.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        mapView.setMinimumHeight(MAP_HEIGHT);
+        mMapContainer.addView(mapView);
+        mMapContainer.setMinimumHeight(MAP_HEIGHT);
+
+        mapView.onCreate(null);
+        mapView.getMapAsync(this);
     }
 
     protected void setupAltitudeChart(){
@@ -187,6 +208,7 @@ public class ResultsActivity extends AppCompatActivity {
             mPressureChartContainer.addView(noGraph);
         }
     }
+
     protected void setupHumidityChart(){
         EnvStatistic humidity = mHDD.getSessionData().getCurrentStats().getHumidity();
         if(humidity!=null && humidity.isValid()){
@@ -216,6 +238,11 @@ public class ResultsActivity extends AppCompatActivity {
             noGraph.setGravity(View.TEXT_ALIGNMENT_CENTER);
             mHumidityChartContainer.addView(noGraph);
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
     }
 
     @Override
