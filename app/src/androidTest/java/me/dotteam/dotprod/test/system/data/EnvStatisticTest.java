@@ -26,9 +26,9 @@ public class EnvStatisticTest extends ApplicationTestCase<Application> {
     private Random valueGenerator;
     private EnvStatistic subject;
 
-    private float randomMax;
-    private float randomAvg;
-    private float randomMin;
+    private double randomMax;
+    private double randomAvg;
+    private double randomMin;
     private int id = Integer.MAX_VALUE;
 
     public EnvStatisticTest(){
@@ -42,15 +42,15 @@ public class EnvStatisticTest extends ApplicationTestCase<Application> {
         valueGenerator = new Random();
         subject = new EnvStatistic();
 
-        randomMax = valueGenerator.nextFloat() * Integer.MAX_VALUE;
-        randomAvg = valueGenerator.nextFloat();
-        randomMin = valueGenerator.nextFloat() * Integer.MIN_VALUE;
+        randomMax = valueGenerator.nextDouble() * Integer.MAX_VALUE;
+        randomAvg = valueGenerator.nextDouble();
+        randomMin = valueGenerator.nextDouble() * Integer.MIN_VALUE;
     }
 
     public void testInsertion() throws Exception{
-        subject.insertSample(randomAvg);
         subject.insertSample(randomMax);
         subject.insertSample(randomMin);
+        subject.insertSample(randomAvg);
 
         assertEquals(subject.getAvg(),randomAvg);
         assertEquals(subject.getMin(),randomMin);
@@ -61,15 +61,17 @@ public class EnvStatisticTest extends ApplicationTestCase<Application> {
         testInsertion();
         //Insert really random values that are >1 and <+-IntegerMaxVal
         for (int i = 0; i < TEST_SIZE; i++) {
-            subject.insertSample(valueGenerator.nextDouble() * Integer.MAX_VALUE * Math.pow(-1,i)*0.5);
+            randomAvg = (valueGenerator.nextDouble() * Integer.MAX_VALUE * Math.pow(-1,i)*0.01);
+            subject.insertSample(randomAvg);
         }
         testInsertion();
     }
 
     public void testInitialization() throws Exception{
-        assertEquals(Float.NaN,subject.getAvg());
-        assertEquals(Float.POSITIVE_INFINITY,subject.getMin());
-        assertEquals(0,subject.getMax());
+        subject = new EnvStatistic();
+        assertEquals(Double.NaN,subject.getAvg());
+        assertEquals(Double.POSITIVE_INFINITY,subject.getMin());
+        assertEquals(0.0,subject.getMax());
     }
 
     public void testValidity() throws Exception{

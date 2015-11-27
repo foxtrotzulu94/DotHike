@@ -17,9 +17,6 @@ public class DBAssistantTest extends ApplicationTestCase<Application> {
     private DBAssistant subject;
     private String subjectName;
 
-
-
-
     public DBAssistantTest(){
         super(Application.class);
     }

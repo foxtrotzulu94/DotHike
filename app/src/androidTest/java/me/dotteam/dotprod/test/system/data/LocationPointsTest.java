@@ -16,7 +16,6 @@ import me.dotteam.dotprod.data.LocationPoints;
  * - Default Construction
  * - Construction with List
  * - Insertion of Coordinates Objects
- * - Serialization into string
  */
 public class LocationPointsTest extends ApplicationTestCase<Application> {
 
@@ -73,24 +72,5 @@ public class LocationPointsTest extends ApplicationTestCase<Application> {
         for (int i = 0; i < storedList.size(); i++) {
             assertSame(storedList.get(i),coordinatesList.get(i));
         }
-    }
-
-    public void testToString() throws Exception{
-        //Empty Case
-        subject = new LocationPoints();
-        assertEquals("Location Points has no points",subject.toString());
-
-        //Full Case
-        for (Coordinates aCoordinate: coordinatesList) {
-            subject.addPoint(aCoordinate);
-        }
-        String string = subject.toString();
-        assertTrue(string.contains(Double.toString(coordinatesList.get(0).getAltitude())));
-        assertTrue(string.contains(Double.toString(coordinatesList.get(0).getLatitude())));
-        assertTrue(string.contains(Double.toString(coordinatesList.get(0).getLongitude())));
-
-        assertTrue(string.contains(Double.toString(coordinatesList.get(TEST_SIZE-1).getAltitude())));
-        assertTrue(string.contains(Double.toString(coordinatesList.get(TEST_SIZE-1).getLatitude())));
-        assertTrue(string.contains(Double.toString(coordinatesList.get(TEST_SIZE-1).getLongitude())));
     }
 }
