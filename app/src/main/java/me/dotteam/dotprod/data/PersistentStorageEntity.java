@@ -110,7 +110,7 @@ public class PersistentStorageEntity {
         }
 
         //First, load the Hike
-        Cursor cursor = mDB.query(DBAssistant.HIKE,null,DBAssistant.HIKE_ID+"=?",
+        Cursor cursor = mDB.query(DBAssistant.HIKE,null,"id=?",
                 new String[]{Integer.toString(hikeID)},null,null,null);
         if(cursor.getCount()<1){
             return null;

@@ -9,7 +9,8 @@ import java.io.File;
 import me.dotteam.dotprod.data.DBAssistant;
 
 /**
- * Created by foxtrot on 22/11/15.
+ * Unit Test of DBAssistant Class
+ * Tests only the methods required for Creation and Destruction
  */
 public class DBAssistantTest extends ApplicationTestCase<Application> {
 
