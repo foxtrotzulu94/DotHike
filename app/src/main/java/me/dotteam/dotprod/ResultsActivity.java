@@ -35,31 +35,37 @@ import me.dotteam.dotprod.data.SessionData;
 
 public class ResultsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private static final int MAP_HEIGHT=900;//DP
     private static final int ALTITUDE_CHART_HEIGHT=500;//DP
+    private static final int INST_PACE_CHART_HEIGHT=500;//DP
     private static final int STATISTIC_CHART_HEIGHT=300;//DP
-    private static final int MAP_HEIGHT=500;//DP
 
     protected HikeDataDirector mHDD;
 
+    protected MapView mMapView;
     protected LineChart mAltitudeChart;
+    protected LineChart mInstPaceChart;
     protected BarChart mTempChart;
     protected BarChart mPressureChart;
     protected BarChart mHumidityChart;
 
     protected Button mButtonResultsDone;
-    protected TextView mDumpSpace;
+//    protected TextView mDumpSpace;
+
     protected LinearLayout mMapContainer;
     protected LinearLayout mAltitudeChartContainer;
+    protected LinearLayout mInstPaceChartContainer;
     protected LinearLayout mTempChartContainer;
     protected LinearLayout mHumidityChartContainer;
     protected LinearLayout mPressureChartContainer;
 
     private void setMemberIDs(){
         mButtonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
-        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
+//        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
 
         mMapContainer = (LinearLayout) findViewById(R.id.linlayout_Map);
         mAltitudeChartContainer=(LinearLayout) findViewById(R.id.linlayout_heightResults);
+        mInstPaceChartContainer=(LinearLayout) findViewById(R.id.linlayout_InstPace);
         mTempChartContainer=(LinearLayout) findViewById(R.id.linlayout_TempStat);
         mHumidityChartContainer=(LinearLayout) findViewById(R.id.linlayout_HumidityStat);
         mPressureChartContainer=(LinearLayout) findViewById(R.id.linlayout_PressureStat);
@@ -83,31 +89,32 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         });
         mHDD=HikeDataDirector.getInstance(this);
 
-        StringBuilder dump = new StringBuilder();
-        SessionData results = mHDD.getSessionData();
+//        StringBuilder dump = new StringBuilder();
+    SessionData results = mHDD.getSessionData();
 
         //Setup all the charts!
         setupMap();
         setupAltitudeChart();
+        setupInstPaceChart();
         setupTemperatureChart();
         setupHumidityChart();
         setupPressureChart();
-
-        dump.append(results.toString());
-        mDumpSpace.setText(dump.toString());
+//
+//        dump.append(results.toString());
+//        mDumpSpace.setText(dump.toString());
     }
     protected void setupMap(){
-        MapView mapView = new MapView(this);
+        mMapView = new MapView(this);
 
-        mapView.setLayoutParams(new LinearLayout.LayoutParams(
+       mMapView.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
-        mapView.setMinimumHeight(MAP_HEIGHT);
-        mMapContainer.addView(mapView);
+        mMapView.setMinimumHeight(MAP_HEIGHT);
+        mMapContainer.addView(mMapView);
         mMapContainer.setMinimumHeight(MAP_HEIGHT);
 
-        mapView.onCreate(null);
-        mapView.getMapAsync(this);
+        mMapView.onCreate(null);
+        mMapView.getMapAsync(this);
     }
 
     protected void setupAltitudeChart(){
@@ -128,13 +135,52 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
                 mAltitudeChart.setDescription("");
                 mAltitudeChart.animateX(3500);
                 mAltitudeChart.getAxisLeft().setEnabled(false);
-
+                mAltitudeChart.setTouchEnabled(false);
                 mAltitudeChart.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
                 mAltitudeChart.setMinimumHeight(ALTITUDE_CHART_HEIGHT);
                 mAltitudeChartContainer.addView(mAltitudeChart);
                 mAltitudeChartContainer.setMinimumHeight(ALTITUDE_CHART_HEIGHT);
+
+                return;
+            }
+        }
+
+        //Else...
+        TextView noAltitude = new TextView(this);
+        noAltitude.setText("No Altitude Height to Show");
+        mAltitudeChartContainer.addView(noAltitude);
+
+    }
+
+    protected void setupInstPaceChart(){
+        List<Coordinates> coordinates = mHDD.getSessionData().getGeoPoints().getCoordinateList();
+
+        if(coordinates!=null) {
+            int listSize = coordinates.size();
+            if (listSize > 0) {
+                mInstPaceChart = new LineChart(this);
+                List<Entry> entries = new ArrayList<>(listSize);
+
+                for (int i = 0; i < listSize; i++) {
+                    //TODO change logic to get the instant pace instead of altidude
+                    entries.add(new Entry((float) coordinates.get(i).getAltitude(), i));
+                }
+                LineDataSet altitudePoints = new LineDataSet(entries, "Pace during Hike");
+
+                mInstPaceChart.setData(new LineData(Collections.nCopies(listSize, ""), altitudePoints));
+                mInstPaceChart.setDescription("");
+                mInstPaceChart.animateX(3500);
+                mInstPaceChart.getAxisLeft().setEnabled(false);
+                mInstPaceChart.setTouchEnabled(false);
+
+                mInstPaceChart.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+                mInstPaceChart.setMinimumHeight(INST_PACE_CHART_HEIGHT);
+                mInstPaceChartContainer.addView(mInstPaceChart);
+                mInstPaceChartContainer.setMinimumHeight(INST_PACE_CHART_HEIGHT);
 
                 return;
             }
@@ -163,6 +209,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
             mTempChart.setDescription("");
             mTempChart.animateY(2000);
             mTempChart.getAxisRight().setEnabled(false);
+            mTempChart.setTouchEnabled(false);
 
             mTempChart.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -194,6 +241,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
             mPressureChart.setDescription("");
             mPressureChart.animateY(2000);
             mPressureChart.getAxisRight().setEnabled(false);
+            mPressureChart.setTouchEnabled(false);
 
             mPressureChart.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -225,6 +273,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
             mHumidityChart.setDescription("");
             mHumidityChart.animateY(2000);
             mHumidityChart.getAxisRight().setEnabled(false);
+            mHumidityChart.setTouchEnabled(false);
 
             mHumidityChart.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,

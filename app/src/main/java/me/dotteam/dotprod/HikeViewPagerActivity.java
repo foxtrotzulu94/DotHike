@@ -100,7 +100,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private TextView mTextAccuracy;
     private TextView mTextDistanceTraveled;
     private TextView mTextStepCount;
-    private float mDistanceTravelled = 0;
+    private float mDistanceTraveled = 0;
     private String mStepCountString = "0";
     private Location mLocation;
     private LocationPoints mLocationPoints;
@@ -323,9 +323,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
 
                         mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
                                 (float) location.getLatitude(), (float) location.getAltitude()));
-                        mDistanceTravelled += results[0];
+                        mDistanceTraveled += results[0];
                         if (mTextDistanceTraveled != null) {
-                            mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+                            mTextDistanceTraveled.setText(String.valueOf(mDistanceTraveled));
                         }
                     }
                 }
@@ -619,7 +619,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
             mTextBearing.setText("0.0");
             mTextAccuracy.setText("0.0");
         }
-        mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+        mTextDistanceTraveled.setText(String.valueOf(mDistanceTraveled));
         mTextStepCount.setText(mStepCountString);
     }
 
