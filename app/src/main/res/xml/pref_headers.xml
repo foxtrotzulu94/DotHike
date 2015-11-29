@@ -3,7 +3,8 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header android:fragment="me.dotteam.dotprod.HikeSettingsActivity$GeneralPreferenceFragment"
-        android:title="@string/pref_header_general" />
+        android:title="@string/pref_header_general"
+        android:summary="General Settings"/>
 
     <header
         android:fragment="me.dotteam.dotprod.HikeSettingsActivity$NotificationPreferenceFragment"

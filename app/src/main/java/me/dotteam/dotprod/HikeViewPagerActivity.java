@@ -203,6 +203,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         // Start Location Updates
         mHLE.startLocationUpdates(this);
 
+        //Cleanup any garbage
+        Runtime.getRuntime().gc();
+        System.gc();
     }
 
     @Override
@@ -249,10 +252,10 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             mTextAltitude.setText(String.valueOf(location.getAltitude()));
         }
         if (mTextBearing != null) {
-            mTextBearing.setText(String.valueOf(location.getBearing()));
+//            mTextBearing.setText(String.valueOf(location.getBearing()));
         }
         if (mTextAccuracy != null) {
-            mTextAccuracy.setText(String.valueOf(location.getAccuracy()));
+//            mTextAccuracy.setText(String.valueOf(location.getAccuracy()));
         }
 
         if (mLocation == null) {
@@ -491,8 +494,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         mTextLatitude = mNavFragment.getTextLatitude();
         mTextLongitude = mNavFragment.getTextLongitude();
         mTextAltitude = mNavFragment.getTextAltitude();
-        mTextBearing = mNavFragment.getTextBearing();
-        mTextAccuracy = mNavFragment.getTextAccuracy();
+//        mTextBearing = mNavFragment.getTextBearing();
+//        mTextAccuracy = mNavFragment.getTextAccuracy();
         mTextDistanceTraveled = mNavFragment.getTextDistanceTraveled();
         mTextStepCount = mNavFragment.getTextStepCount();
 
@@ -501,14 +504,14 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             mTextLatitude.setText(String.valueOf(mLocation.getLatitude()));
             mTextLongitude.setText(String.valueOf(mLocation.getLongitude()));
             mTextAltitude.setText(String.valueOf(mLocation.getAltitude()));
-            mTextBearing.setText(String.valueOf(mLocation.getBearing()));
-            mTextAccuracy.setText(String.valueOf(mLocation.getAccuracy()));
+//            mTextBearing.setText(String.valueOf(mLocation.getBearing()));
+//            mTextAccuracy.setText(String.valueOf(mLocation.getAccuracy()));
         } else {
             mTextLatitude.setText("0.0");
             mTextLongitude.setText("0.0");
             mTextAltitude.setText("0.0");
-            mTextBearing.setText("0.0");
-            mTextAccuracy.setText("0.0");
+//            mTextBearing.setText("0.0");
+//            mTextAccuracy.setText("0.0");
         }
         mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
         mTextStepCount.setText(mStepCountString);
