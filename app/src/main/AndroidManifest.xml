@@ -102,7 +102,9 @@
             android:name=".HikeSettingsActivity"
             android:label="@string/title_activity_hike_settings"
             android:parentActivityName=".HomeActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+
+            android:theme="@style/HikeCustom">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.dotteam.dotprod.HomeActivity" />
