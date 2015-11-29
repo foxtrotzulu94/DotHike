@@ -1,6 +1,7 @@
 package me.dotteam.dotprod;
 
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -76,12 +77,10 @@ public class HomeActivity extends AppCompatActivity{
         // Shows Setting Dialogue
         mLinearLayoutSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                DSettingsFragment dSettingsFragment = new DSettingsFragment();
-                dSettingsFragment.show(fm, "Settings Dialog");
-                //TODO: Remove later
-                HikeDataDirector mHDD = HikeDataDirector.getInstance(HomeActivity.this);
-                mHDD.testStorage();
-                Toast.makeText(HomeActivity.this,"Testing Storage Setup", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(HomeActivity.this,HikeSettingsActivity.class));
+                Log.d("HikeHome",
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).
+                                getString("example_text", ""));
             }
         });
 
