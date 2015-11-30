@@ -1,8 +1,10 @@
 package me.dotteam.dotprod;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +22,17 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +44,7 @@ import me.dotteam.dotprod.data.HikeDataDirector;
 import me.dotteam.dotprod.data.SessionData;
 
 public class ResultsActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private final String TAG = "ResultsActivity";
 
     private static final int MAP_HEIGHT=900;//DP
     private static final int ALTITUDE_CHART_HEIGHT=500;//DP
@@ -41,6 +52,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     private static final int STATISTIC_CHART_HEIGHT=300;//DP
 
     protected HikeDataDirector mHDD;
+
+    protected List<Coordinates> mCoordinatesList;
 
     protected MapView mMapView;
     protected LineChart mAltitudeChart;
@@ -53,7 +66,9 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 //    protected TextView mDumpSpace;
 
     protected LinearLayout mMapContainer;
+    protected LinearLayout mTextAltitudeContainer;
     protected LinearLayout mAltitudeChartContainer;
+    protected LinearLayout mTextInstPaceContainer;
     protected LinearLayout mInstPaceChartContainer;
     protected LinearLayout mTextReadingsContainer;
     protected LinearLayout mTempChartContainer;
@@ -69,7 +84,9 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 //        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
 
         mMapContainer=(LinearLayout) findViewById(R.id.linlayout_Map);
+        mTextAltitudeContainer=(LinearLayout) findViewById(R.id.linlayout_textAltitude);
         mAltitudeChartContainer=(LinearLayout) findViewById(R.id.linlayout_heightResults);
+        mTextInstPaceContainer=(LinearLayout) findViewById(R.id.linlayout_textInstPace);
         mInstPaceChartContainer=(LinearLayout) findViewById(R.id.linlayout_InstPace);
         mTextReadingsContainer=(LinearLayout) findViewById(R.id.linlayout_textReadings);
         mTempChartContainer=(LinearLayout) findViewById(R.id.linlayout_TempStat);
@@ -99,8 +116,11 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         });
         mHDD=HikeDataDirector.getInstance(this);
 
-//        StringBuilder dump = new StringBuilder()
-//         SessionData results = mHDD.getSessionData();
+        mCoordinatesList = mHDD.getSessionData().getGeoPoints().getCoordinateList();
+
+
+//        StringBuilder dump = new StringBuilder();
+    SessionData results = mHDD.getSessionData();
 
         //Setup all the charts!
         setupMap();
@@ -112,9 +132,14 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 //        mDumpSpace.setText(dump.toString());
     }
     protected void setupMap(){
-        mMapView = new MapView(this);
+        // GoogleMapOptions to Set Map to Lite Mode
+        GoogleMapOptions googleMapOptions = new GoogleMapOptions().liteMode(true);
 
-       mMapView.setLayoutParams(new LinearLayout.LayoutParams(
+        mMapView = new MapView(this, googleMapOptions);
+
+        mMapView.setClickable(false);
+
+        mMapView.setLayoutParams(new LinearLayout.LayoutParams(
                ViewGroup.LayoutParams.MATCH_PARENT,
                ViewGroup.LayoutParams.MATCH_PARENT));
         mMapView.setMinimumHeight(MAP_HEIGHT);
@@ -122,6 +147,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mMapContainer.setMinimumHeight(MAP_HEIGHT);
 
         mMapView.onCreate(null);
+        mMapView.onResume();
         mMapView.getMapAsync(this);
     }
 
@@ -129,7 +155,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         TextView textAltitude = new TextView(this);
         textAltitude.setText("Altitude:");
         textAltitude.setTextColor(getResources().getColor(R.color.hike_blue_grey));
-        mAltitudeChartContainer.addView(textAltitude);
+        mTextAltitudeContainer.addView(textAltitude);
 
         List<Coordinates> coordinates = mHDD.getSessionData().getGeoPoints().getCoordinateList();
 
@@ -171,7 +197,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         TextView textInstPace = new TextView(this);
         textInstPace.setText("Pace:");
         textInstPace.setTextColor(getResources().getColor(R.color.hike_blue_grey));
-        mInstPaceChartContainer.addView(textInstPace);
+        mTextInstPaceContainer.addView(textInstPace);
 
         List<Coordinates> coordinates = mHDD.getSessionData().getGeoPoints().getCoordinateList();
 
@@ -362,6 +388,47 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.i(TAG, "onMapReady called");
+
+        // Set MapType to Terrain
+        googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+
+        // Change GoogleMap's UI Settings to remove toolbar stuff
+        UiSettings mapSettings = googleMap.getUiSettings();
+        mapSettings.setMapToolbarEnabled(false);
+
+        PolylineOptions polylineOptions = new PolylineOptions();
+
+        // Create LatLngBounds object. This is used to zoom in to the map in such a way
+        // that all points are visible
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
+        for (int i = 0; i < mCoordinatesList.size(); i++) {
+            double lat = mCoordinatesList.get(i).getLatitude();
+            double lng = mCoordinatesList.get(i).getLongitude();
+
+            LatLng latLng = new LatLng(lat, lng);
+
+            polylineOptions.add(latLng);
+
+            // Add to LatLngBounds object
+            boundsBuilder.include(latLng);
+        }
+
+        googleMap.addPolyline(polylineOptions);
+
+        // Zoom in to map
+        LatLngBounds bounds = boundsBuilder.build();
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
+
+        LatLng startPos = new LatLng(mCoordinatesList.get(0).getLatitude(), mCoordinatesList.get(0).getLongitude());
+        LatLng endPos = new LatLng(mCoordinatesList.get(mCoordinatesList.size() - 1).getLatitude(),
+                mCoordinatesList.get(mCoordinatesList.size() - 1).getLongitude());
+
+        googleMap.addMarker(new MarkerOptions()
+                .position(startPos)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        googleMap.addMarker(new MarkerOptions().position(endPos));
 
     }
 
