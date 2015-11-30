@@ -189,7 +189,6 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     public void startFallbackSensors() {
         if (mFallbackTemperature == null) {
             Log.d(TAG, "No Temperature Sensor");
-            Toast.makeText(mContext, "No Temperature Sensor", Toast.LENGTH_SHORT).show();
         } else {
             if (mFallbackTemperatureListener == null) {
                 mFallbackTemperatureListener = new FallbackTemperatureEventListener();
@@ -199,7 +198,6 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
 
         if (mFallbackHumidity == null) {
             Log.d(TAG, "No Humidity Sensor");
-            Toast.makeText(mContext, "No Humidity Sensor", Toast.LENGTH_SHORT).show();
         } else {
             if (mFallbackHumidityListener == null) {
                 mFallbackHumidityListener = new FallbackHumidityEventListener();
@@ -209,7 +207,6 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
 
         if (mFallbackPressure == null) {
             Log.d(TAG, "No Pressure Sensor");
-            Toast.makeText(mContext, "No Pressure Sensor", Toast.LENGTH_SHORT).show();
         } else {
             if (mFallbackPressureListener == null) {
                 mFallbackPressureListener = new FallbackPressureEventListener();
