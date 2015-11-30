@@ -62,15 +62,11 @@
                 android:id="@+id/linlayout_Map">
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/textAltitude"
-                android:id="@+id/textAltitude"
-                android:textColor="@color/hike_blue_grey"
-                android:paddingTop="5sp"
-                android:paddingBottom="0sp" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linlayout_textAltitude"></LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -80,15 +76,11 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/textPace"
-                android:id="@+id/textPace"
-                android:textColor="@color/hike_blue_grey"
-                android:paddingTop="5sp"
-                android:paddingBottom="0sp" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linlayout_textInstPace"></LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -96,15 +88,11 @@
                 android:layout_height="match_parent"
                 android:id="@+id/linlayout_InstPace"></LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/textReadings"
-                android:textColor="@color/hike_blue_grey"
-                android:paddingTop="5sp"
-                android:paddingBottom="0sp"
-                android:text="@string/textReadings" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/linlayout_textReadings"></LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -139,113 +127,33 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:id="@+id/linlayout_textDistTravl">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView"
-                    android:textColor="@color/hike_blue_grey"
-                    android:paddingTop="5sp"
-                    android:paddingBottom="0sp"
-                    android:layout_weight="0.5"
-                    android:text="@string/textDistanceTraveled" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView2"
-                    android:textColor="@color/hike_blue_grey"
-                    android:paddingTop="5sp"
-                    android:paddingBottom="0sp"
-                    android:text="@string/textReadings"
-                    android:layout_weight="0.5" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/linlayout_textHikeTime">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView3"
-                    android:textColor="@color/hike_blue_grey"
-                    android:paddingTop="5sp"
-                    android:paddingBottom="0sp"
-                    android:text="Total Hike TIme"
-                    android:layout_weight="0.5" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView8"
-                    android:textColor="@color/hike_blue_grey"
-                    android:paddingTop="5sp"
-                    android:paddingBottom="0sp"
-                    android:text="@string/textReadings"
-                    android:layout_weight="0.5" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/linlayout_textAvgPace">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView9"
-                    android:textColor="@color/hike_blue_grey"
-                    android:paddingTop="5sp"
-                    android:paddingBottom="0sp"
-                    android:text="Average Pace"
-                    android:layout_weight="0.5" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView10"
-                    android:textColor="@color/hike_blue_grey"
-                    android:paddingTop="5sp"
-                    android:paddingBottom="0sp"
-                    android:text="@string/textReadings"
-                    android:layout_weight="0.5" />
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:id="@+id/linlayout_textStepCount">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView11"
-                    android:textColor="@color/hike_blue_grey"
-                    android:paddingTop="5sp"
-                    android:paddingBottom="0sp"
-                    android:text="Step Count"
-                    android:layout_weight="0.5" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView12"
-                    android:textColor="@color/hike_blue_grey"
-                    android:paddingTop="5sp"
-                    android:paddingBottom="0sp"
-                    android:text="@string/textReadings"
-                    android:layout_weight="0.5" />
             </LinearLayout>
 
         </LinearLayout>

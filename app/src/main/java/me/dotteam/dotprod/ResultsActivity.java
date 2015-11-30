@@ -53,22 +53,36 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 //    protected TextView mDumpSpace;
 
     protected LinearLayout mMapContainer;
+    protected LinearLayout mTextAltitudeContainer;
     protected LinearLayout mAltitudeChartContainer;
+    protected LinearLayout mTextInstPaceContainer;
     protected LinearLayout mInstPaceChartContainer;
+    protected LinearLayout mTextReadingsContainer;
     protected LinearLayout mTempChartContainer;
     protected LinearLayout mHumidityChartContainer;
     protected LinearLayout mPressureChartContainer;
+    protected LinearLayout mTextDistTravlContainer;
+    protected LinearLayout mTextHikeTimeContainer;
+    protected LinearLayout mTextAvgPaceContainer;
+    protected LinearLayout mTextStepCountContainer;
 
     private void setMemberIDs(){
         mButtonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
 //        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
 
-        mMapContainer = (LinearLayout) findViewById(R.id.linlayout_Map);
+        mMapContainer=(LinearLayout) findViewById(R.id.linlayout_Map);
+        mTextAltitudeContainer=(LinearLayout) findViewById(R.id.linlayout_textAltitude);
         mAltitudeChartContainer=(LinearLayout) findViewById(R.id.linlayout_heightResults);
+        mTextInstPaceContainer=(LinearLayout) findViewById(R.id.linlayout_textInstPace);
         mInstPaceChartContainer=(LinearLayout) findViewById(R.id.linlayout_InstPace);
+        mTextReadingsContainer=(LinearLayout) findViewById(R.id.linlayout_textReadings);
         mTempChartContainer=(LinearLayout) findViewById(R.id.linlayout_TempStat);
         mHumidityChartContainer=(LinearLayout) findViewById(R.id.linlayout_HumidityStat);
         mPressureChartContainer=(LinearLayout) findViewById(R.id.linlayout_PressureStat);
+        mTextDistTravlContainer=(LinearLayout) findViewById(R.id.linlayout_textDistTravl);
+        mTextHikeTimeContainer=(LinearLayout) findViewById(R.id.linlayout_textHikeTime);
+        mTextAvgPaceContainer=(LinearLayout) findViewById(R.id.linlayout_textAvgPace);
+        mTextStepCountContainer=(LinearLayout) findViewById(R.id.linlayout_textStepCount);
     }
 
     @Override
@@ -96,10 +110,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         setupMap();
         setupAltitudeChart();
         setupInstPaceChart();
-        setupTemperatureChart();
-        setupHumidityChart();
-        setupPressureChart();
-//
+        setupEnvReadingsLayout();
+        setupOtherInfoLayout();
 //        dump.append(results.toString());
 //        mDumpSpace.setText(dump.toString());
     }
@@ -107,8 +119,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mMapView = new MapView(this);
 
        mMapView.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
+               ViewGroup.LayoutParams.MATCH_PARENT,
+               ViewGroup.LayoutParams.MATCH_PARENT));
         mMapView.setMinimumHeight(MAP_HEIGHT);
         mMapContainer.addView(mMapView);
         mMapContainer.setMinimumHeight(MAP_HEIGHT);
@@ -118,6 +130,11 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     protected void setupAltitudeChart(){
+        TextView textAltitude = new TextView(this);
+        textAltitude.setText("Altitude:");
+        textAltitude.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextAltitudeContainer.addView(textAltitude);
+
         List<Coordinates> coordinates = mHDD.getSessionData().getGeoPoints().getCoordinateList();
 
         if(coordinates!=null) {
@@ -155,6 +172,11 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     protected void setupInstPaceChart(){
+        TextView textInstPace = new TextView(this);
+        textInstPace.setText("Pace:");
+        textInstPace.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextInstPaceContainer.addView(textInstPace);
+
         List<Coordinates> coordinates = mHDD.getSessionData().getGeoPoints().getCoordinateList();
 
         if(coordinates!=null) {
@@ -184,13 +206,23 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 
                 return;
             }
+
+            //Else...
+            TextView noInstaPace = new TextView(this);
+            noInstaPace.setText("No Pace to Show");
+            mAltitudeChartContainer.addView(noInstaPace);
         }
+    }
 
-        //Else...
-        TextView noAltitude = new TextView(this);
-        noAltitude.setText("No Altitude Height to Show");
-        mAltitudeChartContainer.addView(noAltitude);
+    protected void setupEnvReadingsLayout(){
+        TextView textReadings = new TextView(this);
+        textReadings.setText("Readings:");
+        textReadings.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextReadingsContainer.addView(textReadings);
 
+        setupTemperatureChart();
+        setupHumidityChart();
+        setupPressureChart();
     }
 
     protected void setupTemperatureChart(){
@@ -288,6 +320,49 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
             mHumidityChartContainer.addView(noGraph);
         }
     }
+
+    protected void setupOtherInfoLayout(){
+        SessionData results = mHDD.getSessionData();
+
+        //Total Distance Travelled
+        TextView textDistTravl = new TextView(this);
+        textDistTravl.setText("Total Distance Traveled:");
+        textDistTravl.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextDistTravlContainer.addView(textDistTravl);
+
+        //Total Hike Time
+        TextView textHikeTime = new TextView(this);
+        textHikeTime.setText("Duration of Hike:");
+        textHikeTime.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextHikeTimeContainer.addView(textHikeTime);
+
+        StringBuilder HikeTimeResults = new StringBuilder();
+        HikeTimeResults.append(String.valueOf(results.hikeEndTime()));
+        TextView textHikeTimeResults = new TextView(this);
+        textHikeTimeResults.setText(HikeTimeResults.toString());
+        textHikeTimeResults.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextStepCountContainer.addView(textHikeTimeResults);
+
+        //Average Pace
+        TextView textAvgPace = new TextView(this);
+        textAvgPace.setText("Average Pace:");
+        textAvgPace.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextAvgPaceContainer.addView(textAvgPace);
+
+        //Step Count
+        TextView textStepCount = new TextView(this);
+        textStepCount.setText("Total Steps Taken:");
+        textStepCount.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextStepCountContainer.addView(textStepCount);
+
+        StringBuilder StepCountResults = new StringBuilder();
+        StepCountResults.append(results.getStepCount().toString());
+        TextView textStepCountResults = new TextView(this);
+        textStepCount.setText(StepCountResults.toString());
+        textStepCount.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextStepCountContainer.addView(textStepCountResults);
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
