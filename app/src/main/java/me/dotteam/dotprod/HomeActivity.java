@@ -106,6 +106,7 @@ public class HomeActivity extends AppCompatActivity{
             public void onClick(View v) {
                 //NOTE: Uncomment to cause an unconditional exception.
                 //Integer integers[] = new Integer[Integer.MAX_VALUE];
+                HikeDataDirector.getInstance(HomeActivity.this).testStorage();
             }
         });
 

@@ -2,6 +2,7 @@ package me.dotteam.dotprod;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,11 @@ public class PastStatisticsActivity extends ResultsActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int hikeID=-1;
+        if(getIntent().hasExtra("id")){
+            hikeID = getIntent().getIntExtra("id",1);
+            HikeDataDirector.getInstance(this).retrieveSessionFromHike(hikeID);
+        }
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_results);
 //        mHDD = HikeDataDirector.getInstance(this);
