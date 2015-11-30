@@ -58,6 +58,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     protected List<Double> mInstPaceList;
     protected double mDistanceTraveled;
 
+    protected GoogleMap mMap;
+
     protected MapView mMapView;
     protected LineChart mAltitudeChart;
     protected LineChart mInstPaceChart;
@@ -363,34 +365,46 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     protected void setupOtherInfoLayout(){
         SessionData results = mHDD.getSessionData();
 
+        double hikeDuration = (results.hikeEndTime() - results.hikeStartTime()) * 0.001;
+
         //Total Distance Travelled
         TextView textDistTravl = new TextView(this);
-        textDistTravl.setText("Total Distance Traveled:");
+        textDistTravl.setText("Total Distance Traveled: ");
         textDistTravl.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextDistTravlContainer.addView(textDistTravl);
 
+        TextView textDistTravlVal = new TextView(this);
+        textDistTravlVal.setText(String.valueOf(mDistanceTraveled));
+        textDistTravlVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextDistTravlContainer.addView(textDistTravlVal);
+
         //Total Hike Time
         TextView textHikeTime = new TextView(this);
-        textHikeTime.setText("Duration of Hike:");
+        textHikeTime.setText("Duration of Hike: ");
         textHikeTime.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextHikeTimeContainer.addView(textHikeTime);
 
         StringBuilder HikeTimeResults = new StringBuilder();
-        HikeTimeResults.append(String.valueOf(results.hikeEndTime()));
+        HikeTimeResults.append(String.valueOf(hikeDuration));
         TextView textHikeTimeResults = new TextView(this);
         textHikeTimeResults.setText(HikeTimeResults.toString());
         textHikeTimeResults.setTextColor(getResources().getColor(R.color.hike_blue_grey));
-        mTextStepCountContainer.addView(textHikeTimeResults);
+        mTextHikeTimeContainer.addView(textHikeTimeResults);
 
         //Average Pace
         TextView textAvgPace = new TextView(this);
-        textAvgPace.setText("Average Pace:");
+        textAvgPace.setText("Average Pace: ");
         textAvgPace.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextAvgPaceContainer.addView(textAvgPace);
 
+        TextView textAvgPaceVal = new TextView(this);
+        textAvgPaceVal.setText(String.valueOf(mDistanceTraveled/hikeDuration));
+        textAvgPaceVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
+        mTextAvgPaceContainer.addView(textAvgPaceVal);
+
         //Step Count
         TextView textStepCount = new TextView(this);
-        textStepCount.setText("Total Steps Taken:");
+        textStepCount.setText("Total Steps Taken: ");
         textStepCount.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextStepCountContainer.addView(textStepCount);
 
@@ -407,45 +421,52 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "onMapReady called");
 
+        mMap = googleMap;
+
         // Set MapType to Terrain
-        googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
         // Change GoogleMap's UI Settings to remove toolbar stuff
-        UiSettings mapSettings = googleMap.getUiSettings();
+        UiSettings mapSettings = mMap.getUiSettings();
         mapSettings.setMapToolbarEnabled(false);
 
-        PolylineOptions polylineOptions = new PolylineOptions();
+        // On Map Loaded Callback
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                PolylineOptions polylineOptions = new PolylineOptions();
 
-        // Create LatLngBounds object. This is used to zoom in to the map in such a way
-        // that all points are visible
-        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+                // Create LatLngBounds object. This is used to zoom in to the map in such a way
+                // that all points are visible
+                LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
 
-        for (int i = 0; i < mCoordinatesList.size(); i++) {
-            double lat = mCoordinatesList.get(i).getLatitude();
-            double lng = mCoordinatesList.get(i).getLongitude();
+                for (int i = 0; i < mCoordinatesList.size(); i++) {
+                    double lat = mCoordinatesList.get(i).getLatitude();
+                    double lng = mCoordinatesList.get(i).getLongitude();
 
-            LatLng latLng = new LatLng(lat, lng);
+                    LatLng latLng = new LatLng(lat, lng);
 
-            polylineOptions.add(latLng);
+                    polylineOptions.add(latLng);
 
-            // Add to LatLngBounds object
-            boundsBuilder.include(latLng);
-        }
+                    // Add to LatLngBounds object
+                    boundsBuilder.include(latLng);
+                }
 
-        googleMap.addPolyline(polylineOptions);
+                mMap.addPolyline(polylineOptions);
+                // Zoom in to map
+                LatLngBounds bounds = boundsBuilder.build();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
 
-        // Zoom in to map
-        LatLngBounds bounds = boundsBuilder.build();
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
+                LatLng startPos = new LatLng(mCoordinatesList.get(0).getLatitude(), mCoordinatesList.get(0).getLongitude());
+                LatLng endPos = new LatLng(mCoordinatesList.get(mCoordinatesList.size() - 1).getLatitude(),
+                        mCoordinatesList.get(mCoordinatesList.size() - 1).getLongitude());
 
-        LatLng startPos = new LatLng(mCoordinatesList.get(0).getLatitude(), mCoordinatesList.get(0).getLongitude());
-        LatLng endPos = new LatLng(mCoordinatesList.get(mCoordinatesList.size() - 1).getLatitude(),
-                mCoordinatesList.get(mCoordinatesList.size() - 1).getLongitude());
-
-        googleMap.addMarker(new MarkerOptions()
-                .position(startPos)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        googleMap.addMarker(new MarkerOptions().position(endPos));
+                mMap.addMarker(new MarkerOptions()
+                        .position(startPos)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                mMap.addMarker(new MarkerOptions().position(endPos));
+            }
+        });
 
     }
 
