@@ -68,14 +68,12 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/bundles" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/coverage-instrumented-classes" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/debug" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/debugAndroidTest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dependency-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/8.1.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/8.1.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.1.0/jars" />
@@ -113,7 +111,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
@@ -127,15 +124,15 @@
     <orderEntry type="library" exported="" name="play-services-base-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-location-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-identity-8.1.0" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-vision-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-drive-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-8.1.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-23.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-cast-8.1.0" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-23.0.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-appinvite-8.1.0" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-ads-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appstate-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-gcm-8.1.0" level="project" />
