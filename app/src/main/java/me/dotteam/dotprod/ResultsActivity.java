@@ -2,6 +2,7 @@ package me.dotteam.dotprod;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,6 +55,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     protected HikeDataDirector mHDD;
 
     protected List<Coordinates> mCoordinatesList;
+    protected List<Double> mInstPaceList;
+    protected double mDistanceTraveled;
 
     protected MapView mMapView;
     protected LineChart mAltitudeChart;
@@ -123,9 +126,31 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     SessionData results = mHDD.getSessionData();
 
         //Setup all the charts!
-        setupMap();
-        setupAltitudeChart();
-        setupInstPaceChart();
+        if (mCoordinatesList != null && mCoordinatesList.size() != 0) {
+            setupMap();
+            setupAltitudeChart();
+
+            mDistanceTraveled = 0;
+            mInstPaceList = new ArrayList<>();
+
+            for (int i = 1; i < mCoordinatesList.size(); i++) {
+                // Get previous location
+                double prevLatitude = mCoordinatesList.get(i - 1).getLatitude();
+                double prevLongitude = mCoordinatesList.get(i - 1).getLongitude();
+                double currLatitude = mCoordinatesList.get(i).getLatitude();
+                double currLongitude = mCoordinatesList.get(i).getLongitude();
+
+                // Array to store distance result
+                float distanceResults[] = new float[3];
+
+                // Get distance current location and last known location
+                Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, distanceResults);
+
+                mDistanceTraveled += distanceResults[0];
+            }
+            setupInstPaceChart();
+        }
+
         setupEnvReadingsLayout();
         setupOtherInfoLayout();
 //        dump.append(results.toString());
@@ -157,16 +182,14 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         textAltitude.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextAltitudeContainer.addView(textAltitude);
 
-        List<Coordinates> coordinates = mHDD.getSessionData().getGeoPoints().getCoordinateList();
-
-        if(coordinates!=null) {
-            int listSize = coordinates.size();
+        if(mCoordinatesList!=null) {
+            int listSize = mCoordinatesList.size();
             if (listSize > 0) {
                 mAltitudeChart = new LineChart(this);
                 List<Entry> entries = new ArrayList<>(listSize);
 
                 for (int i = 0; i < listSize; i++) {
-                    entries.add(new Entry((float) coordinates.get(i).getAltitude(), i));
+                    entries.add(new Entry((float) mCoordinatesList.get(i).getAltitude(), i));
                 }
                 LineDataSet altitudePoints = new LineDataSet(entries, "Altitude during Hike");
 
@@ -199,17 +222,15 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         textInstPace.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextInstPaceContainer.addView(textInstPace);
 
-        List<Coordinates> coordinates = mHDD.getSessionData().getGeoPoints().getCoordinateList();
-
-        if(coordinates!=null) {
-            int listSize = coordinates.size();
+        if(mCoordinatesList!=null) {
+            int listSize = mCoordinatesList.size();
             if (listSize > 0) {
                 mInstPaceChart = new LineChart(this);
                 List<Entry> entries = new ArrayList<>(listSize);
 
                 for (int i = 0; i < listSize; i++) {
                     //TODO change logic to get the instant pace instead of altidude
-                    entries.add(new Entry((float) coordinates.get(i).getAltitude(), i));
+                    entries.add(new Entry((float) mCoordinatesList.get(i).getAltitude(), i));
                 }
                 LineDataSet altitudePoints = new LineDataSet(entries, "Pace during Hike");
 
