@@ -46,6 +46,16 @@ public class DBAssistant extends SQLiteOpenHelper {
     public static final String SCHEME_CREATE_STEPS_TABLE="CREATE TABLE "+STEPS+" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+STEP_COUNT+" INTEGER)";
     public static final String SCHEME_CREATE_NAME_TABLE="CREATE TABLE "+ HIKE_NAME +" (id INTEGER PRIMARY KEY AUTOINCREMENT, "+HIKE_ID+" INTEGER REFERENCES "+HIKE+" (id) NOT NULL, "+NICKNAME+" TEXT)";
 
+    public static final String[] VALID_TABLES= {
+            HIKE, //First table is this one. When iterating, remember that this table has 'id', NOT "hike_id"
+            COORDS,
+            ENVHUMD,
+            ENVPRES,
+            ENVTEMP,
+            STEPS,
+            HIKE_NAME
+    };
+
     public static final String[] SCHEME_CREATE = {
             SCHEME_CREATE_HIKES_TABLE,
             SCHEME_CREATE_COORDS_TABLE,
@@ -88,23 +98,18 @@ public class DBAssistant extends SQLiteOpenHelper {
      * @param curr current schema version, defined by SCHEME_VERSION.
      */
     public void onUpgrade(SQLiteDatabase sqlDB, int prev, int curr) {
-        if(prev==1 && curr==2){
-            sqlDB.execSQL(SCHEME_CREATE_STEPS_TABLE);
-            sqlDB.execSQL(SCHEME_CREATE_NAME_TABLE);
-        }
-        else {
-            Log.w(TAG, String.format("Updating DB from version %s to %s. Will destroy previous", prev, curr));
-            sqlDB.execSQL(SCHEME_DESTROY + COORDS);
-            sqlDB.execSQL(SCHEME_DESTROY + ENVPRES);
-            sqlDB.execSQL(SCHEME_DESTROY + ENVTEMP);
-            sqlDB.execSQL(SCHEME_DESTROY + ENVHUMD);
-            sqlDB.execSQL(SCHEME_DESTROY + STEPS);
-            sqlDB.execSQL(SCHEME_DESTROY + HIKE_NAME);
+        Log.w(TAG, String.format("Updating DB from version %s to %s. Will destroy previous", prev, curr));
+        sqlDB.execSQL(SCHEME_DESTROY + COORDS);
+        sqlDB.execSQL(SCHEME_DESTROY + ENVPRES);
+        sqlDB.execSQL(SCHEME_DESTROY + ENVTEMP);
+        sqlDB.execSQL(SCHEME_DESTROY + ENVHUMD);
+        sqlDB.execSQL(SCHEME_DESTROY + STEPS);
+        sqlDB.execSQL(SCHEME_DESTROY + HIKE_NAME);
 
-            sqlDB.execSQL(SCHEME_DESTROY + HIKE);
+        sqlDB.execSQL(SCHEME_DESTROY + HIKE);
 
-            onCreate(sqlDB);
-        }
+        onCreate(sqlDB);
+
     }
 
 }

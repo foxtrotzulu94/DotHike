@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import java.util.Date;
+
 import com.google.android.gms.location.LocationListener;
 
 import me.dotteam.dotprod.HikeViewPagerActivity;
@@ -19,12 +21,13 @@ import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
 import me.dotteam.dotprod.hw.SensorListenerInterface;
 import me.dotteam.dotprod.loc.HikeLocationEntity;
+import me.dotteam.dotprod.loc.HikeLocationListener;
 
 /**
  * Lightweight class used for Sensor Data Collection as a service.
  * Is the bridge between the {@link HikeDataDirector} and the HikeHardwareManager
  */
-public class SessionCollectionService extends Service implements SensorListenerInterface,LocationListener{
+public class SessionCollectionService extends Service implements SensorListenerInterface, HikeLocationListener {
 
     private final String LONG_NAME=".Hike Statistics Service";
     private final String TAG="SCS";
@@ -137,7 +140,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
         //de-register yourself
         HikeHardwareManager.getInstance(this).removeListener(this);
-        HikeLocationEntity.getInstance(this).addListener(this);
+        HikeLocationEntity.getInstance(this).removeListener(this);
     }
 
     /**
@@ -175,15 +178,14 @@ public class SessionCollectionService extends Service implements SensorListenerI
      * @param location The object describing longitude and latitude
      */
     @Override
-    public void onLocationChanged(Location location) {
-        if(!mHDD.IsPaused()) {
-            //Store the new point in our recorded coordinates list
-            Log.d(TAG, "onLocationChanged Added " + location.toString());
-            this.recordedCoordinates.addPoint(new Coordinates(
-                    location.getLongitude(),
-                    location.getLatitude(),
-                    location.getAltitude()
-            ));
-        }
+    public void onLocationChanged(Location location, float distance) {
+        // TODO: Save distance traveled
+        //Store the new point in our recorded coordinates list
+        Log.d(TAG, "onLocationChanged Added "+location.toString());
+        this.recordedCoordinates.addPoint(new Coordinates(
+                location.getLongitude(),
+                location.getLatitude(),
+                location.getAltitude()
+        ));
     }
 }

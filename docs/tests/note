@@ -1,0 +1,2 @@
+Generated testing docs on Linux using:
+pandoc -o output.doc IdealHW-Data_Package_Tests.html

@@ -14,9 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
@@ -31,12 +29,13 @@ import me.dotteam.dotprod.data.HikeDataDirector;
 import me.dotteam.dotprod.data.LocationPoints;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.loc.HikeLocationEntity;
+import me.dotteam.dotprod.loc.HikeLocationListener;
 
 /**
  * Hike ViewPager Activity
  * Created by EricTremblay on 15-11-13.
  */
-public class HikeViewPagerActivity extends FragmentActivity implements LocationListener, HikeFragment.HikeFragmentListener, NavigationFragment.NavigationFragmentListener, EnvCondFragment.EnvCondFragmentListener {
+public class HikeViewPagerActivity extends FragmentActivity implements HikeLocationListener, HikeFragment.HikeFragmentListener, NavigationFragment.NavigationFragmentListener, EnvCondFragment.EnvCondFragmentListener {
     /**
      * Activity's TAG for logging
      */
@@ -100,7 +99,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     private TextView mTextAccuracy;
     private TextView mTextDistanceTraveled;
     private TextView mTextStepCount;
-    private float mDistanceTraveled = 0;
+    private float mDistanceTravelled = 0;
     private String mStepCountString = "0";
     private Location mLocation;
     private LocationPoints mLocationPoints;
@@ -202,32 +201,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         mHLE.addListener(this);
 
         // Start Location Updates
-        mHLE.startLocationUpdates();
+        mHLE.startLocationUpdates(this);
 
-        Thread testy = new Thread(){
-            @Override
-            public void run(){
-                try {
-                    sleep(5000);
-                }
-                catch (Exception e){
-                    //Do Nothing
-                }
-                Log.d(TAG, "run Starting randy");
-                Random randy = new Random();
-                for (int i = 0; i < 100; i++) {
-                    try{
-                        sleep(250);
-                    }
-                    catch (Exception e){
-                        //Do nothing
-                    }
-                    mHikeFragment.updateCompass(randy.nextDouble() * 360.0);
-                    Log.d(TAG, "Updating Compass now");
-                }
-            }
-        };
-//        testy.start();
     }
 
     @Override
@@ -261,21 +236,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        // Log values
-        Log.i(TAG, "Location Changed!"
-                + "\nLatitude: " + location.getLatitude()
-                + "\nLongitude: " + location.getLongitude()
-                + "\nAltitude: " + location.getAltitude()
-                + "\nBearing: " + location.getBearing()
-                + "\nAccuracy :" + location.getAccuracy());
-
-        if (mLocation == null) {
-            mLocation = new Location(location);
-        } else {
-            mLocation = location;
-        }
-
+    public void onLocationChanged(Location location, float distance) {
+        Log.d(TAG, "onLocationChanged");
         // Set TextViews to new values
         if (mTextLatitude != null) {
             mTextLatitude.setText(String.valueOf(location.getLatitude()));
@@ -293,42 +255,28 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
             mTextAccuracy.setText(String.valueOf(location.getAccuracy()));
         }
 
-        if (location.getAccuracy() <= 40) {
-            List<Coordinates> coordinatesList = mLocationPoints.getCoordinateList();
-            int numberOfPoints = coordinatesList.size();
+        if (mLocation == null) {
+            mLocation = new Location(location);
+
             if (mMapReady) {
-                if (numberOfPoints == 0) {
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMapPolylineOptions.add(latLng);
-                    mMap.addPolyline(mMapPolylineOptions);
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mapZoomCameraToLocation(latLng);
+                mMapPolylineOptions.add(latLng);
+                mMap.addPolyline(mMapPolylineOptions);
+            }
+        } else {
+            mLocation = location;
 
-                    mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
-                            (float) location.getLatitude(), (float) location.getAltitude()));
-                } else {
-                    // Array to store results
-                    float results[] = new float[3];
+            if (mMapReady) {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMapPolylineOptions.add(latLng);
+                mMap.addPolyline(mMapPolylineOptions);
+            }
 
-                    // Get previous and current longitude and latitude
-                    double prevLongitude = coordinatesList.get(numberOfPoints - 1).getLongitude();
-                    double prevLatitude = coordinatesList.get(numberOfPoints - 1).getLatitude();
-                    double currLongitude = location.getLongitude();
-                    double currLatitude = location.getLatitude();
+            mDistanceTravelled += distance;
 
-                    // Calculate distance between both points and add it to total
-                    Location.distanceBetween(prevLatitude, prevLongitude, currLatitude, currLongitude, results);
-                    if (results[0] > location.getAccuracy()) {
-                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        mMapPolylineOptions.add(latLng);
-                        mMap.addPolyline(mMapPolylineOptions);
-
-                        mLocationPoints.addPoint(new Coordinates((float) location.getLongitude(),
-                                (float) location.getLatitude(), (float) location.getAltitude()));
-                        mDistanceTraveled += results[0];
-                        if (mTextDistanceTraveled != null) {
-                            mTextDistanceTraveled.setText(String.valueOf(mDistanceTraveled));
-                        }
-                    }
-                }
+            if (mTextDistanceTraveled != null) {
+                mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
             }
         }
     }
@@ -358,61 +306,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         // Set Map Type to Terrain
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                // Attempt to find and zoom to current location
-                mapZoomCameraToCurrentLocation();
-
-                // If finding current location failed, start a thread to retry
-                if (!mGotLocation) {
-                    //TODO: Deprecate this thread. We can make the map zoom into position with onLocationChange
-                    Thread t = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d(TAG, "Entered find current location thread");
-                            int counter = 0;
-                            // This will attempt to find location numberOfAttempts times
-                            int numberofAttempts = 5; //Number of attempts
-                            int waitBetweenAttempts = 1000; // how long to wait between attempts in milliseconds
-                            while (counter < numberofAttempts) {
-                                try {
-                                    Thread.sleep(waitBetweenAttempts);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                // Attempt to find current location
-                                mapZoomCameraToCurrentLocation();
-
-                                // If attempt was successful, break out of while loop to exit thread
-                                if (mGotLocation) {
-                                    Log.d(TAG, "Current location found");
-                                    break;
-                                }
-                                // If attempt failed, increment counter
-                                else {
-                                    counter++;
-                                }
-                            }
-
-                            // If the counter is equal numberOfAttempts, give up
-                            if (counter == numberofAttempts) {
-                                Log.e(TAG, "Current location could not be found");
-
-                                // Show a Toast to inform user
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(HikeViewPagerActivity.this, "Current location could not be found", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-                        }
-                    });
-                    t.start();
-                }
-            }
-        });
     }
 
     @Override
@@ -428,25 +321,22 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         // Set callback for End Hike Button
         mButtonEndHike.setOnClickListener(new View.OnClickListener() {
             @Override
-//            public void onClick(View v){
-//                mButtonEndHike.setEnabled(true);
-//                mButtonEndHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.2f));
-//                mButtonPauseHike.setLayoutParams(new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.8f));
-//
-//            }
             public void onClick(View v) {
                 //Button currently locked
-                if(!mEndHikeButtonLocked) {
+                if (!mEndHikeButtonLocked) {
                     // Reset Pedometer
                     // TODO Save Pedometer value
                     mHHM.resetPedometer();
+                    mHLE.removeListener(HikeViewPagerActivity.this);
+                    mHLE.stopLocationUpdates();
                     Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
                     startActivity(intentResults);
                     mHDD.endCollectionService();
                     mHHM.stopSensorTag();
+                    mHHM.stopPedometer();
                     finish();
-                 //Unlocking Button
-                } else{
+                    //Unlocking Button
+                } else {
                     mEndHikeButtonLocked = false;
                     mPauseHikeButtonLocked = true;
 
@@ -498,19 +388,20 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
         });
     }
 
-    private void mapZoomCameraToCurrentLocation() {
+    private void mapZoomCameraToLocation(final LatLng latlng) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                final Location location = mMap.getMyLocation();
-                if (location != null) {
-                    final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    mGotLocation = true;
-                }
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+                mGotLocation = true;
             }
         });
+    }
+
+    private void mapZoomCameraToLocation(Location location) {
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        mapZoomCameraToLocation(latLng);
     }
 
     void updateTemperature(final String temp) {
@@ -619,7 +510,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements LocationL
             mTextBearing.setText("0.0");
             mTextAccuracy.setText("0.0");
         }
-        mTextDistanceTraveled.setText(String.valueOf(mDistanceTraveled));
+        mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
         mTextStepCount.setText(mStepCountString);
     }
 

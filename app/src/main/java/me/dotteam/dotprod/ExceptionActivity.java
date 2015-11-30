@@ -61,7 +61,7 @@ public class ExceptionActivity extends AppCompatActivity {
                 //Send an Email
                 Intent sendMail = new Intent(Intent.ACTION_SEND);
                 sendMail.setType("message/rfc822");
-                sendMail.putExtra(Intent.EXTRA_EMAIL, new String[]{"foxtrotzulu94@gmail.com"});
+                sendMail.putExtra(Intent.EXTRA_EMAIL, new String[]{"dotteamdevs@gmail.com"});
                 sendMail.putExtra(Intent.EXTRA_SUBJECT, String.format("DotProd Crash branch %s on %s",
                         BuildConfig.GIT_BRANCH,
                         new Date(System.currentTimeMillis()).toString()));
