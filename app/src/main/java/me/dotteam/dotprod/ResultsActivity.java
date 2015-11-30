@@ -69,9 +69,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 //    protected TextView mDumpSpace;
 
     protected LinearLayout mMapContainer;
-    protected LinearLayout mTextAltitudeContainer;
     protected LinearLayout mAltitudeChartContainer;
-    protected LinearLayout mTextInstPaceContainer;
     protected LinearLayout mInstPaceChartContainer;
     protected LinearLayout mTextReadingsContainer;
     protected LinearLayout mTempChartContainer;
@@ -87,9 +85,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 //        mDumpSpace = (TextView) findViewById(R.id.textView_dumpspace);
 
         mMapContainer=(LinearLayout) findViewById(R.id.linlayout_Map);
-        mTextAltitudeContainer=(LinearLayout) findViewById(R.id.linlayout_textAltitude);
         mAltitudeChartContainer=(LinearLayout) findViewById(R.id.linlayout_heightResults);
-        mTextInstPaceContainer=(LinearLayout) findViewById(R.id.linlayout_textInstPace);
         mInstPaceChartContainer=(LinearLayout) findViewById(R.id.linlayout_InstPace);
         mTextReadingsContainer=(LinearLayout) findViewById(R.id.linlayout_textReadings);
         mTempChartContainer=(LinearLayout) findViewById(R.id.linlayout_TempStat);
@@ -165,8 +161,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mMapView.setClickable(false);
 
         mMapView.setLayoutParams(new LinearLayout.LayoutParams(
-               ViewGroup.LayoutParams.MATCH_PARENT,
-               ViewGroup.LayoutParams.MATCH_PARENT));
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
         mMapView.setMinimumHeight(MAP_HEIGHT);
         mMapContainer.addView(mMapView);
         mMapContainer.setMinimumHeight(MAP_HEIGHT);
@@ -180,7 +176,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         TextView textAltitude = new TextView(this);
         textAltitude.setText("Altitude:");
         textAltitude.setTextColor(getResources().getColor(R.color.hike_blue_grey));
-        mTextAltitudeContainer.addView(textAltitude);
+        mAltitudeChartContainer.addView(textAltitude);
 
         if(mCoordinatesList!=null) {
             int listSize = mCoordinatesList.size();
@@ -220,7 +216,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         TextView textInstPace = new TextView(this);
         textInstPace.setText("Pace:");
         textInstPace.setTextColor(getResources().getColor(R.color.hike_blue_grey));
-        mTextInstPaceContainer.addView(textInstPace);
+        mInstPaceChartContainer.addView(textInstPace);
 
         if(mCoordinatesList!=null) {
             int listSize = mCoordinatesList.size();
