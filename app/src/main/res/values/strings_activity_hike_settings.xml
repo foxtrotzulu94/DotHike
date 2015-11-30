@@ -2,6 +2,116 @@
     <string name="title_activity_hike_settings">Settings</string>
 
     <!-- Strings related to Settings -->
+    <!-- Display Settings-->
+    <string name="pref_header_display">Display and UI</string>
+    <!-- Unit Display -->
+    <string name="pref_display_units_title">Units for Readings</string>
+    <string-array name="pref_display_units">
+        <item>Metric (meters, celsius)</item>
+        <item>Imperial (miles, farenheit)</item>
+    </string-array>
+    <string-array name="pref_display_units_values">
+        <item>metric</item>
+        <item>american</item>
+    </string-array>
+    <!-- Map Type -->
+    <string name="pref_display_map_title">Map Type</string>
+    <string-array name="pref_display_map_type">
+        <item>Terrain</item>
+        <item>Satellite</item>
+        <item>Hybrid</item>
+        <item>Normal</item>
+        <item>None</item>
+    </string-array>
+    <string-array name="pref_display_map_type_values">
+        <item>3</item>
+        <item>2</item>
+        <item>4</item>
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+    <string name="pref_display_compass_title">Show Compass</string>
+    <string name="pref_display_compass_summary">Have the Compass Shown While Hiking</string>
+    <!-- Compass is a checkbox -->
+
+
+    <!-- Sensor Settings-->
+    <string name="pref_header_sensors">Sensors</string>
+    <string name="pref_sensors_device_sensorconfig_title">Device Sensor Configuration</string>
+    <string-array name="pref_sensors_device_update">
+        <item>Real Time (Battery Killer)</item>
+        <item>Fastest</item>
+        <item>2x Speed</item>
+        <item>Normal (Default)</item>
+    </string-array>
+    <string-array name="pref_sensors_device_updatevals">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string name="pref_sensors_ext_sensorconfig_title">External Sensor Configuration</string>
+    <string name="pref_sensors_ext_sensor_title">External Sensor</string>
+    <string-array name="pref_sensors_ext_sensor">
+        <item>TI SensorTag</item>
+        <item>None</item>
+    </string-array>
+    <string-array name="pref_sensors_ext_sensorval">
+        <item>1</item>
+        <item>-1</item>
+    </string-array>
+    <string name="pref_sensors_refresh">Refresh Time</string>
+    <string name="pref_sensors_prompt_title">Prompt For Connection</string>
+    <!-- AskForConnection is a checkbox -->
+    <string name="pref_sensors_autoconnect_title">Connect To First Available</string>
+    <!-- ConnectAutomatically is a checkbox -->
+
+
+    <!-- Notification Settings-->
+    <string name="pref_header_notifications">Notifications</string>
+    <string name="pref_notifications_show_title">Show Notifications</string>
+    <!-- ShowNotifications is a checkbox -->
+    <string name="pref_notifications_vibrate_title">Vibrate for Notification</string>
+    <!-- VibratingNotifications is a checkbox -->
+
+
+    <!-- Location Settings-->
+    <string name="pref_header_location">Location</string>
+    <string name="pref_location_filter_title">Filter Permissiveness</string>
+    <!-- Filter value is a slider -->
+    <string name="pref_location_update_title">Location Accuracy</string>
+    <string-array name="pref_location_update_choices">
+        <item>High Accuracy (Best, Fastest, Battery Draining)</item>
+        <item>Balanced</item>
+        <item>Low Power</item>
+        <item>No Power (Useless)</item>
+    </string-array>
+    <string-array name="pref_location_update_values">
+        <item>100</item>
+        <item>102</item>
+        <item>104</item>
+        <item>105</item>
+    </string-array>
+    <string name="pref_location_android">System Location Settings</string>
+    <!-- This would fire an Intent -->
+
+
+    <!-- About Settings-->
+    <string name="pref_header_about">About</string>
+    <string name="pref_about_application_title">About .Hike</string>
+    <string name="pref_about_application_summary">Learn more about the application</string>
+
+    <string name="pref_about_developers_title">About Team Dot</string>
+    <string name="pref_about_developers_summary">The Handsome Student Dev Team</string>
+
+    <string name="pref_about_help_title">General Help</string>
+    <string name="pref_about_help_summary">Coming Soon!</string>
+
+    <string name="pref_about_donate_title">Donate Now!</string>
+    <string name="pref_about_donate_summary">Help Us help You, support us through PayPal!</string>
+
+    <string name="pref_about_special_title">Special Thanks</string>
+
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
@@ -47,10 +157,11 @@
         <item>-1</item>
     </string-array>
 
+
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
+    <!--<string name="pref_header_notifications">Notifications</string>-->
 
     <string name="pref_title_new_message_notifications">New message notifications</string>
 
@@ -58,4 +169,6 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <string-array name="empty_array"></string-array>
 </resources>

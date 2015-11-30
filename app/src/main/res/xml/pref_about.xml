@@ -1,0 +1,26 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="about_dothike"
+        android:title="@string/pref_about_application_title"
+        android:summary="@string/pref_about_application_summary"/>
+
+    <Preference
+        android:key="about_devs"
+        android:title="@string/pref_about_developers_title"
+        android:summary="@string/pref_about_developers_summary"/>
+
+    <Preference
+        android:key="about_help"
+        android:title="@string/pref_about_help_title" />
+
+    <Preference
+        android:key="donate"
+        android:title="@string/pref_about_donate_title"
+        android:summary="@string/pref_about_donate_summary"/>
+
+    <Preference
+        android:key="thanks"
+        android:title="@string/pref_about_special_title"/>
+
+</PreferenceScreen>

@@ -1,17 +1,23 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- These settings headers are only used on tablets. -->
+    <header
+        android:fragment="me.dotteam.dotprod.HikeSettingsActivity$DisplayPreferenceFragment"
+        android:title="@string/pref_header_display" />
 
-    <header android:fragment="me.dotteam.dotprod.HikeSettingsActivity$GeneralPreferenceFragment"
-        android:title="@string/pref_header_general"
-        android:summary="General Settings"/>
+    <header
+        android:fragment="me.dotteam.dotprod.HikeSettingsActivity$SensorPreferenceFragment"
+        android:title="@string/pref_header_sensors" />
 
     <header
         android:fragment="me.dotteam.dotprod.HikeSettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications" />
 
-    <header android:fragment="me.dotteam.dotprod.HikeSettingsActivity$DataSyncPreferenceFragment"
-        android:title="@string/pref_header_data_sync" />
+    <header
+        android:fragment="me.dotteam.dotprod.HikeSettingsActivity$LocationPreferenceFragment"
+        android:title="@string/pref_header_location" />
 
+    <header
+        android:fragment="me.dotteam.dotprod.HikeSettingsActivity$AboutPreferenceFragment"
+        android:title="@string/pref_header_about" />
 
 </preference-headers>

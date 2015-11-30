@@ -1,7 +1,9 @@
 package me.dotteam.dotprod;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -11,14 +13,20 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -183,31 +191,36 @@ public class HikeSettingsActivity extends PreferenceActivity {
                         getString(preference.getKey(),""));
     }
 
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
+    public static class DisplayPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
+            addPreferencesFromResource(R.xml.pref_display);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_text"));
-            bindPreferenceSummaryToValue(findPreference("example_list"));
+            bindPreferenceSummaryToValue(findPreference("display_units"));
+            bindPreferenceSummaryToValue(findPreference("display_maptype"));
         }
     }
 
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public static class SensorPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_sensors);
+
+            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+            bindPreferenceSummaryToValue(findPreference("extsensor"));
+            bindPreferenceSummaryToValue(findPreference("sensor_refresh"));
+        }
+    }
+
     public static class NotificationPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -218,27 +231,141 @@ public class HikeSettingsActivity extends PreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+//            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+
         }
     }
 
-    /**
-     * This fragment shows data and sync preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class DataSyncPreferenceFragment extends PreferenceFragment {
+    public static class LocationPreferenceFragment extends PreferenceFragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_data_sync);
+            addPreferencesFromResource(R.xml.pref_location);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference("location_permission"));
 
+            Preference myPref = findPreference("location_filter_accuracy");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(final Preference preference) {
+                    SeekBar inputVal = new SeekBar(getActivity());
+                    final TextView valueText = new TextView(getActivity());
+                    LinearLayout root = new LinearLayout(getActivity());
+                    SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+                    inputVal.setMax(100);
+                    inputVal.setProgress(appPrefs.getInt(preference.getKey(), 40));
+                    valueText.setText(Integer.toString(inputVal.getProgress()));
+
+
+                    root.setOrientation(LinearLayout.VERTICAL);
+                    root.setGravity(Gravity.CENTER);
+
+                    inputVal.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT));
+                    valueText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    valueText.setGravity(Gravity.CENTER);
+                    root.addView(inputVal);
+                    root.addView(valueText);
+
+                    inputVal.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            valueText.setText(Integer.toString(progress));
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
+                        }
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                            SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            SharedPreferences.Editor edit = appPrefs.edit();
+                            edit.putInt(preference.getKey(), seekBar.getProgress());
+                            edit.apply();
+                        }
+                    });
+
+
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("Change Location Filter Accuracy");
+                    dialog.setMessage("Lower values -> strict filtering\nHigher Values -> less filtering");
+                    dialog.setView(root);
+                    dialog.show();
+                    return false;
+                }
+            });
+        }
+    }
+
+    public static class AboutPreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_about);
+
+            //Set all the OnClick Listeners here
+            Preference myPref =  findPreference("about_dothike");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //TODO: Make a nicer DialogFragment with some text about .Hike
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("About .Hike");
+                    dialog.setMessage("Thanks devs");
+                    dialog.show();
+                    return false;
+                }
+            });
+
+            myPref = findPreference("about_devs");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //TODO: Make an EVEN NICER dialog fragment with all our info
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("About Team Dot");
+                    dialog.setMessage("Thanks devs");
+                    dialog.show();
+                    return false;
+                }
+            });
+
+            myPref = findPreference("about_help");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //Help isn't coming.... Unless we get funded! :D
+                    Toast.makeText(getActivity(),"Coming Soon, Donate Now!",Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+
+            myPref = findPreference("donate");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //TODO: make a binding to paypal here.
+                    return false;
+                }
+            });
+
+            myPref = findPreference("thanks");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //TODO: Add a special thanks to the MPAndroid and CompassView people.
+                    //      And to Marc-Alexandre Chan for going through the SensorTagLib code.
+                    return false;
+                }
+            });
         }
     }
 }
