@@ -12,8 +12,8 @@ android {
         versionName "1.0"
 
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
-        buildConfigField "String", "GIT_BRANCH", "\""+getGitBranch()+"\""
-        buildConfigField "String", "GIT_COMMIT_INFO", "\""+getGitCommit()+"\""
+        buildConfigField "String", "GIT_BRANCH", "\"" + getGitBranch() + "\""
+        buildConfigField "String", "GIT_COMMIT_INFO", "\"" + getGitCommit() + "\""
     }
     buildTypes {
         release {
@@ -38,10 +38,10 @@ def getGitCommit() {
     return result.text.trim()
 }
 
-def getGitBranch(){
-   def gitCom = "git rev-parse --abbrev-ref HEAD"
-   def result = gitCom.execute()
-   return result.text.trim()
+def getGitBranch() {
+    def gitCom = "git rev-parse --abbrev-ref HEAD"
+    def result = gitCom.execute()
+    return result.text.trim()
 }
 
 dependencies {
@@ -49,4 +49,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.+'
     compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.android.support:support-v4:23.0.1'
 }

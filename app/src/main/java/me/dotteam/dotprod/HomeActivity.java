@@ -1,6 +1,9 @@
 package me.dotteam.dotprod;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +28,6 @@ public class HomeActivity extends AppCompatActivity{
     private LinearLayout mLinearLayoutPastHikes;
     private LinearLayout mLinearLayoutSensors;
     private LinearLayout mLinearLayoutSettings;
-    private FragmentManager fm = getSupportFragmentManager();
 
     public void setMemberIDs(){
         mLinearLayoutStartHike = (LinearLayout) findViewById(R.id.linearLayoutStartHike);
@@ -42,6 +44,18 @@ public class HomeActivity extends AppCompatActivity{
         setOnClickListeners();
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
 
+        //Optimize loading of the bitmap
+        BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
+        decodeOptions.inScaled = true;
+        decodeOptions.inPremultiplied =false;
+        decodeOptions.inDither = false;
+        LinearLayout homeRoot = (LinearLayout) findViewById(R.id.linlayout_homeroot);
+        homeRoot.setBackground(new BitmapDrawable(getResources(),
+                BitmapFactory.decodeResource(getResources(),R.drawable.background_image_white, decodeOptions)));
+
+        //The icons were also optimized into .9.png thanks to
+        //https://romannurik.github.io/AndroidAssetStudio/nine-patches.html
+
         //TODO: Recover and put on settings or something.
         //Show build information for debugging.
         if (BuildConfig.DEBUG) {
@@ -55,11 +69,15 @@ public class HomeActivity extends AppCompatActivity{
                     BuildConfig.GIT_BRANCH);
             buildField.setText(formatter.toString());
         }
+        Runtime.getRuntime().gc();
+        System.gc();
     }
 
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        Runtime.getRuntime().gc();
+        System.gc();
         finish();
     }
 
@@ -76,12 +94,10 @@ public class HomeActivity extends AppCompatActivity{
         // Shows Setting Dialogue
         mLinearLayoutSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                DSettingsFragment dSettingsFragment = new DSettingsFragment();
-                dSettingsFragment.show(fm, "Settings Dialog");
-                //TODO: Remove later
-                HikeDataDirector mHDD = HikeDataDirector.getInstance(HomeActivity.this);
-                mHDD.testStorage();
-                Toast.makeText(HomeActivity.this,"Testing Storage Setup", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(HomeActivity.this,HikeSettingsActivity.class));
+                Log.d("HikeHome",
+                        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).
+                                getString("example_text", ""));
             }
         });
 
@@ -98,7 +114,6 @@ public class HomeActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intentPastHike = new Intent(HomeActivity.this, PastHikesActivity.class);
                 startActivity(intentPastHike);
-                System.gc();
             }
         });
 

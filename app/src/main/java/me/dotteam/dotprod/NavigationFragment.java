@@ -20,8 +20,8 @@ public class NavigationFragment extends Fragment {
     private TextView mTextLatitude;
     private TextView mTextLongitude;
     private TextView mTextAltitude;
-    private TextView mTextBearing;
-    private TextView mTextAccuracy;
+//    private TextView mTextBearing;
+//    private TextView mTextAccuracy;
     private TextView mTextDistanceTraveled;
     private TextView mTextStepCount;
 
@@ -48,8 +48,8 @@ public class NavigationFragment extends Fragment {
         mTextLatitude = (TextView) rootView.findViewById(R.id.textLatitude);
         mTextLongitude = (TextView) rootView.findViewById(R.id.textLongitude);
         mTextAltitude = (TextView) rootView.findViewById(R.id.textAltitude);
-        mTextBearing = (TextView) rootView.findViewById(R.id.textBearing);
-        mTextAccuracy = (TextView) rootView.findViewById(R.id.textAccuracy);
+//        mTextBearing = (TextView) rootView.findViewById(R.id.textBearing);
+//        mTextAccuracy = (TextView) rootView.findViewById(R.id.textAccuracy);
         mTextDistanceTraveled = (TextView) rootView.findViewById(R.id.textDistanceTraveled);
         mTextStepCount = (TextView) rootView.findViewById(R.id.textStepCount);
 
@@ -70,13 +70,13 @@ public class NavigationFragment extends Fragment {
         return mTextAltitude;
     }
 
-    public TextView getTextBearing() {
-        return mTextBearing;
-    }
-
-    public TextView getTextAccuracy() {
-        return mTextAccuracy;
-    }
+//    public TextView getTextBearing() {
+//        return mTextBearing;
+//    }
+//
+//    public TextView getTextAccuracy() {
+//        return mTextAccuracy;
+//    }
 
     public TextView getTextDistanceTraveled() {
         return mTextDistanceTraveled;
