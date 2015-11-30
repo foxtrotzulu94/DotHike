@@ -40,6 +40,8 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
 
     private boolean dedicatedPedometer = false;
 
+    private int mSensorDelay = SensorManager.SENSOR_DELAY_NORMAL;
+
     // Android Sensors
     SensorManager mSensorManager;
     android.hardware.Sensor mPedometer;
@@ -147,12 +149,12 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             if(mPedometerListener==null){
                 mPedometerListener = new PedometerEventListener();
             }
-            mSensorManager.registerListener(mPedometerListener, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(mPedometerListener, mPedometer, mSensorDelay);
         }
         else{
             Log.w(TAG, "startPedometer Failed! Maybe this sensor is not on the device?");
             Log.w(TAG, "startPedometer Falling back to accelerometer");
-            mSensorManager.registerListener(mFallbackPedometerListener, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(mFallbackPedometerListener, mAccelerometer, mSensorDelay);
         }
     }
 
@@ -171,8 +173,8 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
 
     public void startCompass(){
         if(mAccelerometer!=null && mMagnetometer!=null) {
-            mSensorManager.registerListener(mCompassListener, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
-            mSensorManager.registerListener(mCompassListener, mMagnetometer, SensorManager.SENSOR_DELAY_UI);
+            mSensorManager.registerListener(mCompassListener, mAccelerometer, mSensorDelay);
+            mSensorManager.registerListener(mCompassListener, mMagnetometer, mSensorDelay);
         }
         else{
             Log.e(TAG, "startCompass Failed! Accelerometer OR Magnetometer may be missing from the device");
@@ -192,7 +194,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             if (mFallbackTemperatureListener == null) {
                 mFallbackTemperatureListener = new FallbackTemperatureEventListener();
             }
-            mSensorManager.registerListener(mFallbackTemperatureListener, mFallbackTemperature, SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(mFallbackTemperatureListener, mFallbackTemperature, mSensorDelay);
         }
 
         if (mFallbackHumidity == null) {
@@ -202,7 +204,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             if (mFallbackHumidityListener == null) {
                 mFallbackHumidityListener = new FallbackHumidityEventListener();
             }
-            mSensorManager.registerListener(mFallbackHumidityListener, mFallbackHumidity, SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(mFallbackHumidityListener, mFallbackHumidity, mSensorDelay);
         }
 
         if (mFallbackPressure == null) {
@@ -212,7 +214,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             if (mFallbackPressureListener == null) {
                 mFallbackPressureListener = new FallbackPressureEventListener();
             }
-            mSensorManager.registerListener(mFallbackPressureListener, mFallbackPressure, SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(mFallbackPressureListener, mFallbackPressure, mSensorDelay);
         }
     }
 
