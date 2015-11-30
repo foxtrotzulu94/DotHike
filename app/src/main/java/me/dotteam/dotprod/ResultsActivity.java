@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -26,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import me.dotteam.dotprod.data.Coordinates;
-import me.dotteam.dotprod.data.EnvStatistic;
+import me.dotteam.dotprod.data.DataStatistic;
 import me.dotteam.dotprod.data.HikeDataDirector;
 import me.dotteam.dotprod.data.SessionData;
 
@@ -127,7 +126,7 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     protected void setupTemperatureChart(){
-        EnvStatistic temperature = mHDD.getSessionData().getCurrentStats().getTemperature();
+        DataStatistic temperature = mHDD.getSessionData().getCurrentStats().getTemperature();
         if(temperature!=null && temperature.isValid()){
             mTempChart = new BarChart(this);
             List<BarEntry> statVals = new ArrayList<>(3);
@@ -158,7 +157,7 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     protected void setupPressureChart(){
-        EnvStatistic pressure = mHDD.getSessionData().getCurrentStats().getPressure();
+        DataStatistic pressure = mHDD.getSessionData().getCurrentStats().getPressure();
         if(pressure!=null && pressure.isValid()){
             mPressureChart = new BarChart(this);
             List<BarEntry> statVals = new ArrayList<>(3);
@@ -188,7 +187,7 @@ public class ResultsActivity extends AppCompatActivity {
         }
     }
     protected void setupHumidityChart(){
-        EnvStatistic humidity = mHDD.getSessionData().getCurrentStats().getHumidity();
+        DataStatistic humidity = mHDD.getSessionData().getCurrentStats().getHumidity();
         if(humidity!=null && humidity.isValid()){
             mHumidityChart = new BarChart(this);
             List<BarEntry> statVals = new ArrayList<>(3);

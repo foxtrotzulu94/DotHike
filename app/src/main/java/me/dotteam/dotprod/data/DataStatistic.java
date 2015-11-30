@@ -5,7 +5,7 @@ import android.content.ContentValues;
 /**
  * Data structure to represent a single Environmental Statistic
  */
-public class EnvStatistic {
+public class DataStatistic {
 
     /**
      * Observed Minimum
@@ -25,7 +25,7 @@ public class EnvStatistic {
     /**
      * Default constructor
      */
-    public EnvStatistic() {
+    public DataStatistic() {
     }
 
     public double getAvg() {

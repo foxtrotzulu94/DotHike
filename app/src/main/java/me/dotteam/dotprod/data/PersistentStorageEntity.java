@@ -1,7 +1,6 @@
 package me.dotteam.dotprod.data;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -148,8 +147,8 @@ public class PersistentStorageEntity {
 //        return retVal;
     }
 
-    private EnvStatistic retrieveEnvDataTable(String tableName, int uniqueID){
-        EnvStatistic retrievedValue = new EnvStatistic();
+    private DataStatistic retrieveEnvDataTable(String tableName, int uniqueID){
+        DataStatistic retrievedValue = new DataStatistic();
         //Get the data
         Cursor cursor = mDB.query(tableName,null,DBAssistant.HIKE_ID+"=?",
                 new String[]{Integer.toString(uniqueID)}, null, null, null);

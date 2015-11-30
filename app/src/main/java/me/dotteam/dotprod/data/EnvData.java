@@ -9,28 +9,28 @@ public class EnvData {
     /**
      * Temperature Statistics Object
      */
-    protected EnvStatistic temperature;
+    protected DataStatistic temperature;
 
     /**
      * Humidity Statistics Object
      */
-    protected EnvStatistic humidity;
+    protected DataStatistic humidity;
 
     /**
      * Pressure Statistics Object
      */
-    protected EnvStatistic pressure;
+    protected DataStatistic pressure;
 
     /**
      * Default constructor
      */
     public EnvData() {
-        temperature = new EnvStatistic();
-        humidity = new EnvStatistic();
-        pressure = new EnvStatistic();
+        temperature = new DataStatistic();
+        humidity = new DataStatistic();
+        pressure = new DataStatistic();
     }
 
-    public EnvData(EnvStatistic temperature,EnvStatistic humidity,EnvStatistic pressure){
+    public EnvData(DataStatistic temperature,DataStatistic humidity,DataStatistic pressure){
         this.temperature = temperature;
         this.humidity = humidity;
         this.pressure = pressure;
@@ -48,15 +48,15 @@ public class EnvData {
         pressure.insertSample(newSample);
     }
 
-    public EnvStatistic getTemperature() {
+    public DataStatistic getTemperature() {
         return temperature;
     }
 
-    public EnvStatistic getHumidity() {
+    public DataStatistic getHumidity() {
         return humidity;
     }
 
-    public EnvStatistic getPressure() {
+    public DataStatistic getPressure() {
         return pressure;
     }
 
