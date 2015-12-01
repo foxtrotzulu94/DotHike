@@ -41,7 +41,9 @@ public class PastHikesActivity extends AppCompatActivity {
             mHDD.retrieveSessionFromHike((Hike) parent.getItemAtPosition(position));
 
             //Load the new activity.
-            startActivity(new Intent(PastHikesActivity.this,PastStatisticsActivity.class));
+            Intent targetIntent = new Intent(PastHikesActivity.this,PastStatisticsActivity.class);
+            targetIntent.putExtra("id",((Hike) parent.getItemAtPosition(position)).getUniqueID());
+            startActivity(targetIntent);
         }
     }
 

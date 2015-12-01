@@ -1,13 +1,13 @@
 package me.dotteam.dotprod.loc;
 
-import android.app.AlertDialog;
-import android.app.SearchManager;
+import android.content.SharedPreferences;
+import android.hardware.SensorManager;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,14 +24,9 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.SettingsApi;
-import com.google.android.gms.maps.LocationSource;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.dotteam.dotprod.HikeViewPagerActivity;
-import me.dotteam.dotprod.HomeActivity;
 
 /**
  * Handles Location Requests to GoogleApiClient and provides an easy way for any object to obtain Location Updates using one common entity.
@@ -49,7 +44,11 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      */
     private final int DEFAULT_INTERVAL = 5000;
     private final int DEFAULT_FASTEST_INTERVAL = 1000;
-    private final int DEFAULT_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
+
+    /**
+     * Location Request Priority. Default is High Accuracy
+     */
+    private int REQUEST_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
     /**
      * Minimum location accuracy
@@ -133,10 +132,21 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
         mLocationRequest = new LocationRequest();
         mInterval = DEFAULT_INTERVAL;
         mFastestInterval = DEFAULT_FASTEST_INTERVAL;
-        mPriority = DEFAULT_PRIORITY;
+        mPriority = REQUEST_PRIORITY;
         mLocationRequest.setInterval(mInterval);
         mLocationRequest.setFastestInterval(mFastestInterval);
         mLocationRequest.setPriority(mPriority);
+    }
+
+    private void updateFromPreferences(){
+        SharedPreferences prefMan = PreferenceManager.getDefaultSharedPreferences(mContext);
+        if (prefMan.contains("location_permission")){
+            REQUEST_PRIORITY = Integer.parseInt(
+                    prefMan.getString("location_permission",String.valueOf(LocationRequest.PRIORITY_HIGH_ACCURACY)));
+        }
+        if(prefMan.contains("location_filter_accuracy")){
+            MIN_LOCATION_ACCURACY = prefMan.getInt("location_filter_accuracy", MIN_LOCATION_ACCURACY);
+        }
     }
 
     /**
@@ -149,6 +159,9 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
         mContext = context;
 
         mRequestingLocationUpdates = true;
+
+        //Read the preferences
+        updateFromPreferences();
 
         if (mGoogleApiClientConnected) {
 
