@@ -263,6 +263,9 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mPedometerListener.mFirstStep = true;
     }
 
+    /**
+     * Start compass updates
+     */
     public void startCompass(){
         if(mAccelerometer!=null && mMagnetometer!=null) {
             mSensorManager.registerListener(mCompassListener, mAccelerometer, mSensorDelay);
