@@ -384,7 +384,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextDistTravlContainer.addView(textDistTravl);
 
         TextView textDistTravlVal = new TextView(this);
-        textDistTravlVal.setText(String.valueOf(mDistanceTraveled));
+        textDistTravlVal.setText(String.valueOf(mDistanceTraveled) + " m");
         textDistTravlVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextDistTravlContainer.addView(textDistTravlVal);
 
@@ -395,7 +395,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextHikeTimeContainer.addView(textHikeTime);
 
         StringBuilder HikeTimeResults = new StringBuilder();
-        HikeTimeResults.append(String.valueOf(hikeDuration));
+        HikeTimeResults.append(String.valueOf(hikeDuration) + " s");
         TextView textHikeTimeResults = new TextView(this);
         textHikeTimeResults.setText(HikeTimeResults.toString());
         textHikeTimeResults.setTextColor(getResources().getColor(R.color.hike_blue_grey));
@@ -408,7 +408,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextAvgPaceContainer.addView(textAvgPace);
 
         TextView textAvgPaceVal = new TextView(this);
-        textAvgPaceVal.setText(String.valueOf(mDistanceTraveled/hikeDuration));
+        textAvgPaceVal.setText(String.valueOf(mDistanceTraveled/hikeDuration) + " m/s");
         textAvgPaceVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextAvgPaceContainer.addView(textAvgPaceVal);
 
