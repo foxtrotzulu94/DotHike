@@ -1,7 +1,7 @@
 package me.dotteam.dotprod;
 
 import android.annotation.TargetApi;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.view.View;
@@ -419,7 +420,10 @@ public class HikeSettingsActivity extends PreferenceActivity {
                     //TODO: Make an EVEN NICER dialog fragment with all our info
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                     dialog.setTitle("About Team Dot");
-                    dialog.setMessage("Thanks devs");
+//                    dialog.setMessage("Thanks devs");
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    View devView = inflater.inflate(R.layout.about_devs,null);
+                    dialog.setView(devView);
                     dialog.show();
                     return false;
                 }
@@ -448,8 +452,10 @@ public class HikeSettingsActivity extends PreferenceActivity {
             myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    //TODO: Add a special thanks to the MPAndroid and CompassView people.
-                    //      And to Marc-Alexandre Chan for going through the SensorTagLib code.
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("Special Thanks from Team Dot");
+                    dialog.setMessage(getString(R.string.special_thanks));
+                    dialog.show();
                     return false;
                 }
             });
