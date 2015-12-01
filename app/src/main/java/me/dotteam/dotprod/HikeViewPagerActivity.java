@@ -345,8 +345,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                     Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
                     startActivity(intentResults);
                     mHDD.endCollectionService();
-                    mHHM.stopSensorTag();
-                    mHHM.stopPedometer();
+                    mHHM.stopSensors();
                     finish();
                     //Unlocking Button
                 } else {
