@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,7 +55,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement HikeFragmentListener");
         }
-        mCompassAnimator = new CompassAnimator(getActivity(),mCompassView);
+
     }
 
     @Override
