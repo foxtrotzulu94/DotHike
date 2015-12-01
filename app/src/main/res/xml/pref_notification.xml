@@ -1,0 +1,17 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- A 'parent' preference, which enables/disables child preferences (below)
+         when checked/unchecked. -->
+    <CheckBoxPreference
+        android:key="notifications_show"
+        android:title="@string/pref_notifications_show_title"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:dependency="notifications_show"
+        android:key="notifications_vibrate"
+        android:title="@string/pref_notifications_vibrate_title"
+        android:defaultValue="false"
+        android:enabled="false"/>
+
+</PreferenceScreen>

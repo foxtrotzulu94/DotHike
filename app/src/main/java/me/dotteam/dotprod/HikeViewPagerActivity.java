@@ -1,7 +1,9 @@
 package me.dotteam.dotprod;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -203,6 +205,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         // Start Location Updates
         mHLE.startLocationUpdates(this);
 
+        //Cleanup any garbage
+        Runtime.getRuntime().gc();
+        System.gc();
     }
 
     @Override
@@ -249,10 +254,10 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             mTextAltitude.setText(String.valueOf(location.getAltitude()));
         }
         if (mTextBearing != null) {
-            mTextBearing.setText(String.valueOf(location.getBearing()));
+//            mTextBearing.setText(String.valueOf(location.getBearing()));
         }
         if (mTextAccuracy != null) {
-            mTextAccuracy.setText(String.valueOf(location.getAccuracy()));
+//            mTextAccuracy.setText(String.valueOf(location.getAccuracy()));
         }
 
         if (mLocation == null) {
@@ -304,8 +309,16 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         mMap.setMyLocationEnabled(true);
 
         // Set Map Type to Terrain
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-
+        SharedPreferences prefMan=PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(prefMan.contains("display_maptype")){
+            mMap.setMapType(
+                    Integer.parseInt(prefMan.getString(
+                            "display_maptype",
+                            Integer.toString(GoogleMap.MAP_TYPE_TERRAIN))));
+        }
+        else {
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        }
     }
 
     @Override
@@ -490,8 +503,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         mTextLatitude = mNavFragment.getTextLatitude();
         mTextLongitude = mNavFragment.getTextLongitude();
         mTextAltitude = mNavFragment.getTextAltitude();
-        mTextBearing = mNavFragment.getTextBearing();
-        mTextAccuracy = mNavFragment.getTextAccuracy();
+//        mTextBearing = mNavFragment.getTextBearing();
+//        mTextAccuracy = mNavFragment.getTextAccuracy();
         mTextDistanceTraveled = mNavFragment.getTextDistanceTraveled();
         mTextStepCount = mNavFragment.getTextStepCount();
 
@@ -500,14 +513,14 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             mTextLatitude.setText(String.valueOf(mLocation.getLatitude()));
             mTextLongitude.setText(String.valueOf(mLocation.getLongitude()));
             mTextAltitude.setText(String.valueOf(mLocation.getAltitude()));
-            mTextBearing.setText(String.valueOf(mLocation.getBearing()));
-            mTextAccuracy.setText(String.valueOf(mLocation.getAccuracy()));
+//            mTextBearing.setText(String.valueOf(mLocation.getBearing()));
+//            mTextAccuracy.setText(String.valueOf(mLocation.getAccuracy()));
         } else {
             mTextLatitude.setText("0.0");
             mTextLongitude.setText("0.0");
             mTextAltitude.setText("0.0");
-            mTextBearing.setText("0.0");
-            mTextAccuracy.setText("0.0");
+//            mTextBearing.setText("0.0");
+//            mTextAccuracy.setText("0.0");
         }
         mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
         mTextStepCount.setText(mStepCountString);

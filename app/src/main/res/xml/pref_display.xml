@@ -1,0 +1,26 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="display_units"
+        android:title="@string/pref_display_units_title"
+        android:defaultValue="metric"
+        android:entries="@array/pref_display_units"
+        android:entryValues="@array/pref_display_units_values"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
+    <ListPreference
+        android:key="display_maptype"
+        android:title="@string/pref_display_map_title"
+        android:defaultValue="3"
+        android:entries="@array/pref_display_map_type"
+        android:entryValues="@array/pref_display_map_type_values"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
+    <CheckBoxPreference
+        android:key="compass_ui"
+        android:title="@string/pref_display_compass_title"
+        android:defaultValue="true" />
+
+</PreferenceScreen>

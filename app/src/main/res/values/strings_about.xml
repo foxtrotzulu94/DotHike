@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="etremblay">Eric Tremblay\n@etremblay</string>
+    <string name="etremblay_summary">Has experience with Java and C++. Worked as a system software specialist at CAE. Currently working on a research project in computer engineering
+Interested in hardware/ software interfacing and electronics</string>
+
+    <string name="coryb2424">Corey Bonneau\n@coryb2424</string>
+    <string name="coryb2424_summary">Knowledge: Ruby, HTML, CSS, SQL. Has experience in Web design and UI. Is interests: Power and renewable energy</string>
+
+    <string name="flareflare">Amit Desai\n@flareflare</string>
+    <string name="flareflare_summary">Knows Python, Java. Has experience as a Systems Test Analyst with experience in networking/routing (physical and software) and scripting. Interested in Telecommunications, both networking and signal processing, and electronics</string>
+
+    <string name="foxtrot94">Javier E. Fajardo\n@foxtrot94</string>
+    <string name="foxtrot94_summary">Fluent in C/C++, Python, C#, Java and Bash. Has experience in Video Game development (Gameplay and Engine), Android Applications and Linux Systems Programming. Major interests are Software Performance Optimization and Operating Systems.</string>
+
+    <string name="special_thanks">.Hike was possible thanks to:\n
+\n- Concordia University
+        \n- ENCS Faculty and ECE Department
+        \n- Marc Alexandre Chan
+        \n- Amine Mhedbi
+        \n- Texas Instruments
+        \n- Phil Jay for MPAndroid
+        \n- RedInput Team for CompassView</string>
+
+
+</resources>

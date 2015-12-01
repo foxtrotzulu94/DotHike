@@ -1,8 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="DotHike" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/hike_naval</item>
+    </style>
+    <style name="HikeCustom" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="android:windowBackground">@color/hike_naval</item>
+    </style>
+    <style name="HikeAlert" parent="AlertDialog.AppCompat.Light">
+        <item name="android:windowBackground">@color/hike_naval</item>
     </style>
 
 </resources>

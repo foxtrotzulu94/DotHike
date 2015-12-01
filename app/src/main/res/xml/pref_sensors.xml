@@ -1,0 +1,47 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/pref_sensors_device_sensorconfig_title">
+        <ListPreference
+            android:key="sensor_refresh"
+            android:title="@string/pref_sensors_refresh"
+            android:defaultValue="3"
+            android:entries="@array/pref_sensors_device_update"
+            android:entryValues="@array/pref_sensors_device_updatevals"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <CheckBoxPreference
+            android:key="sensor_activatefallback"
+            android:title="@string/pref_sensors_fallback_title"
+            android:summary="@string/pref_sensors_fallback_summary"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_sensors_ext_sensorconfig_title">
+        <ListPreference
+            android:key="extsensor"
+            android:title="@string/pref_sensors_ext_sensor_title"
+            android:defaultValue="1"
+            android:entries="@array/pref_sensors_ext_sensor"
+            android:entryValues="@array/pref_sensors_ext_sensorval"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+        <Preference
+            android:key="extsensor_period"
+            android:title="@string/pref_sensors_refresh"
+            android:summary="Default: 500ms"
+            android:defaultValue="500"/>
+        <CheckBoxPreference
+            android:key="extsensor_askconnect"
+            android:title="@string/pref_sensors_prompt_title"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="extsensor_autoconnect"
+            android:title="@string/pref_sensors_autoconnect_title"
+            android:defaultValue="true"
+            android:enabled="false"/>
+    </PreferenceCategory>
+
+
+</PreferenceScreen>
