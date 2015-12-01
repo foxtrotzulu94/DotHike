@@ -2,6 +2,7 @@ package me.dotteam.dotprod;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +20,8 @@ public class SensorsActivity extends AppCompatActivity {
     private Button mButtonDone;
     private CompassAnimator mCompassAnimator;
     private CompassView mCompassView;
-    private HikeHardwareManager mHHM;
+    private HikeHardwareManager
+     mHHM;
 
     private class CompassAnimator extends Thread{
 
@@ -92,7 +94,7 @@ public class SensorsActivity extends AppCompatActivity {
 
         mCompassView = (CompassView) findViewById(R.id.compass);
         mCompassView.setRangeDegrees(180);
-        mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_indigo_baltik));
+        mCompassView.setBackgroundColor(Color.BLACK);
         mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
         mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
         mCompassView.setTextColor(getResources().getColor(R.color.hike_palisade));

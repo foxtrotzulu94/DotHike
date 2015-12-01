@@ -140,7 +140,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
         mCompassView = (CompassView) rootView.findViewById(R.id.compass);
         mCompassView.setRangeDegrees(180);
-        mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_indigo_baltik));
+        mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_naval));
         mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
         mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
         mCompassView.setTextColor(getResources().getColor(R.color.hike_palisade));

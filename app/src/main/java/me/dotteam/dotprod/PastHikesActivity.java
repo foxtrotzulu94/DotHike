@@ -78,32 +78,32 @@ public class PastHikesActivity extends AppCompatActivity {
         }
     }
 
-    private class ResetHikesListener implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(PastHikesActivity.this);
-            builder.setPositiveButton("Reset Everything", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //Delete EVERYTHING!
-                    mHDD.deleteAllData();
-                    PastHikesActivity.this.recreate();
-                }
-            });
-
-            builder.setNegativeButton("Keep", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //Keep my data.
-                }
-            });
-            builder.setMessage("This will delete ALL hikes.\nThere's no going back after this. Are you sure you want to continue?");
-            builder.setTitle("Delete ALL Stored Data");
-            AlertDialog deleteAlert = builder.create();
-            deleteAlert.setCancelable(true);
-            deleteAlert.show();
-        }
-    }
+//    private class ResetHikesListener implements View.OnClickListener{
+//        @Override
+//        public void onClick(View v) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(PastHikesActivity.this);
+//            builder.setPositiveButton("Reset Everything", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    //Delete EVERYTHING!
+//                    mHDD.deleteAllData();
+//                    PastHikesActivity.this.recreate();
+//                }
+//            });
+//
+//            builder.setNegativeButton("Keep", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    //Keep my data.
+//                }
+//            });
+//            builder.setMessage("This will delete ALL hikes.\nThere's no going back after this. Are you sure you want to continue?");
+//            builder.setTitle("Delete ALL Stored Data");
+//            AlertDialog deleteAlert = builder.create();
+//            deleteAlert.setCancelable(true);
+//            deleteAlert.show();
+//        }
+//    }
 
     /**
      * Reference to HikeDataDirector
@@ -134,7 +134,7 @@ public class PastHikesActivity extends AppCompatActivity {
         // Get UI elements
         retrieveInterfaceElements();
 
-        resetHikes.setOnClickListener(new ResetHikesListener());
+//        resetHikes.setOnClickListener(new ResetHikesListener());
 
         // Get referenece to HikeDataDirector
         mHDD = HikeDataDirector.getInstance(this);
