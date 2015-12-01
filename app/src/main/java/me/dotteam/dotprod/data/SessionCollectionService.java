@@ -14,10 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import java.util.Date;
-
-import com.google.android.gms.location.LocationListener;
-
 import me.dotteam.dotprod.HikeViewPagerActivity;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
 import me.dotteam.dotprod.R;
@@ -166,7 +162,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
      */
     @Override
     public void update(HikeSensors hikesensors, double value) {
-        if(!mHDD.IsPaused()) {
+        if(!mHDD.isPaused()) {
             Log.d("SCS", String.format("Got update %s: %s", hikesensors.toString(), value));
             switch (hikesensors) {
                 case TEMPERATURE: {

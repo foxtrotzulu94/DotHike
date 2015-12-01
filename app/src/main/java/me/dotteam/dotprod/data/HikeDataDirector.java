@@ -146,11 +146,11 @@ public class HikeDataDirector {
         }
     }
 
-    public void IsPaused(boolean b){
+    public void setPauseStatus(boolean b){
         mPauseCollection = b;
     }
 
-    public boolean IsPaused(){
+    public boolean isPaused(){
         return mPauseCollection;
     }
 

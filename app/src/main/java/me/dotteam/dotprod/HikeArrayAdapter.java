@@ -222,7 +222,7 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
             // that all points are visible
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
 
-            if (mCoordinatesList != null) {
+            if (mCoordinatesList != null && mCoordinatesList.size()>0) {
                 for (int i = 0; i < mCoordinatesList.size(); i++) {
                     // Get latitude and longitude
                     LatLng latLng = new LatLng(mCoordinatesList.get(i).getLatitude(), mCoordinatesList.get(i).getLongitude());

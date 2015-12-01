@@ -23,10 +23,6 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.List;
-import java.util.Random;
-
-import me.dotteam.dotprod.data.Coordinates;
 import me.dotteam.dotprod.data.HikeDataDirector;
 import me.dotteam.dotprod.data.LocationPoints;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
@@ -362,18 +358,18 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         mButtonPauseHike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mPauseHikeButtonLocked) {
+                if (!mPauseHikeButtonLocked) {
                     if (!mHikeCurrentlyPaused) {
                         //Pause the collection and saving of data
-                        mHDD.IsPaused(true);
+                        mHDD.setPauseStatus(true);
                         mHikeCurrentlyPaused = true;
                     } else {
                         //UnPause the collection and saving of data
-                        mHDD.IsPaused(false);
+                        mHDD.setPauseStatus(false);
                         mHikeCurrentlyPaused = false;
                     }
-                //Unlocking Button
-                } else{
+                    //Unlocking Button
+                } else {
                     mEndHikeButtonLocked = true;
                     mPauseHikeButtonLocked = false;
 
@@ -384,17 +380,17 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         });
 
         //Set callback for Nav-Arrow ImageView
-        mImageViewNavArrow.setOnClickListener(new View.OnClickListener(){
+        mImageViewNavArrow.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 mPager.setCurrentItem(0);
             }
         });
 
         //Set callback for Env-Arrow ImageView
-        mImageViewEnvArrow.setOnClickListener(new View.OnClickListener(){
+        mImageViewEnvArrow.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 mPager.setCurrentItem(2);
             }
         });
