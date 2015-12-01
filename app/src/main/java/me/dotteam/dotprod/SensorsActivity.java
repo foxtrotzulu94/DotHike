@@ -27,10 +27,13 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
         switch (hikesensors){
 
             case TEMPERATURE:
+                updateTemperature(value);
                 break;
             case HUMIDITY:
+                updateHumidity(value);
                 break;
             case PRESSURE:
+                updatePressure(value);
                 break;
             case PEDOMETER:
                 break;
@@ -38,6 +41,42 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
                 mCompassAnimator.setNewValue((float) value);
                 break;
         }
+    }
+
+    void updateTemperature(final String temp) {
+        mTemperatureString = temp;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mTextDisplayTemperature != null) {
+                    mTextDisplayTemperature.setText(temp);
+                }
+            }
+        });
+    }
+
+    void updateHumidity(final String hum) {
+        mHumidityString = hum;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mTextDisplayHumidity != null) {
+                    mTextDisplayHumidity.setText(hum);
+                }
+            }
+        });
+    }
+
+    void updatePressure(final String pressure) {
+        mPressureString = pressure;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mTextDisplayPressure != null) {
+                    mTextDisplayPressure.setText(pressure);
+                }
+            }
+        });
     }
 
     private void setMemberIDs() {
@@ -85,6 +124,7 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
 
         // Add Listener to HHM
         mHHM.startCompass();
+        mHHM.startSensors(this);
     }
 
     @Override
@@ -105,7 +145,7 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //mHHM.stopSensors();
+        mHHM.stopSensors();
     }
 
     @Override
