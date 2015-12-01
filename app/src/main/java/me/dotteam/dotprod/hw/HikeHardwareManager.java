@@ -1,12 +1,14 @@
 package me.dotteam.dotprod.hw;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,9 +38,13 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
 
     private List<SensorListenerInterface> mSensorListenerList;
     private boolean mSTConnected = false;
-    private int samplingFrequency = 500; //In milliseconds. 1000ms = 1s. MAX:2550ms
+    private int mSamplingFrequency = 500; //In milliseconds. 1000ms = 1s. MAX:2550ms
+    private boolean mPromptForConnection = true;
+    private boolean mUsingAndroidEnvironmentalSensors = false;
 
     private boolean dedicatedPedometer = false;
+
+    private int mSensorDelay = SensorManager.SENSOR_DELAY_NORMAL;
 
     // Android Sensors
     SensorManager mSensorManager;
@@ -48,6 +54,14 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     PedometerEventListener mPedometerListener;
     AccelerometerAsPedometerListener mFallbackPedometerListener;
     CompassEventListener mCompassListener;
+    android.hardware.Sensor mFallbackTemperature;
+    android.hardware.Sensor mFallbackHumidity;
+    android.hardware.Sensor mFallbackPressure;
+    FallbackTemperatureEventListener mFallbackTemperatureListener;
+    FallbackHumidityEventListener mFallbackHumidityListener;
+    FallbackPressureEventListener mFallbackPressureListener;
+
+
 
 
     public static HikeHardwareManager getInstance(Context context) {
@@ -71,37 +85,80 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mAccelerometer = mSensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER);
         mMagnetometer = mSensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_MAGNETIC_FIELD);
 
+        mFallbackTemperature = mSensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_AMBIENT_TEMPERATURE);
+        mFallbackHumidity = mSensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_RELATIVE_HUMIDITY);
+        mFallbackPressure = mSensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_PRESSURE);
 
         mPedometerListener = new PedometerEventListener();
         mCompassListener = new CompassEventListener();
         mFallbackPedometerListener = new AccelerometerAsPedometerListener();
     }
 
+    private void updateFromPreferences(){
+        SharedPreferences prefMan = PreferenceManager.getDefaultSharedPreferences(mContext);
+        if (prefMan.contains("sensor_refresh")){
+            mSensorDelay = Integer.parseInt(
+                    prefMan.getString("sensor_refresh",String.valueOf(SensorManager.SENSOR_DELAY_NORMAL)));
+        }
+        if(prefMan.contains("extsensor_period")){
+            mSamplingFrequency = prefMan.getInt("extsensor_period", mSamplingFrequency);
+        }
+        if(prefMan.contains("extsensor_askconnect")){
+            mPromptForConnection = prefMan.getBoolean("extsensor_askconnect",true);
+        }
+    }
+
     public void startSensors(Context context) {
         mContext = context;
+
+        //Check the preferences for any updates on the sensor update times
+        updateFromPreferences();
+
         startSensorTagConnector();
         startPedometer();
         startCompass();
     }
 
+    public void stopSensors() {
+        if (!mUsingAndroidEnvironmentalSensors) {
+            stopSensorTag();
+        } else {
+            stopOnboardSensors();
+        }
+        stopPedometer();
+        stopCompass();
+    }
+
     private void startSensorTagConnector() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-        dialog.setTitle(R.string.STConnectDialogFragmentTitle);
-        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Log.d(TAG, "AlertDialog Yes");
-                mSTConnector = new SensorTagConnector(mContext);
-                mSTConnector.addListener(mInstance);
+        if(mPromptForConnection) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+            dialog.setTitle(R.string.STConnectDialogFragmentTitle);
+            dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.d(TAG, "AlertDialog Yes");
+                    mSTConnector = new SensorTagConnector(mContext);
+                    mSTConnector.addListener(mInstance);
+                }
+            });
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.d(TAG, "AlertDialog No");
+                    startOnboardSensors();
+                    mUsingAndroidEnvironmentalSensors = true;
+                }
+            });
+            dialog.create().show();
+        }
+        else{
+            mSTConnector = new SensorTagConnector(mContext);
+            mSTConnector.addListener(mInstance);
+            //Take a reading from the user prefs if we begin reading from the environmental sensors
+            if(mUsingAndroidEnvironmentalSensors){
+                startOnboardSensors();
             }
-        });
-        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Log.d(TAG, "AlertDialog No");
-            }
-        });
-        dialog.create().show();
+        }
     }
 
     public void stopSensorTag(){
@@ -124,12 +181,12 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
             if(mPedometerListener==null){
                 mPedometerListener = new PedometerEventListener();
             }
-            mSensorManager.registerListener(mPedometerListener, mPedometer, SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(mPedometerListener, mPedometer, mSensorDelay);
         }
         else{
             Log.w(TAG, "startPedometer Failed! Maybe this sensor is not on the device?");
             Log.w(TAG, "startPedometer Falling back to accelerometer");
-            mSensorManager.registerListener(mFallbackPedometerListener,mAccelerometer,SensorManager.SENSOR_DELAY_NORMAL);
+            mSensorManager.registerListener(mFallbackPedometerListener, mAccelerometer, mSensorDelay);
         }
     }
 
@@ -148,8 +205,8 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
 
     public void startCompass(){
         if(mAccelerometer!=null && mMagnetometer!=null) {
-            mSensorManager.registerListener(mCompassListener, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
-            mSensorManager.registerListener(mCompassListener, mMagnetometer, SensorManager.SENSOR_DELAY_UI);
+            mSensorManager.registerListener(mCompassListener, mAccelerometer, mSensorDelay);
+            mSensorManager.registerListener(mCompassListener, mMagnetometer, mSensorDelay);
         }
         else{
             Log.e(TAG, "startCompass Failed! Accelerometer OR Magnetometer may be missing from the device");
@@ -157,8 +214,43 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     }
 
     public void stopCompass(){
-        mSensorManager.unregisterListener(mCompassListener,mAccelerometer);
-        mSensorManager.unregisterListener(mCompassListener,mMagnetometer);
+        mSensorManager.unregisterListener(mCompassListener, mAccelerometer);
+        mSensorManager.unregisterListener(mCompassListener, mMagnetometer);
+    }
+
+    private void startOnboardSensors() {
+        if (mFallbackTemperature == null) {
+            Log.d(TAG, "No Temperature Sensor");
+        } else {
+            if (mFallbackTemperatureListener == null) {
+                mFallbackTemperatureListener = new FallbackTemperatureEventListener();
+            }
+            mSensorManager.registerListener(mFallbackTemperatureListener, mFallbackTemperature, mSensorDelay);
+        }
+
+        if (mFallbackHumidity == null) {
+            Log.d(TAG, "No Humidity Sensor");
+        } else {
+            if (mFallbackHumidityListener == null) {
+                mFallbackHumidityListener = new FallbackHumidityEventListener();
+            }
+            mSensorManager.registerListener(mFallbackHumidityListener, mFallbackHumidity, mSensorDelay);
+        }
+
+        if (mFallbackPressure == null) {
+            Log.d(TAG, "No Pressure Sensor");
+        } else {
+            if (mFallbackPressureListener == null) {
+                mFallbackPressureListener = new FallbackPressureEventListener();
+            }
+            mSensorManager.registerListener(mFallbackPressureListener, mFallbackPressure, mSensorDelay);
+        }
+    }
+
+    public void stopOnboardSensors() {
+        mSensorManager.unregisterListener(mFallbackTemperatureListener, mFallbackTemperature);
+        mSensorManager.unregisterListener(mFallbackHumidityListener, mFallbackHumidity);
+        mSensorManager.unregisterListener(mFallbackPressureListener, mFallbackPressure);
     }
 
     public void addListener(SensorListenerInterface sensorListenerInterface){
@@ -186,6 +278,11 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         mSensorTagManager = new SensorTagManager(mContext, btdevice);
         mSensorTagManager.addListener(mSensorTagManagerListener);
 
+        //Stop using the device environmental sensors
+        if(mUsingAndroidEnvironmentalSensors){
+            stopOnboardSensors();
+        }
+
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -196,10 +293,9 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
                     return;
                 }
 
-                //TODO: wrap this in a function call in case we want to dynamically change the sampling frequency
-                mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE,samplingFrequency);
-                mSensorTagManager.enableSensor(Sensor.HUMIDITY,samplingFrequency);
-                mSensorTagManager.enableSensor(Sensor.BAROMETER,samplingFrequency);
+                mSensorTagManager.enableSensor(Sensor.IR_TEMPERATURE, mSamplingFrequency);
+                mSensorTagManager.enableSensor(Sensor.HUMIDITY, mSamplingFrequency);
+                mSensorTagManager.enableSensor(Sensor.BAROMETER, mSamplingFrequency);
                 mSensorTagManager.enableUpdates();
 
                 mSTConnected = true;
@@ -213,6 +309,13 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         Toast.makeText(mContext,"SensorTag Disconnected",Toast.LENGTH_SHORT).show();
         mSensorTagManager.disableUpdates();
         mSTConnected = false;
+
+        //Read from the preferences again and try to go to onboard sensors as Fallback
+        updateFromPreferences();
+        if(mUsingAndroidEnvironmentalSensors){
+            Toast.makeText(mContext,"Falling Back to Device Sensors",Toast.LENGTH_SHORT).show();
+            startOnboardSensors();
+        }
     }
 
 
@@ -237,6 +340,50 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         @Override
         public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
             //Do nothing
+        }
+    }
+
+    public class FallbackTemperatureEventListener implements SensorEventListener {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            Log.d(TAG, "Fallback Temperature Called");
+            double value = event.values[0];
+            broadcastUpdate(SensorListenerInterface.HikeSensors.TEMPERATURE, value);
+        }
+
+        @Override
+        public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
+            // Do nothing
+        }
+    }
+
+    public class FallbackHumidityEventListener implements SensorEventListener {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            double value = event.values[0];
+            broadcastUpdate(SensorListenerInterface.HikeSensors.HUMIDITY, value);
+        }
+
+        @Override
+        public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
+
+        }
+    }
+
+    public class FallbackPressureEventListener implements SensorEventListener {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            double value = event.values[0];
+
+            // Convert from hectoPascals to kiloPascals
+            value = value * 0.1;
+
+            broadcastUpdate(SensorListenerInterface.HikeSensors.PRESSURE, value);
+        }
+
+        @Override
+        public void onAccuracyChanged(android.hardware.Sensor sensor, int accuracy) {
+
         }
     }
 

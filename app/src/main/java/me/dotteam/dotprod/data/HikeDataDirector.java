@@ -134,11 +134,23 @@ public class HikeDataDirector {
         }
     }
 
-    public void IsPaused(boolean b){
+    public boolean retrieveSessionFromHike(int hikeID){
+        checkOrSetPSE();
+        mSessionData = mPSE.loadHikeData(hikeID);
+        if(mSessionData!=null) {
+            mDataIsHistoric = true;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public void setPauseStatus(boolean b){
         mPauseCollection = b;
     }
 
-    public boolean IsPaused(){
+    public boolean isPaused(){
         return mPauseCollection;
     }
 
@@ -155,7 +167,7 @@ public class HikeDataDirector {
 
                 //Start the hike
                 mockHike.start();
-                for (int i=0; i<100; ++i) {
+                for (int i=0; i<10000; ++i) {
                     mockStats.updateHumidity(randy.nextFloat());
                     mockStats.updateTemp(randy.nextFloat());
                     mockStats.updatePressure(randy.nextFloat());

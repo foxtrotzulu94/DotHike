@@ -1,8 +1,9 @@
 package me.dotteam.dotprod;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,72 +21,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.redinput.compassview.CompassView;
 
-import java.util.Random;
-
 /**
  * Created by EricTremblay on 15-11-13.
  */
 public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
-//    private class CompassAnimator extends Thread{
-//
-//        float currentDegrees = 0.0f;
-//        float finalDegrees = 0.0f;
-//        float dampingPercentage = 0.05f;
-//        boolean runningThread =false;
-//
-//        @Override
-//        public void run(){
-//            runningThread =true;
-//            while(runningThread){
-//                if (currentDegrees!=finalDegrees){
-//                    currentDegrees = lerp(currentDegrees,finalDegrees,dampingPercentage);
-//                    updateUI(currentDegrees);
-//                }
-//                else{
-//                    runningThread = false;
-//                }
-//
-//                try{
-//                    sleep(34); //30 FPS, no compass needs to be at 60...
-//                }
-//                catch (InterruptedException e){
-//                    runningThread = false;
-//                }
-//
-//            }
-//        }
-//
-//        private float lerp(float start, float end, float percentage){
-//            return start+( percentage*(end-start)  );
-//        }
-//
-//        private void updateUI(final float value){
-//            getActivity().runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mCompassView.setDegrees(value);
-//                }
-//            });
-//        }
-//
-//        public void setNewValue(float newValue){
-//            finalDegrees = newValue % 360;
-//            if(!isAlive() && !runningThread)
-//                this.start();
-//        }
-//
-//        public void setAndStop(float newValue){
-//            updateUI(newValue);
-//            runningThread = false;
-//        }
-//
-//        public void stopAnimation(){
-//            setAndStop(finalDegrees);
-//        }
-//    }
-
-
+    
     private String TAG = "HikeFragment";
     private Button mButtonEndHike;
     private Button mButtonPauseHike;
@@ -97,6 +38,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mGoogleMap;
     private CompassView mCompassView;
+    private boolean mShowCompassView =true;
 
     private CompassAnimator mCompassAnimator;
 
@@ -138,16 +80,25 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         mImageViewEnvArrow = (ImageView) rootView.findViewById(R.id.imageEnvArrow);
         mImageViewNavArrow = (ImageView) rootView.findViewById(R.id.imageNavArrow);
         mCompassView = (CompassView) rootView.findViewById(R.id.compass);
-
-        mCompassAnimator = new CompassAnimator(getActivity(),mCompassView);
-        mCompassView.setRangeDegrees(180);
-        mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_naval));
-        mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
-        mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
-        mCompassView.setTextColor(getResources().getColor(R.color.hike_palisade));
-        mCompassView.setShowMarker(true);
-        mCompassView.setTextSize(40);
-        mCompassView.setDegrees(0);
+        
+        //Setup the compass if in prefs
+        SharedPreferences prefMan = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if(prefMan.contains("compass_ui")){
+            mShowCompassView = prefMan.getBoolean("compass_ui",true);
+        }
+        if(mShowCompassView) {
+            mCompassView.setRangeDegrees(180);
+            mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_indigo_baltik));
+            mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
+            mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
+            mCompassView.setTextColor(getResources().getColor(R.color.hike_palisade));
+            mCompassView.setShowMarker(true);
+            mCompassView.setTextSize(40);
+            mCompassView.setDegrees(0);
+        }
+        else{
+            mCompassView.setVisibility(View.INVISIBLE);
+        }
 
         mListener.onHikeFragmentReady();
         return rootView;
@@ -172,7 +123,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
     public void updateCompass(double value){
         //Tell the animator thread to begin
-        if(mCompassAnimator!=null){
+        if(mCompassAnimator!=null && mShowCompassView){
             mCompassAnimator.setNewValue((float) value);
         }
     }

@@ -5,16 +5,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
-import java.util.Date;
-
-import com.google.android.gms.location.LocationListener;
 
 import me.dotteam.dotprod.HikeViewPagerActivity;
 import me.dotteam.dotprod.hw.HikeHardwareManager;
@@ -96,11 +94,20 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
         mNotifier = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationID = this.getApplicationInfo().uid;
-        firstNotify();
-//        serviceThread = new TimeUpdate(this);
-//        serviceThread.start();
-        Log.d("Collect","SERVICE STARTED!!!");
 
+        //Read the preferences to see if we build a notification
+        boolean activeNotifications = true;
+        SharedPreferences prefMan = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(prefMan.contains("notifications_show")){
+            activeNotifications = prefMan.getBoolean("notifications_show",true);
+        }
+
+        if(activeNotifications) {
+            firstNotify();
+        }
+
+
+        Log.d(TAG,"Statistical Collection has begun");
         //register yourself
         HikeHardwareManager.getInstance(this).addListener(this);
         HikeLocationEntity.getInstance(this).addListener(this);
@@ -117,10 +124,15 @@ public class SessionCollectionService extends Service implements SensorListenerI
 
         mBuilder.setContentIntent(
                 PendingIntent.getActivity(
-                        this,0,new Intent(this, HikeViewPagerActivity.class),PendingIntent.FLAG_UPDATE_CURRENT)
+                        this,0,new Intent(this, HikeViewPagerActivity.class),0)
                 );
 
         mNotifier.notify(notificationID,mBuilder.build());
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId){
+        return START_NOT_STICKY;
     }
 
     /**
@@ -150,7 +162,7 @@ public class SessionCollectionService extends Service implements SensorListenerI
      */
     @Override
     public void update(HikeSensors hikesensors, double value) {
-        if(!mHDD.IsPaused()) {
+        if(!mHDD.isPaused()) {
             Log.d("SCS", String.format("Got update %s: %s", hikesensors.toString(), value));
             switch (hikesensors) {
                 case TEMPERATURE: {
