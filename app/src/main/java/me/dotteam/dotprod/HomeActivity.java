@@ -91,6 +91,24 @@ public class HomeActivity extends AppCompatActivity{
             }
         });
 
+        //Intent to Sensors
+        mLinearLayoutSensors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentSensors = new Intent(HomeActivity.this, SensorsActivity.class);
+                startActivity(intentSensors);
+            }
+        });
+
+        //Intent to Past Hikes
+        mLinearLayoutPastHikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentPastHike = new Intent(HomeActivity.this, PastHikesActivity.class);
+                startActivity(intentPastHike);
+            }
+        });
+
         // Shows Setting Dialogue
         mLinearLayoutSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -100,23 +118,5 @@ public class HomeActivity extends AppCompatActivity{
                                 getString("example_text", ""));
             }
         });
-
-        mLinearLayoutSensors.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //NOTE: Uncomment to cause an unconditional exception.
-                //Integer integers[] = new Integer[Integer.MAX_VALUE];
-            }
-        });
-
-        mLinearLayoutPastHikes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentPastHike = new Intent(HomeActivity.this, PastHikesActivity.class);
-                startActivity(intentPastHike);
-            }
-        });
-
     }
-
 }

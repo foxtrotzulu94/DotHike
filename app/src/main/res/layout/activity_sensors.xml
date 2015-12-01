@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.dotteam.dotprod.SensorsActivity"
+    android:orientation="vertical"
+    android:background="@color/hike_indigo_baltik">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:background="@color/hike_black_tricorn">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Sensors"
+            android:id="@+id/textView2"
+            android:layout_weight="0.2"
+            android:gravity="center_vertical"
+            android:textSize="30sp"
+            android:textColor="@color/hike_blue_grey"
+            android:background="@color/hike_black_tricorn" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Done"
+            android:id="@+id/buttonDone"
+            android:layout_weight="0.8"
+            android:background="@color/hike_black_tricorn"
+            android:textColor="@color/hike_blue_grey" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.1"></LinearLayout>
+</LinearLayout>
