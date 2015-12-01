@@ -38,5 +38,11 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.1"></LinearLayout>
+        android:layout_weight="0.1">
+
+        <com.redinput.compassview.CompassView
+            android:id="@+id/compass"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+    </LinearLayout>
 </LinearLayout>

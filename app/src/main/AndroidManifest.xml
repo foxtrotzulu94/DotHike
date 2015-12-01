@@ -110,7 +110,12 @@
         </activity>
         <activity
             android:name=".SensorsActivity"
-            android:label="@string/title_activity_sensors" >
+            android:label="@string/title_activity_sensors"
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.dotteam.dotprod.HomeActivity" />
         </activity>
     </application>
 
