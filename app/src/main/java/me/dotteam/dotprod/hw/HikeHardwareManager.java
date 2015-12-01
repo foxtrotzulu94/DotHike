@@ -43,19 +43,19 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
     private int mSensorDelay = SensorManager.SENSOR_DELAY_NORMAL;
 
     // Android Sensors
-    SensorManager mSensorManager;
-    android.hardware.Sensor mPedometer;
-    android.hardware.Sensor mAccelerometer;
-    android.hardware.Sensor mMagnetometer;
-    PedometerEventListener mPedometerListener;
-    AccelerometerAsPedometerListener mFallbackPedometerListener;
-    CompassEventListener mCompassListener;
-    android.hardware.Sensor mFallbackTemperature;
-    android.hardware.Sensor mFallbackHumidity;
-    android.hardware.Sensor mFallbackPressure;
-    FallbackTemperatureEventListener mFallbackTemperatureListener;
-    FallbackHumidityEventListener mFallbackHumidityListener;
-    FallbackPressureEventListener mFallbackPressureListener;
+    private SensorManager mSensorManager;
+    private android.hardware.Sensor mPedometer;
+    private android.hardware.Sensor mAccelerometer;
+    private android.hardware.Sensor mMagnetometer;
+    private PedometerEventListener mPedometerListener;
+    private AccelerometerAsPedometerListener mFallbackPedometerListener;
+    private CompassEventListener mCompassListener;
+    private android.hardware.Sensor mFallbackTemperature;
+    private android.hardware.Sensor mFallbackHumidity;
+    private android.hardware.Sensor mFallbackPressure;
+    private FallbackTemperatureEventListener mFallbackTemperatureListener;
+    private FallbackHumidityEventListener mFallbackHumidityListener;
+    private FallbackPressureEventListener mFallbackPressureListener;
 
     boolean usingFallbackSensors = false;
 
@@ -143,7 +143,7 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         System.gc(); //Mark for Cleanup!
     }
 
-    private void startPedometer() {
+    public void startPedometer() {
         if(mPedometer!=null){
             dedicatedPedometer = true;
             if(mPedometerListener==null){
