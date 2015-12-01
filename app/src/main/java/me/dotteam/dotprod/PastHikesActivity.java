@@ -109,6 +109,7 @@ public class PastHikesActivity extends AppCompatActivity {
      * Reference to HikeDataDirector
      */
     private HikeDataDirector mHDD;
+    private Button mbuttonDone;
 
     /**
      * Reference to GridView
@@ -121,9 +122,10 @@ public class PastHikesActivity extends AppCompatActivity {
      * Method to retrieve UI elements and assign them to the associated data member
      */
     private void retrieveInterfaceElements(){
+        mbuttonDone = (Button) findViewById(R.id.buttonDone);
         titleText = (TextView) findViewById(R.id.textView_pastHikesTitle);
         pastHikes = (GridView) findViewById(R.id.listView_pastHikes);
-        resetHikes= (Button) findViewById(R.id.button_resetPastHikes);
+//        resetHikes= (Button) findViewById(R.id.button_resetPastHikes);
     }
 
     @Override
@@ -159,6 +161,15 @@ public class PastHikesActivity extends AppCompatActivity {
         else{
             titleText.setText(titleText.getText().toString()+"\n No Hikes to Display");
         }
+
+        mbuttonDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentHome = new Intent(PastHikesActivity.this, HomeActivity.class);
+                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentHome);
+            }
+        });
     }
 
     @Override
