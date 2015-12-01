@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
@@ -28,7 +29,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Date;
+import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -141,7 +145,6 @@ public class HikeSettingsActivity extends PreferenceActivity {
                 // using RingtoneManager.
                 if (TextUtils.isEmpty(stringValue)) {
                     // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary(R.string.pref_ringtone_silent);
 
                 } else {
                     Ringtone ringtone = RingtoneManager.getRingtone(
@@ -218,6 +221,67 @@ public class HikeSettingsActivity extends PreferenceActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("extsensor"));
             bindPreferenceSummaryToValue(findPreference("sensor_refresh"));
+
+            Preference myPref = findPreference("extsensor_period");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(final Preference preference) {
+                    SeekBar inputVal = new SeekBar(getActivity());
+                    final TextView valueText = new TextView(getActivity());
+                    LinearLayout root = new LinearLayout(getActivity());
+                    SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+                    inputVal.setMax(2550);
+                    inputVal.setProgress(appPrefs.getInt(preference.getKey(), 500));
+                    valueText.setText(Integer.toString(inputVal.getProgress()));
+
+
+                    root.setOrientation(LinearLayout.VERTICAL);
+                    root.setGravity(Gravity.CENTER);
+
+                    inputVal.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT));
+                    valueText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    valueText.setGravity(Gravity.CENTER);
+                    valueText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    valueText.setText(String.format("%s ms",
+                            PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(preference.getKey(),500)));
+                    root.addView(inputVal);
+                    root.addView(valueText);
+
+                    inputVal.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                        @Override
+                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                            if (progress < 50) {
+                                progress = 50;
+                            }
+                            valueText.setText(String.format("%s ms", progress));
+                        }
+
+                        @Override
+                        public void onStartTrackingTouch(SeekBar seekBar) {
+
+                        }
+
+                        @Override
+                        public void onStopTrackingTouch(SeekBar seekBar) {
+                            SharedPreferences appPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            SharedPreferences.Editor edit = appPrefs.edit();
+                            edit.putInt(preference.getKey(), seekBar.getProgress());
+                            edit.apply();
+                        }
+                    });
+
+
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                    dialog.setTitle("Change Sensor Update Frequency");
+                    dialog.setMessage("Higher values imply Lower Frequency and Less Battery Drain");
+                    dialog.setView(root);
+                    dialog.show();
+                    return false;
+                }
+            });
         }
     }
 
@@ -270,6 +334,7 @@ public class HikeSettingsActivity extends PreferenceActivity {
                     valueText.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT));
                     valueText.setGravity(Gravity.CENTER);
+                    valueText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     root.addView(inputVal);
                     root.addView(valueText);
 
@@ -316,10 +381,32 @@ public class HikeSettingsActivity extends PreferenceActivity {
             myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+
                     //TODO: Make a nicer DialogFragment with some text about .Hike
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                     dialog.setTitle("About .Hike");
-                    dialog.setMessage("Thanks devs");
+                    dialog.setMessage(getResources().getString(R.string.app_summary));
+                    if (BuildConfig.DEBUG) {
+                        LinearLayout root = new LinearLayout(getActivity());
+                        TextView debugInfo = new TextView(getActivity());
+
+
+                        Date buildDate = new Date(BuildConfig.TIMESTAMP);
+                        Formatter formatter = new Formatter(new StringBuilder(), Locale.US);
+                        formatter.format("[ %1$s build ] \nBuild: %2$s\nCommitt: %3$s \n[from %4$s]",
+                                BuildConfig.BUILD_TYPE,
+                                buildDate.toString(),
+                                BuildConfig.GIT_COMMIT_INFO,
+                                BuildConfig.GIT_BRANCH);
+
+                        debugInfo.setText(formatter.toString());
+                        debugInfo.setLayoutParams(new LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT));
+                        root.addView(debugInfo);
+                        root.setPadding(20, 20, 20, 20);
+                        dialog.setView(root);
+                    }
                     dialog.show();
                     return false;
                 }

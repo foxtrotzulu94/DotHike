@@ -1,7 +1,9 @@
 package me.dotteam.dotprod;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -197,8 +199,17 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
             Log.d(TAG, "onMapReady: " + mHikeId);
             googleMap.clear();
 
-            // Set MapType to Terrain
-            googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            // Set Map Type to Terrain
+            SharedPreferences prefMan= PreferenceManager.getDefaultSharedPreferences(getContext());
+            if(prefMan.contains("display_maptype")){
+                googleMap.setMapType(
+                        Integer.parseInt(prefMan.getString(
+                                "display_maptype",
+                                Integer.toString(GoogleMap.MAP_TYPE_TERRAIN))));
+            }
+            else {
+                googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            }
 
             // Change GoogleMap's UI Settings to remove toolbar stuff
             UiSettings mapSettings = googleMap.getUiSettings();

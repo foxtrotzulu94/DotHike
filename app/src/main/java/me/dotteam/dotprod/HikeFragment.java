@@ -1,8 +1,9 @@
 package me.dotteam.dotprod;
 
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,14 +14,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.redinput.compassview.CompassView;
-
-import java.util.Random;
 
 /**
  * Created by EricTremblay on 15-11-13.
@@ -97,6 +95,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
     private SupportMapFragment mSupportMapFragment;
     private GoogleMap mGoogleMap;
     private CompassView mCompassView;
+    private boolean mShowCompassView =true;
 
     private CompassAnimator mCompassAnimator;
 
@@ -137,16 +136,27 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         mButtonPauseHike = (Button) rootView.findViewById(R.id.buttonPauseHike);
         mImageViewEnvArrow = (ImageView) rootView.findViewById(R.id.imageEnvArrow);
         mImageViewNavArrow = (ImageView) rootView.findViewById(R.id.imageNavArrow);
-
         mCompassView = (CompassView) rootView.findViewById(R.id.compass);
-        mCompassView.setRangeDegrees(180);
-        mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_indigo_baltik));
-        mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
-        mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
-        mCompassView.setTextColor(getResources().getColor(R.color.hike_palisade));
-        mCompassView.setShowMarker(true);
-        mCompassView.setTextSize(40);
-        mCompassView.setDegrees(0);
+
+
+        //Setup the compass if in prefs
+        SharedPreferences prefMan = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if(prefMan.contains("compass_ui")){
+            mShowCompassView = prefMan.getBoolean("compass_ui",true);
+        }
+        if(mShowCompassView) {
+            mCompassView.setRangeDegrees(180);
+            mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_indigo_baltik));
+            mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
+            mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
+            mCompassView.setTextColor(getResources().getColor(R.color.hike_palisade));
+            mCompassView.setShowMarker(true);
+            mCompassView.setTextSize(40);
+            mCompassView.setDegrees(0);
+        }
+        else{
+            mCompassView.setVisibility(View.INVISIBLE);
+        }
 
         mListener.onHikeFragmentReady();
         return rootView;
@@ -171,7 +181,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
     public void updateCompass(double value){
         //Tell the animator thread to begin
-        if(mCompassAnimator!=null){
+        if(mCompassAnimator!=null && mShowCompassView){
             mCompassAnimator.setNewValue((float) value);
         }
     }

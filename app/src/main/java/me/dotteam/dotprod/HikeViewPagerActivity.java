@@ -1,7 +1,9 @@
 package me.dotteam.dotprod;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -307,8 +309,16 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         mMap.setMyLocationEnabled(true);
 
         // Set Map Type to Terrain
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-
+        SharedPreferences prefMan=PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(prefMan.contains("display_maptype")){
+            mMap.setMapType(
+                    Integer.parseInt(prefMan.getString(
+                            "display_maptype",
+                            Integer.toString(GoogleMap.MAP_TYPE_TERRAIN))));
+        }
+        else {
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        }
     }
 
     @Override
