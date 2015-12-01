@@ -25,14 +25,26 @@ import ti.android.ble.common.BluetoothLeService;
 import ti.android.util.CustomToast;
 
 /**
+ * Class that handles connection with Texas Instrument SensorTag using Bluetooth.
+ *
  * Created by EricTremblay on 15-10-30.
  */
 public class SensorTagConnector {
 
+    /**
+     * Interface for listeners that will be notified when a SensorTag is connected or disconnected.
+     */
     public interface STConnectorListener {
 
+        /**
+         * Called when SensorTag is connected
+         * @param btdevice BlueTooth device object that represents the connected SensorTag
+         */
         void onSensorTagConnect(BluetoothDevice btdevice);
 
+        /**
+         * Called when the SensorTag is disconnected
+         */
         void onSensorTagDisconnect();
     }
     // Log
@@ -65,9 +77,13 @@ public class SensorTagConnector {
     private IntentFilter mFilter;
     private String[] mDeviceFilter = null;
 
-    Context mContext;
-    List<STConnectorListener> mListeners;
+    private Context mContext;
+    private List<STConnectorListener> mListeners;
 
+    /**
+     * Constructor for SensorTagConnector. Starts the SensorTag connection process.
+     * @param context Context of activity which initiated SensorTag connection.
+     */
     public SensorTagConnector(Context context) {
         mContext = context;
         mListeners = new ArrayList<>();
@@ -116,10 +132,17 @@ public class SensorTagConnector {
         }
     }
 
+    /**
+     * Add listener to SensorTagConnector. These listeners will be notified when the SensorTag is connected or disconnected.
+     * @param listener Listener to be registed to SensorTagConnector.
+     */
     public void addListener(STConnectorListener listener) {
         mListeners.add(listener);
     }
 
+    /**
+     * Stop SensorTag connection and Bluetooth services
+     */
     public void stop(){
         scanLeDevice(false);
         if(mBluetoothLeService!=null) {
@@ -132,6 +155,11 @@ public class SensorTagConnector {
 
     }
 
+    /**
+     * Enable scanning for SensorTag devices.
+     * @param enable True starts the scanning, false stops the scanning
+     * @return Boolean which indicates if the scanning has started successfully.
+     */
     private boolean scanLeDevice(boolean enable) {
         if (enable) {
             mScanning = mBtAdapter.startLeScan(mLeScanCallback);
@@ -143,10 +171,19 @@ public class SensorTagConnector {
         return mScanning;
     }
 
+    /**
+     * Get for list of Bluetooth devices information
+     * @return List of BleDeviceInfo
+     */
     List<BleDeviceInfo> getDeviceInfoList() {
         return mDeviceInfoList;
     }
 
+    /**
+     * Check if Bluetooth device is a SensorTag.
+     * @param device Device to check
+     * @return Returns true if the device is a SensorTag, false if it is not.
+     */
     private boolean checkDeviceFilter(BluetoothDevice device) {
         if(device == null || device.getName() == null) {
             return false;
@@ -166,12 +203,23 @@ public class SensorTagConnector {
             return true;
     }
 
+    /**
+     * Create Bluetooth device information
+     * @param device
+     * @param rssi
+     * @return
+     */
     private BleDeviceInfo createDeviceInfo(BluetoothDevice device, int rssi) {
         BleDeviceInfo deviceInfo = new BleDeviceInfo(device, rssi);
 
         return deviceInfo;
     }
 
+    /**
+     * Find device information of Bluetooth device.
+     * @param device
+     * @return
+     */
     private BleDeviceInfo findDeviceInfo(BluetoothDevice device) {
         for (int i = 0; i < mDeviceInfoList.size(); i++) {
             if (mDeviceInfoList.get(i).getBluetoothDevice().getAddress()
@@ -182,6 +230,10 @@ public class SensorTagConnector {
         return null;
     }
 
+    /**
+     * Add device information to list
+     * @param device
+     */
     private void addDevice(BleDeviceInfo device) {
         mNumDevs++;
         mDeviceInfoList.add(device);
@@ -192,6 +244,9 @@ public class SensorTagConnector {
         }
     }
 
+    /**
+     * Called when the SensorTag is connected or discconected
+     */
     void onConnect() {
         Log.d(TAG, "Connect Called");
         if (mNumDevs > 0) {
@@ -217,6 +272,11 @@ public class SensorTagConnector {
         }
     }
 
+    /**
+     * Check if a Bluetooth device already exists.
+     * @param address Mac address of Bluetooth device
+     * @return
+     */
     private boolean deviceInfoExists(String address) {
         for (int i = 0; i < mDeviceInfoList.size(); i++) {
             if (mDeviceInfoList.get(i).getBluetoothDevice().getAddress().equals(address)) {
@@ -226,6 +286,9 @@ public class SensorTagConnector {
         return false;
     }
 
+    /**
+     * Start Bluetooth Low-Energy Service to connect to Bluetooth devices.
+     */
     private void startBluetoothLeService() {
         Intent bindIntent = new Intent(mContext, BluetoothLeService.class);
         mContext.startService(bindIntent);
@@ -244,6 +307,10 @@ public class SensorTagConnector {
     //
     // Broadcasted actions from Bluetooth adapter and BluetoothLeService
     //
+
+    /**
+     * BroadcastReceiver object which receives broadcasts from Bluetooth adapter and Bluetooth service
+     */
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -308,7 +375,9 @@ public class SensorTagConnector {
         }
     };
 
-    // Code to manage Service life cycle.
+    /**
+     * Code to manage Service life cycle.
+     */
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         public void onServiceConnected(ComponentName componentName, IBinder service) {
@@ -333,8 +402,10 @@ public class SensorTagConnector {
         }
     };
 
-    // Device scan callback.
-    // NB! Nexus 4 and Nexus 7 (2012) only provide one scan result per scan
+    /**
+     * Device scan callback.
+     * NB! Nexus 4 and Nexus 7 (2012) only provide one scan result per scan
+     */
     private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
 
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
@@ -361,6 +432,10 @@ public class SensorTagConnector {
 
     };
 
+    /**
+     * Get BluetoothDevice
+     * @return current Bluetooth device that is connected
+     */
     BluetoothDevice getBluetoothDevice() {
         return mBluetoothDevice;
     }
