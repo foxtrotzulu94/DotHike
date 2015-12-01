@@ -38,6 +38,8 @@
     <!-- Sensor Settings-->
     <string name="pref_header_sensors">Sensors</string>
     <string name="pref_sensors_device_sensorconfig_title">Device Sensor Configuration</string>
+    <string name="pref_sensors_fallback_title">Fallback on Android Sensors</string>
+    <string name="pref_sensors_fallback_summary">In the absence of an External Sensor, your device might be able to record environmental conditions. </string>
     <string-array name="pref_sensors_device_update">
         <item>Real Time (Battery Killer)</item>
         <item>Fastest</item>

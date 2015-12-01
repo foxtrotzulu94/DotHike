@@ -1,6 +1,6 @@
 package me.dotteam.dotprod.loc;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;

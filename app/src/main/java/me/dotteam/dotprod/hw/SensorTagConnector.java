@@ -70,7 +70,7 @@ public class SensorTagConnector {
 
     public SensorTagConnector(Context context) {
         mContext = context;
-        mListeners = new ArrayList<STConnectorListener>();
+        mListeners = new ArrayList<>();
         // Use this check to determine whether BLE is supported on the device. Then
         // you can selectively disable BLE-related features.
         if (!mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -90,7 +90,7 @@ public class SensorTagConnector {
         }
 
         // Initialize device list container and device filter
-        mDeviceInfoList = new ArrayList<BleDeviceInfo>();
+        mDeviceInfoList = new ArrayList<>();
         Resources res = mContext.getResources();
         mDeviceFilter = res.getStringArray(ca.concordia.sensortag.R.array.device_filter);
 
@@ -125,13 +125,9 @@ public class SensorTagConnector {
         if(mBluetoothLeService!=null) {
             mBluetoothLeService.close();
             mBluetoothLeService.stopService(new Intent(mContext, BluetoothLeService.class));
-//            mBluetoothLeService = null;
             mContext.stopService(new Intent(mContext, BluetoothLeService.class));
             mContext.unbindService(mServiceConnection);
             mContext.unregisterReceiver(mReceiver);
-        }
-        if(mBtAdapter.isEnabled()){
-            mBtAdapter.disable();
         }
 
     }
@@ -210,7 +206,7 @@ public class SensorTagConnector {
                     Log.d(TAG, "Connecting Bluetooth Device");
                     boolean ok = mBluetoothLeService.connect(mBluetoothDevice.getAddress());
                     if (!ok) {
-                        //setError("Connect failed");
+                        Log.e(TAG, "Connection Failed");
                     }
                     scanLeDevice(false);
                     break;
@@ -281,6 +277,7 @@ public class SensorTagConnector {
                     }
                 }
                 else {
+                    Log.e(TAG, "onReceive Connection Failed");
                     //setError("Connect failed. Status: " + status);
                 }
 
@@ -296,6 +293,7 @@ public class SensorTagConnector {
                     mListeners.get(i).onSensorTagDisconnect();
                 }
                 if (status == BluetoothGatt.GATT_SUCCESS) {
+                    Log.d(TAG, "onReceive Successfully Connected to GATT");
                 }
                 else {
                     //setError("Disconnect failed. Status: " + status);
