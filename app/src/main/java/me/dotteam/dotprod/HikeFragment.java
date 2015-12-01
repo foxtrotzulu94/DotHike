@@ -113,7 +113,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement HikeFragmentListener");
         }
-        mCompassAnimator = new CompassAnimator(getActivity(),mCompassView);
+
     }
 
     @Override
@@ -137,8 +137,9 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         mButtonPauseHike = (Button) rootView.findViewById(R.id.buttonPauseHike);
         mImageViewEnvArrow = (ImageView) rootView.findViewById(R.id.imageEnvArrow);
         mImageViewNavArrow = (ImageView) rootView.findViewById(R.id.imageNavArrow);
-
         mCompassView = (CompassView) rootView.findViewById(R.id.compass);
+
+        mCompassAnimator = new CompassAnimator(getActivity(),mCompassView);
         mCompassView.setRangeDegrees(180);
         mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_naval));
         mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
