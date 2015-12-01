@@ -51,6 +51,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     private static final int ALTITUDE_CHART_HEIGHT=500;//DP
     private static final int INST_PACE_CHART_HEIGHT=500;//DP
     private static final int STATISTIC_CHART_HEIGHT=300;//DP
+    private static final float FILTER_ALPHA = 0.25f;
 
     protected HikeDataDirector mHDD;
 
@@ -186,8 +187,17 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
                 mAltitudeChart = new LineChart(this);
                 List<Entry> entries = new ArrayList<>(listSize);
 
+                float[] altitudeValues = new float[mCoordinatesList.size()];
+
+                for (int i = 0; i < mCoordinatesList.size(); i++) {
+                    altitudeValues[i] = (float) mCoordinatesList.get(i).getAltitude();
+                }
+
+                float[] filteredAltitude = lowpassFilter(altitudeValues);
+
                 for (int i = 0; i < listSize; i++) {
-                    entries.add(new Entry((float) mCoordinatesList.get(i).getAltitude(), i));
+                    //entries.add(new Entry((float) mCoordinatesList.get(i).getAltitude(), i));
+                    entries.add(new Entry(filteredAltitude[i], i));
                 }
                 LineDataSet altitudePoints = new LineDataSet(entries, "Altitude during Hike");
 
@@ -416,6 +426,17 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextStepCountContainer.addView(textStepCountResults);
     }
 
+    public float[] lowpassFilter(float[] input) {
+        float[] output = new float[input.length];
+
+        output[0] = input[0];
+
+        for (int i = 1; i < input.length; i++) {
+            output[i] = output[i - 1] + FILTER_ALPHA * (input[i] - output[i - 1]);
+        }
+
+        return output;
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -455,7 +476,10 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
                 mMap.addPolyline(polylineOptions);
                 // Zoom in to map
                 LatLngBounds bounds = boundsBuilder.build();
-                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
+
+                // TODO: Fix padding. Why does it not work?
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+
 
                 LatLng startPos = new LatLng(mCoordinatesList.get(0).getLatitude(), mCoordinatesList.get(0).getLongitude());
                 LatLng endPos = new LatLng(mCoordinatesList.get(mCoordinatesList.size() - 1).getLatitude(),

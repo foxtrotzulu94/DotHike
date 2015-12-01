@@ -3,7 +3,8 @@ package me.dotteam.dotprod.loc;
 import android.location.Location;
 
 /**
- * Listener for HikeLocationEntity location callbacks
+ * Listener for HikeLocationEntity location callbacks.
+ *
  * Created by EricTremblay on 15-11-20.
  */
 public interface HikeLocationListener {
