@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.redinput.compassview.CompassView;
 
@@ -19,21 +20,26 @@ import me.dotteam.dotprod.hw.SensorListenerInterface;
 public class SensorsActivity extends AppCompatActivity implements SensorListenerInterface{
 
     private Button mButtonDone;
+    private TextView mTextDisplayTemperature;
+    private TextView mTextDisplayHumidity;
+    private TextView mTextDisplayPressure;
+
     private CompassAnimator mCompassAnimator;
     private CompassView mCompassView;
     private HikeHardwareManager mHHM;
 
     public void update(HikeSensors hikesensors, double value) {
+        String valueString = String.format("%.2f",value);
         switch (hikesensors){
 
             case TEMPERATURE:
-                updateTemperature(value);
+                updateTemperature(valueString);
                 break;
             case HUMIDITY:
-                updateHumidity(value);
+                updateHumidity(valueString);
                 break;
             case PRESSURE:
-                updatePressure(value);
+                updatePressure(valueString);
                 break;
             case PEDOMETER:
                 break;
@@ -44,7 +50,6 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
     }
 
     void updateTemperature(final String temp) {
-        mTemperatureString = temp;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -56,7 +61,6 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
     }
 
     void updateHumidity(final String hum) {
-        mHumidityString = hum;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -68,7 +72,6 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
     }
 
     void updatePressure(final String pressure) {
-        mPressureString = pressure;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -81,6 +84,9 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
 
     private void setMemberIDs() {
         mButtonDone = (Button) findViewById(R.id.buttonDone);
+        mTextDisplayHumidity = (TextView) findViewById(R.id.textViewDispHum);
+        mTextDisplayPressure = (TextView) findViewById(R.id.textViewDispPress);
+        mTextDisplayTemperature = (TextView) findViewById(R.id.textViewDispTemp);
     }
 
 
@@ -103,9 +109,6 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
         // Instantiate HikeHardwareManager
         mHHM = HikeHardwareManager.getInstance(this);
 
-        // Start SensorTag connection and pedometer
-        mHHM.startSensors(this);
-
         mCompassAnimator = new CompassAnimator(this, mCompassView);
 
         mButtonDone.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +125,7 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
     protected void onStart() {
         super.onStart();
 
-        // Add Listener to HHM
+        //Start sensors and compass
         mHHM.startCompass();
         mHHM.startSensors(this);
     }
@@ -130,6 +133,7 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
     @Override
     protected void onResume() {
         super.onResume();
+        // Add Listener to HHM
         mHHM.addListener(this);
     }
 
@@ -137,7 +141,7 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
     protected void onStop() {
         super.onStop();
 
-        // Remove Listener from HHM
+        // Remove Listener and compass from HHM
         mHHM.stopCompass();
         mHHM.removeListener(this);
     }
@@ -145,6 +149,7 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //stop sensors
         mHHM.stopSensors();
     }
 

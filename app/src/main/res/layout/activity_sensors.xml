@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.9"
-        android:background="@color/hike_black_tricorn"
-        android:padding="7sp">
+        android:background="@color/hike_black_tricorn">
 
         <TextView
             android:layout_width="match_parent"
@@ -74,7 +73,7 @@
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/textDisplayTemperature"
-                    android:id="@+id/textView9"
+                    android:id="@+id/textViewDispTemp"
                     android:gravity="top|center_vertical|center_horizontal"
                     android:layout_weight="0.5"
                     android:textColor="@color/hike_blue_grey" />
@@ -116,7 +115,7 @@
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/textDisplayHumidity"
-                    android:id="@+id/textView9"
+                    android:id="@+id/textViewDispHum"
                     android:layout_weight="0.5"
                     android:gravity="top|center_vertical|center_horizontal"
                     android:textColor="@color/hike_blue_grey" />
@@ -158,7 +157,7 @@
                     android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/textDisplayPressure"
-                    android:id="@+id/textView9"
+                    android:id="@+id/textViewDispPress"
                     android:layout_weight="0.5"
                     android:gravity="top|center_vertical|center_horizontal"
                     android:textColor="@color/hike_blue_grey" />
