@@ -389,13 +389,16 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
                 if (results[0] > location.getAccuracy()) {
                     // update last known location
                     mLastKnownLocation = location;
-
-                    // Notify listeners
-                    for (int i = 0; i < mListeners.size(); i++) {
-                        mListeners.get(i).onLocationChanged(location, results[0]);
-                    }
+                    broadcastUpdate(location, results[0]);
                 }
             }
+        }
+    }
+
+    private void broadcastUpdate(Location location, float distance){
+        // Notify listeners
+        for (int i = 0; i < mListeners.size(); i++) {
+            mListeners.get(i).onLocationChanged(location, distance);
         }
     }
 

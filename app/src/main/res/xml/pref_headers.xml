@@ -20,4 +20,8 @@
         android:fragment="me.dotteam.dotprod.HikeSettingsActivity$AboutPreferenceFragment"
         android:title="@string/pref_header_about" />
 
+    <header
+        android:fragment="me.dotteam.dotprod.HikeSettingsActivity$DemoDayFragment"
+        android:title="Demo Features" />
+
 </preference-headers>

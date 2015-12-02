@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="demo"
+        android:title="Begin The Demo"
+        android:summary="This will automatically drive all features of the application according to your settings below"/>
+
+    <CheckBoxPreference
+        android:key="demodrive_location"
+        android:title="Automatic Hiking Route"
+        android:summary="A simple 24-point, pre-defined Hiking Walk in Ontario"
+        android:defaultValue="true"
+        />
+
+    <CheckBoxPreference
+        android:key="demodrive_sensors"
+        android:dependency="demodrive_location"
+        android:title="Drive Sensors"
+        android:summary="Mock Sensor Input?"
+        android:defaultValue="true"
+        />
+
+    <CheckBoxPreference
+        android:key="demodrive_stepcount"
+        android:dependency="demodrive_location"
+        android:title="Update Step Count"
+        android:summary="As if you were taking a hike yourself"
+        android:defaultValue="true"
+        />
+
+</PreferenceScreen>

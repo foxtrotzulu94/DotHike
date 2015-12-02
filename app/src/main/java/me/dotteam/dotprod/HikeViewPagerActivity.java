@@ -237,49 +237,52 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     }
 
     @Override
-    public void onLocationChanged(Location location, float distance) {
+    public void onLocationChanged(final Location location, final float distance) {
         Log.d(TAG, "onLocationChanged");
         // Set TextViews to new values
-        if (mTextLatitude != null) {
-            mTextLatitude.setText(String.valueOf(location.getLatitude()));
-        }
-        if (mTextLongitude != null) {
-            mTextLongitude.setText(String.valueOf(location.getLongitude()));
-        }
-        if (mTextAltitude != null) {
-            mTextAltitude.setText(String.valueOf(location.getAltitude()));
-        }
-        if (mTextBearing != null) {
-//            mTextBearing.setText(String.valueOf(location.getBearing()));
-        }
-        if (mTextAccuracy != null) {
-//            mTextAccuracy.setText(String.valueOf(location.getAccuracy()));
-        }
 
-        if (mLocation == null) {
-            mLocation = new Location(location);
+        //Explicitly run this from the UI Thread!
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (mTextLatitude != null) {
+                    mTextLatitude.setText(String.valueOf(location.getLatitude()));
+                }
+                if (mTextLongitude != null) {
+                    mTextLongitude.setText(String.valueOf(location.getLongitude()));
+                }
+                if (mTextAltitude != null) {
+                    mTextAltitude.setText(String.valueOf(location.getAltitude()));
+                }
 
-            if (mMapReady) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mapZoomCameraToLocation(latLng);
-                mMapPolylineOptions.add(latLng);
-                mMap.addPolyline(mMapPolylineOptions);
+                if (mLocation == null) {
+                    mLocation = new Location(location);
+
+                    if (mMapReady) {
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        mapZoomCameraToLocation(latLng);
+                        mMapPolylineOptions.add(latLng);
+                        mMap.addPolyline(mMapPolylineOptions);
+                    }
+                } else {
+                    mLocation = location;
+
+                    if (mMapReady) {
+                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                        mMapPolylineOptions.add(latLng);
+                        mMap.addPolyline(mMapPolylineOptions);
+                    }
+
+                    mDistanceTravelled += distance;
+
+                    if (mTextDistanceTraveled != null) {
+                        mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+                    }
+                }
             }
-        } else {
-            mLocation = location;
+        });
 
-            if (mMapReady) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mMapPolylineOptions.add(latLng);
-                mMap.addPolyline(mMapPolylineOptions);
-            }
 
-            mDistanceTravelled += distance;
-
-            if (mTextDistanceTraveled != null) {
-                mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
-            }
-        }
     }
 
     /// ===========================================

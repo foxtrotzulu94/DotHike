@@ -247,7 +247,7 @@ public class HikeSettingsActivity extends PreferenceActivity {
                     valueText.setGravity(Gravity.CENTER);
                     valueText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     valueText.setText(String.format("%s ms",
-                            PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(preference.getKey(),500)));
+                            PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(preference.getKey(), 500)));
                     root.addView(inputVal);
                     root.addView(valueText);
 
@@ -456,6 +456,31 @@ public class HikeSettingsActivity extends PreferenceActivity {
                     dialog.setTitle("Special Thanks from Team Dot");
                     dialog.setMessage(getString(R.string.special_thanks));
                     dialog.show();
+                    return false;
+                }
+            });
+        }
+    }
+
+    public static class DemoDayFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_demo);
+
+            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+            // to their values. When their values change, their summaries are
+            // updated to reflect the new value, per the Android Design
+            // guidelines.
+//            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            Preference myPref =  findPreference("demo");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if(!DemoShow.isRunning){
+                        DemoShow demo = new DemoShow(getActivity().getApplicationContext());
+                        demo.start();
+                    }
                     return false;
                 }
             });
