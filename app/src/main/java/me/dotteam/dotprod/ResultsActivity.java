@@ -362,6 +362,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 
     protected void setupOtherInfoLayout(){
         SessionData results = mHDD.getSessionData();
+        StringBuilder StringBuild = new StringBuilder();
 
         //Total Distance Travelled
         TextView textDistTravl = new TextView(this);
@@ -375,12 +376,11 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         textHikeTime.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextHikeTimeContainer.addView(textHikeTime);
 
-        StringBuilder HikeTimeResults = new StringBuilder();
-        HikeTimeResults.append(String.valueOf(results.hikeEndTime()));
+        StringBuild.append(String.valueOf(results.hikeEndTime()));
         TextView textHikeTimeResults = new TextView(this);
-        textHikeTimeResults.setText(HikeTimeResults.toString());
+        textHikeTimeResults.setText(StringBuild.toString());
         textHikeTimeResults.setTextColor(getResources().getColor(R.color.hike_blue_grey));
-        mTextStepCountContainer.addView(textHikeTimeResults);
+        mTextHikeTimeContainer.addView(textHikeTimeResults);
 
         //Average Pace
         TextView textAvgPace = new TextView(this);
@@ -394,10 +394,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         textStepCount.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextStepCountContainer.addView(textStepCount);
 
-        StringBuilder StepCountResults = new StringBuilder();
-        StepCountResults.append(results.getStepCount().toString());
         TextView textStepCountResults = new TextView(this);
-        textStepCount.setText(StepCountResults.toString());
+        textStepCount.setText(results.getStepCount().toString());
         textStepCount.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextStepCountContainer.addView(textStepCountResults);
     }

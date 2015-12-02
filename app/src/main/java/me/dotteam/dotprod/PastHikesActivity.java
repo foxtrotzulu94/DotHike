@@ -80,33 +80,6 @@ public class PastHikesActivity extends AppCompatActivity {
         }
     }
 
-//    private class ResetHikesListener implements View.OnClickListener{
-//        @Override
-//        public void onClick(View v) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(PastHikesActivity.this);
-//            builder.setPositiveButton("Reset Everything", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    //Delete EVERYTHING!
-//                    mHDD.deleteAllData();
-//                    PastHikesActivity.this.recreate();
-//                }
-//            });
-//
-//            builder.setNegativeButton("Keep", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    //Keep my data.
-//                }
-//            });
-//            builder.setMessage("This will delete ALL hikes.\nThere's no going back after this. Are you sure you want to continue?");
-//            builder.setTitle("Delete ALL Stored Data");
-//            AlertDialog deleteAlert = builder.create();
-//            deleteAlert.setCancelable(true);
-//            deleteAlert.show();
-//        }
-//    }
-
     /**
      * Reference to HikeDataDirector
      */
@@ -118,7 +91,6 @@ public class PastHikesActivity extends AppCompatActivity {
      */
     GridView pastHikes;
     TextView titleText;
-    Button resetHikes;
 
     /**
      * Method to retrieve UI elements and assign them to the associated data member
@@ -127,7 +99,6 @@ public class PastHikesActivity extends AppCompatActivity {
         mbuttonDone = (Button) findViewById(R.id.buttonDone);
         titleText = (TextView) findViewById(R.id.textView_pastHikesTitle);
         pastHikes = (GridView) findViewById(R.id.listView_pastHikes);
-//        resetHikes= (Button) findViewById(R.id.button_resetPastHikes);
     }
 
     @Override
@@ -137,8 +108,6 @@ public class PastHikesActivity extends AppCompatActivity {
 
         // Get UI elements
         retrieveInterfaceElements();
-
-//        resetHikes.setOnClickListener(new ResetHikesListener());
 
         // Get referenece to HikeDataDirector
         mHDD = HikeDataDirector.getInstance(this);
@@ -167,9 +136,10 @@ public class PastHikesActivity extends AppCompatActivity {
         mbuttonDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentHome = new Intent(PastHikesActivity.this, HomeActivity.class);
-                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intentHome);
+                finish();
+//                Intent intentHome = new Intent(PastHikesActivity.this, HomeActivity.class);
+//                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(intentHome);
             }
         });
     }
