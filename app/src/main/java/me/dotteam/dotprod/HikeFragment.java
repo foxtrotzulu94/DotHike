@@ -95,6 +95,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
             mCompassView.setShowMarker(true);
             mCompassView.setTextSize(40);
             mCompassView.setDegrees(0);
+            mCompassAnimator = new CompassAnimator(getActivity(),mCompassView);
         }
         else{
             mCompassView.setVisibility(View.INVISIBLE);
@@ -118,7 +119,6 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mListener.onMapReady(googleMap);
-
     }
 
     public void updateCompass(double value){
