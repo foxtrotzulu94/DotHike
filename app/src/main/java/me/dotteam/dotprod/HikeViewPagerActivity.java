@@ -360,11 +360,11 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             public void onClick(View v) {
                 if (!mPauseHikeButtonLocked) {
                     if (!mHikeCurrentlyPaused) {
-                        //Pause the collection and saving of data
+                        //TODO Pause the collection and saving of data
                         mHDD.setPauseStatus(true);
                         mHikeCurrentlyPaused = true;
                     } else {
-                        //UnPause the collection and saving of data
+                        //TODO UnPause the collection and saving of data
                         mHDD.setPauseStatus(false);
                         mHikeCurrentlyPaused = false;
                     }
