@@ -362,7 +362,6 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 
     protected void setupOtherInfoLayout(){
         SessionData results = mHDD.getSessionData();
-        StringBuilder StringBuild = new StringBuilder();
 
         //Total Distance Travelled
         TextView textDistTravl = new TextView(this);
@@ -376,9 +375,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         textHikeTime.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextHikeTimeContainer.addView(textHikeTime);
 
-        StringBuild.append(String.valueOf(results.hikeEndTime()));
         TextView textHikeTimeResults = new TextView(this);
-        textHikeTimeResults.setText(StringBuild.toString());
+        textHikeTimeResults.setText(String.valueOf(results.hikeEndTime()));
         textHikeTimeResults.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextHikeTimeContainer.addView(textHikeTimeResults);
 
