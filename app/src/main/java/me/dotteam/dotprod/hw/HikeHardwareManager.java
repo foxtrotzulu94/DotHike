@@ -197,7 +197,10 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
                     mUsingAndroidEnvironmentalSensors = true;
                 }
             });
-            dialog.create().show();
+            AlertDialog SensorDialog = dialog.create();
+            SensorDialog.setCancelable(false);
+            SensorDialog.setCanceledOnTouchOutside(false);
+            SensorDialog.show();
         }
         else{
             mSTConnector = new SensorTagConnector(mContext);

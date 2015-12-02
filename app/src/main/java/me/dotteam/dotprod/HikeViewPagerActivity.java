@@ -1,5 +1,6 @@
 package me.dotteam.dotprod;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -356,19 +358,33 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                         mHHM.stopSensors();
                         mHDD.setPauseStatus(true);
                         mHikeCurrentlyPaused = true;
-                    } else {
-                        //TODO UnPause the collection and saving of data
-                        mHHM.startSensors(HikeViewPagerActivity.this);
-                        mHDD.setPauseStatus(false);
-                        mHikeCurrentlyPaused = false;
-                    }
-                    //Unlocking Button
-                } else {
-                    mEndHikeButtonLocked = true;
-                    mPauseHikeButtonLocked = false;
 
-                    mHikeFragment.setButtonEndHIke(0.8f);
-                    mHikeFragment.setButtonPauseHIke(0.2f);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(HikeViewPagerActivity.this);
+                        builder.setPositiveButton("Resume", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Unpause Hike!
+                                //TODO UnPause the collection and saving of data
+                                mHHM.startSensors(HikeViewPagerActivity.this);
+                                mHDD.setPauseStatus(false);
+                                mHikeCurrentlyPaused = false;
+                            }
+                        });
+
+                        builder.setMessage("The Hike is Paused, would you like to resume?");
+                        builder.setTitle("Hike Paused");
+                        AlertDialog pauseAlert = builder.create();
+                        pauseAlert.setCancelable(false);
+                        pauseAlert.setCanceledOnTouchOutside(false);
+                        pauseAlert.show();
+                        //Unlocking Button
+                    } else {
+                        mEndHikeButtonLocked = true;
+                        mPauseHikeButtonLocked = false;
+
+                        mHikeFragment.setButtonEndHIke(0.8f);
+                        mHikeFragment.setButtonPauseHIke(0.2f);
+                    }
                 }
             }
         });
