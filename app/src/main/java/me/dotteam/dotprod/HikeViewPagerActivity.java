@@ -93,8 +93,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     private TextView mTextLatitude;
     private TextView mTextLongitude;
     private TextView mTextAltitude;
-    private TextView mTextBearing;
-    private TextView mTextAccuracy;
     private TextView mTextDistanceTraveled;
     private TextView mTextStepCount;
     private float mDistanceTravelled = 0;
@@ -249,12 +247,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         if (mTextAltitude != null) {
             mTextAltitude.setText(String.valueOf(location.getAltitude()));
         }
-        if (mTextBearing != null) {
-//            mTextBearing.setText(String.valueOf(location.getBearing()));
-        }
-        if (mTextAccuracy != null) {
-//            mTextAccuracy.setText(String.valueOf(location.getAccuracy()));
-        }
 
         if (mLocation == null) {
             mLocation = new Location(location);
@@ -361,10 +353,12 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                 if (!mPauseHikeButtonLocked) {
                     if (!mHikeCurrentlyPaused) {
                         //TODO Pause the collection and saving of data
+                        mHHM.stopSensors();
                         mHDD.setPauseStatus(true);
                         mHikeCurrentlyPaused = true;
                     } else {
                         //TODO UnPause the collection and saving of data
+                        mHHM.startSensors(HikeViewPagerActivity.this);
                         mHDD.setPauseStatus(false);
                         mHikeCurrentlyPaused = false;
                     }
