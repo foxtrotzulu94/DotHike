@@ -335,7 +335,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
         return mRequestingLocationUpdates;
     }
 
-    public double[] lowpassFilter(double[] input) {
+    private double[] lowpassFilter(double[] input) {
         double[] output = new double[input.length];
 
         output[0] = input[0];
