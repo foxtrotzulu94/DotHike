@@ -31,9 +31,6 @@ public class CompassAnimator extends Thread{
                 currentDegrees = lerp(currentDegrees,finalDegrees,dampingPercentage);
                 updateUI(currentDegrees);
             }
-            else{
-                runningThread = false;
-            }
 
             try{
                 sleep(34); //30 FPS, no compass needs to be at 60...
@@ -60,8 +57,10 @@ public class CompassAnimator extends Thread{
 
     public void setNewValue(float newValue){
         finalDegrees = newValue % 360;
-        if(!isAlive() && !runningThread)
+        if(!isAlive() && !runningThread) {
             this.start();
+            runningThread = true;
+        }
     }
 
     public void setAndStop(float newValue){
