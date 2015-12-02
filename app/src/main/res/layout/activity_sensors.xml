@@ -1,0 +1,176 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.dotteam.dotprod.SensorsActivity"
+    android:orientation="vertical"
+    android:background="@color/hike_naval">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:background="@color/hike_black_tricorn">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Sensors"
+            android:id="@+id/textView2"
+            android:layout_weight="0.2"
+            android:gravity="center_vertical"
+            android:textSize="30sp"
+            android:textColor="@color/hike_blue_grey"
+            android:background="@color/hike_black_tricorn" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Done"
+            android:id="@+id/buttonDone"
+            android:layout_weight="0.8"
+            android:background="@color/hike_black_tricorn"
+            android:textColor="@color/hike_blue_grey" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.1">
+
+        <com.redinput.compassview.CompassView
+            android:id="@+id/compass"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3" >
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                android:layout_weight="0.3" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Temperature:"
+                    android:id="@+id/textView8"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/hike_blue_grey"
+                    android:gravity="bottom|center_horizontal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/textDisplayTemperature"
+                    android:id="@+id/textViewDispTemp"
+                    android:gravity="top|center_vertical|center_horizontal"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/hike_blue_grey" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageView"
+                android:layout_weight="0.7"
+                android:src="@drawable/thermometer_accent"
+                android:background="@color/hike_indigo_baltik" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3" >
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Relative Humidity"
+                    android:id="@+id/textView8"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/hike_blue_grey"
+                    android:gravity="bottom|center_horizontal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/textDisplayHumidity"
+                    android:id="@+id/textViewDispHum"
+                    android:layout_weight="0.5"
+                    android:gravity="top|center_vertical|center_horizontal"
+                    android:textColor="@color/hike_blue_grey" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageView"
+                android:layout_weight="0.7"
+                android:src="@drawable/hygrometer_accent"
+                android:background="@color/hike_indigo_baltik" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3" >
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Atmospheric Pressure"
+                    android:id="@+id/textView8"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/hike_blue_grey"
+                    android:gravity="bottom|center_horizontal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/textDisplayPressure"
+                    android:id="@+id/textViewDispPress"
+                    android:layout_weight="0.5"
+                    android:gravity="top|center_vertical|center_horizontal"
+                    android:textColor="@color/hike_blue_grey" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageView"
+                android:layout_weight="0.7"
+                android:src="@drawable/hum_meter_accent"
+                android:background="@color/hike_indigo_baltik" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
