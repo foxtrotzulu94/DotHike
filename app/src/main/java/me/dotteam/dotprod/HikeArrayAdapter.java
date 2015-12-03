@@ -292,10 +292,11 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
                         } else {
                             mMap.animateCamera(CameraUpdateFactory.zoomTo(0));
                         }
-                    } else {
-                        mMap.addPolyline(mMapPolylineOptions);
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(mMapBounds, 5));
                     }
+//                    else {
+//                        mMap.addPolyline(mMapPolylineOptions);
+//                        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(mMapBounds, 5));
+//                    }
                 }
             });
         }
