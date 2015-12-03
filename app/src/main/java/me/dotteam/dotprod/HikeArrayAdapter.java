@@ -195,10 +195,19 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
         /**
          * Unique Hike ID
          */
-        Integer mHikeId;
+        private Integer mHikeId;
 
         // List of Coordinates for associated Hike
-        List<Coordinates> mCoordinatesList;
+        private List<Coordinates> mCoordinatesList;
+
+        /**
+         * Reference to google map so it can be used in onMapLoadedListener
+         */
+        private GoogleMap mMap;
+
+        private PolylineOptions mMapPolylineOptions;
+
+        private LatLngBounds mMapBounds;
 
         /**
          * Default Constructor
@@ -212,6 +221,8 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
         public void onMapReady(GoogleMap googleMap) {
             Log.d(TAG, "onMapReady: " + mHikeId);
             googleMap.clear();
+
+            mMap = googleMap;
 
             // Set Map Type to Terrain
             SharedPreferences prefMan= PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -230,13 +241,13 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
             mapSettings.setMapToolbarEnabled(false);
 
             // Create Polyline object
-            PolylineOptions mapPolylineOptions = new PolylineOptions();
+            mMapPolylineOptions = new PolylineOptions();
 
             // Create LatLngBounds object. This is used to zoom in to the map in such a way
             // that all points are visible
             LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
 
-            if (mCoordinatesList != null && mCoordinatesList.size()>0) {
+            if (mCoordinatesList != null && mCoordinatesList.size() > 0) {
                 for (int i = 0; i < mCoordinatesList.size(); i++) {
                     // Get latitude and longitude
                     LatLng latLng = new LatLng(mCoordinatesList.get(i).getLatitude(), mCoordinatesList.get(i).getLongitude());
@@ -245,20 +256,63 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
                     boundsBuilder.include(latLng);
 
                     // Add to Polyline object
-                    mapPolylineOptions.add(latLng);
+                    mMapPolylineOptions.add(latLng);
                 }
 
                 // Draw polylines
-                googleMap.addPolyline(mapPolylineOptions);
+                mMap.addPolyline(mMapPolylineOptions);
+
+
 
                 // Zoom in to map
-                LatLngBounds bounds = boundsBuilder.build();
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
+                mMapBounds = boundsBuilder.build();
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(mMapBounds, 5));
             }
             else {
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(0));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(0));
             }
+
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    Log.d(TAG, "onMapLoaded: " + String.valueOf(mHikeId));
+
+                    if (mMapBounds != null && mMapPolylineOptions != null) {
+                        // Create Polyline object
+                        PolylineOptions mapPolylineOptions = new PolylineOptions();
+
+                        // Create LatLngBounds object. This is used to zoom in to the map in such a way
+                        // that all points are visible
+                        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
+                        if (mCoordinatesList != null && mCoordinatesList.size() > 0) {
+                            for (int i = 0; i < mCoordinatesList.size(); i++) {
+                                // Get latitude and longitude
+                                LatLng latLng = new LatLng(mCoordinatesList.get(i).getLatitude(), mCoordinatesList.get(i).getLongitude());
+
+                                // Add to LatLngBounds object
+                                boundsBuilder.include(latLng);
+
+                                // Add to Polyline object
+                                mapPolylineOptions.add(latLng);
+                            }
+
+                            // Draw polylines
+                            mMap.addPolyline(mapPolylineOptions);
+
+                            // Zoom in to map
+                            LatLngBounds bounds = boundsBuilder.build();
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
+                        } else {
+                            mMap.animateCamera(CameraUpdateFactory.zoomTo(0));
+                        }
+                    }
+//                    else {
+//                        mMap.addPolyline(mMapPolylineOptions);
+//                        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(mMapBounds, 5));
+//                    }
+                }
+            });
         }
     }
-
 }

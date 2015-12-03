@@ -32,7 +32,7 @@ public class StepCount {
 
     public String toString(){
         if(stepsTaken>0)
-            return String.format("Steps Taken: %s\n",stepsTaken);
+            return String.format("Steps Taken: %s steps\n",stepsTaken);
         else
             return "No steps recorded\n";
     }

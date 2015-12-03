@@ -8,40 +8,53 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@color/hike_black_tricorn"
+        android:layout_weight="0.9">
 
         <TextView android:text="Past Hikes" android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView_pastHikesTitle"
-            android:textSize="50sp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFFFF"
-            android:layout_weight="0.1" />
+            android:textColor="@color/hike_blue_grey"
+            android:layout_weight="0.2"
+            android:background="@color/hike_black_tricorn"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RESET"
-            android:id="@+id/button_resetPastHikes" />
+            android:text="Done"
+            android:id="@+id/buttonDone"
+            android:background="@color/hike_black_tricorn"
+            android:textColor="@color/hike_blue_grey"
+            android:layout_weight="0.8" />
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/textView_deleteHint"
-        android:textColor="@color/hike_palisade"
-        android:text="@string/viewAndDeleteHint" />
+        android:layout_height="match_parent"
+        android:layout_weight="0.1">
 
-    <GridView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:numColumns="2"
-        android:verticalSpacing="1dp"
-        android:horizontalSpacing="1dp"
-        android:id="@+id/listView_pastHikes" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/textView_deleteHint"
+            android:textColor="@color/hike_blue_grey"
+            android:text="@string/viewAndDeleteHint" />
+
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="2"
+            android:verticalSpacing="1dp"
+            android:horizontalSpacing="1dp"
+            android:id="@+id/listView_pastHikes" />
+    </LinearLayout>
 
 </LinearLayout>
