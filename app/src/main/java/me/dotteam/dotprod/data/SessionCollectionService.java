@@ -41,7 +41,6 @@ public class SessionCollectionService extends Service implements SensorListenerI
     private LocationPoints recordedCoordinates;
     private Hike currentHike;
     private HikeDataDirector mHDD;
-
     class TimeUpdate extends Thread{
 
         private Context mainContext;
