@@ -1,5 +1,6 @@
 package me.dotteam.dotprod;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -93,8 +95,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     private TextView mTextLatitude;
     private TextView mTextLongitude;
     private TextView mTextAltitude;
-    private TextView mTextBearing;
-    private TextView mTextAccuracy;
     private TextView mTextDistanceTraveled;
     private TextView mTextStepCount;
     private float mDistanceTravelled = 0;
@@ -231,9 +231,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         if(mPager.getCurrentItem()!=1) {
             mPager.setCurrentItem(1);
         }
-//        else{
-//            //TODO: make this the same as ending the hike!
-//        }
+        else{
+            endHike();
+        }
     }
 
     @Override
@@ -245,40 +245,40 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mTextLatitude != null) {
-                    mTextLatitude.setText(String.valueOf(location.getLatitude()));
+            if (mTextLatitude != null) {
+                mTextLatitude.setText(String.valueOf(location.getLatitude()));
+            }
+            if (mTextLongitude != null) {
+                mTextLongitude.setText(String.valueOf(location.getLongitude()));
+            }
+            if (mTextAltitude != null) {
+                mTextAltitude.setText(String.valueOf(location.getAltitude()));
+            }
+    
+            if (mLocation == null) {
+                mLocation = new Location(location);
+    
+                if (mMapReady) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mapZoomCameraToLocation(latLng);
+                    mMapPolylineOptions.add(latLng);
+                    mMap.addPolyline(mMapPolylineOptions);
                 }
-                if (mTextLongitude != null) {
-                    mTextLongitude.setText(String.valueOf(location.getLongitude()));
+            } else {
+                mLocation = location;
+    
+                if (mMapReady) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMapPolylineOptions.add(latLng);
+                    mMap.addPolyline(mMapPolylineOptions);
                 }
-                if (mTextAltitude != null) {
-                    mTextAltitude.setText(String.valueOf(location.getAltitude()));
+    
+                mDistanceTravelled += distance;
+    
+                if (mTextDistanceTraveled != null) {
+                    mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
                 }
-
-                if (mLocation == null) {
-                    mLocation = new Location(location);
-
-                    if (mMapReady) {
-                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        mapZoomCameraToLocation(latLng);
-                        mMapPolylineOptions.add(latLng);
-                        mMap.addPolyline(mMapPolylineOptions);
-                    }
-                } else {
-                    mLocation = location;
-
-                    if (mMapReady) {
-                        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                        mMapPolylineOptions.add(latLng);
-                        mMap.addPolyline(mMapPolylineOptions);
-                    }
-
-                    mDistanceTravelled += distance;
-
-                    if (mTextDistanceTraveled != null) {
-                        mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
-                    }
-                }
+            }
             }
         });
 

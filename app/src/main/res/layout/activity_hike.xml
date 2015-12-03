@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:weightSum="1"
     android:orientation="vertical"
-    android:background="@color/hike_indigo_baltik">
+    android:background="@color/hike_naval">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -62,7 +62,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/buttonTextPauseHike"
                 android:id="@+id/buttonPauseHike"
-                android:background="@color/hike_naval"
+                android:background="@color/hike_indigo_baltik"
                 android:layout_weight="0.2"
                 android:textColor="@color/hike_blue_grey" />
 

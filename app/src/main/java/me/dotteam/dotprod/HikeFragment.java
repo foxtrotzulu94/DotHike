@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,65 +26,7 @@ import com.redinput.compassview.CompassView;
  */
 public class HikeFragment extends Fragment implements OnMapReadyCallback {
 
-    private class CompassAnimator extends Thread{
-
-        float currentDegrees = 0.0f;
-        float finalDegrees = 0.0f;
-        float dampingPercentage = 0.05f;
-        boolean runningThread =false;
-
-        @Override
-        public void run(){
-            runningThread =true;
-            while(runningThread){
-                if (currentDegrees!=finalDegrees){
-                    currentDegrees = lerp(currentDegrees,finalDegrees,dampingPercentage);
-                    updateUI(currentDegrees);
-                }
-                else{
-                    runningThread = false;
-                }
-
-                try{
-                    sleep(34); //30 FPS, no compass needs to be at 60...
-                }
-                catch (InterruptedException e){
-                    runningThread = false;
-                }
-
-            }
-        }
-
-        private float lerp(float start, float end, float percentage){
-            return start+( percentage*(end-start)  );
-        }
-
-        private void updateUI(final float value){
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mCompassView.setDegrees(value);
-                }
-            });
-        }
-
-        public void setNewValue(float newValue){
-            finalDegrees = newValue % 360;
-            if(!isAlive() && !runningThread)
-                this.start();
-        }
-
-        public void setAndStop(float newValue){
-            updateUI(newValue);
-            runningThread = false;
-        }
-
-        public void stopAnimation(){
-            setAndStop(finalDegrees);
-        }
-    }
-
-
+    
     private String TAG = "HikeFragment";
     private Button mButtonEndHike;
     private Button mButtonPauseHike;
@@ -112,7 +55,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement HikeFragmentListener");
         }
-        mCompassAnimator = new CompassAnimator();
+
     }
 
     @Override
@@ -137,8 +80,7 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         mImageViewEnvArrow = (ImageView) rootView.findViewById(R.id.imageEnvArrow);
         mImageViewNavArrow = (ImageView) rootView.findViewById(R.id.imageNavArrow);
         mCompassView = (CompassView) rootView.findViewById(R.id.compass);
-
-
+        
         //Setup the compass if in prefs
         SharedPreferences prefMan = PreferenceManager.getDefaultSharedPreferences(getActivity());
         if(prefMan.contains("compass_ui")){
@@ -146,13 +88,14 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
         }
         if(mShowCompassView) {
             mCompassView.setRangeDegrees(180);
-            mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_indigo_baltik));
+            mCompassView.setBackgroundColor(getResources().getColor(R.color.hike_naval));
             mCompassView.setLineColor(getResources().getColor(R.color.hike_palisade));
             mCompassView.setMarkerColor(getResources().getColor(R.color.hike_palisade));
             mCompassView.setTextColor(getResources().getColor(R.color.hike_palisade));
             mCompassView.setShowMarker(true);
             mCompassView.setTextSize(40);
             mCompassView.setDegrees(0);
+            mCompassAnimator = new CompassAnimator(getActivity(),mCompassView);
         }
         else{
             mCompassView.setVisibility(View.INVISIBLE);
@@ -176,7 +119,6 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mListener.onMapReady(googleMap);
-
     }
 
     public void updateCompass(double value){
