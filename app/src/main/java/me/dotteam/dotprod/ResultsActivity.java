@@ -373,7 +373,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextDistTravlContainer.addView(textDistTravl);
 
         TextView textDistTravlVal = new TextView(this);
-        textDistTravlVal.setText(String.valueOf(numberFormat.format(mDistanceTraveled)) + " m" + " (" + String.valueOf(numberFormat.format(mDistanceTraveled/1000)) + " km)");
+        textDistTravlVal.setText(String.format("%.3f m (%.3f km)", mDistanceTraveled, mDistanceTraveled/1000));
         textDistTravlVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextDistTravlContainer.addView(textDistTravlVal);
 
@@ -383,10 +383,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         textHikeTime.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextHikeTimeContainer.addView(textHikeTime);
 
-        StringBuilder HikeTimeResults = new StringBuilder();
-        HikeTimeResults.append(results.formattedDuration());
         TextView textHikeTimeResults = new TextView(this);
-        textHikeTimeResults.setText(HikeTimeResults.toString());
+        textHikeTimeResults.setText(results.formattedDuration());
         textHikeTimeResults.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextHikeTimeContainer.addView(textHikeTimeResults);
 
@@ -398,7 +396,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 
         TextView textAvgPaceVal = new TextView(this);
         double average_pace = mDistanceTraveled/hikeDuration;
-        textAvgPaceVal.setText(String.valueOf(numberFormat.format(average_pace)) + " m/s" + " (" + String.valueOf(numberFormat.format(average_pace * 3.6)) + " km/h)");
+        textAvgPaceVal.setText(String.format("%.3f m/s (%.3f km/h)", average_pace, average_pace * 3.6));
         textAvgPaceVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextAvgPaceContainer.addView(textAvgPaceVal);
 
