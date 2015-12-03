@@ -153,6 +153,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         setupEnvReadingsLayout();
         setupOtherInfoLayout();
     }
+
     protected void setupMap(){
         // GoogleMapOptions to Set Map to Lite Mode
         GoogleMapOptions googleMapOptions = new GoogleMapOptions().liteMode(true);
@@ -361,7 +362,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
-    protected void setupOtherInfoLayout(){
+    protected void setupOtherInfoLayout() {
         SessionData results = mHDD.getSessionData();
 
         DecimalFormat numberFormat = new DecimalFormat("#.000");
@@ -375,7 +376,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextDistTravlContainer.addView(textDistTravl);
 
         TextView textDistTravlVal = new TextView(this);
-        textDistTravlVal.setText(String.format("%.3f m (%.3f km)", mDistanceTraveled, mDistanceTraveled/1000));
+        textDistTravlVal.setText(String.format("%.3f m (%.3f km)", mDistanceTraveled, mDistanceTraveled / 1000));
         textDistTravlVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextDistTravlContainer.addView(textDistTravlVal);
 
@@ -397,7 +398,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextAvgPaceContainer.addView(textAvgPace);
 
         TextView textAvgPaceVal = new TextView(this);
-        double average_pace = mDistanceTraveled/hikeDuration;
+        double average_pace = mDistanceTraveled / hikeDuration;
         textAvgPaceVal.setText(String.format("%.3f m/s (%.3f km/h)", average_pace, average_pace * 3.6));
         textAvgPaceVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextAvgPaceContainer.addView(textAvgPaceVal);
@@ -412,6 +413,11 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         textStepCount.setText(results.getStepCount().toString());
         textStepCount.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextStepCountContainer.addView(textStepCountResults);
+    }
+
+    @Override
+    public void onBackPressed() {
+        mButtonResultsDone.performClick();
     }
 
     @Override
