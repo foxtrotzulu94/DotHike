@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,38 @@ public class PersistentStorageEntity {
         cursor.close();
 
         return allHikes;
+    }
+
+    public Map<Integer,LocationPoints> loadMaps(){
+        Cursor cursor = mDB.query(DBAssistant.COORDS,null,null,null,DBAssistant.HIKE_ID,null,null);
+        Map<Integer,LocationPoints> retVal = null;
+
+        if(cursor.getCount()>0){
+            retVal = new HashMap<>(cursor.getCount());
+
+            int altColumn = cursor.getColumnIndex(DBAssistant.ALT_COL);
+            int latColumn = cursor.getColumnIndex(DBAssistant.LAT_COL);
+            int longColumn = cursor.getColumnIndex(DBAssistant.LONG_COL);
+            int hikeColumn = cursor.getColumnIndex(DBAssistant.HIKE_ID);
+
+            List<Coordinates> fullList = new ArrayList<>();
+            int currentHike = -1;
+            cursor.moveToFirst();
+
+            while(cursor.moveToNext()){
+                //Get the Hike ID
+            }
+
+            do{
+
+            }while(true);
+
+
+        }
+
+        cursor.close();
+
+        return retVal;
     }
 
     /**
