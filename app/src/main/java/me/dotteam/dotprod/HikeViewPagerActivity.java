@@ -354,7 +354,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             public void onClick(View v) {
                 if (!mPauseHikeButtonLocked) {
                     if (!mHikeCurrentlyPaused) {
-                        //TODO Pause the collection and saving of data
+                        //Pause the collection and saving of data
                         mHLE.stopLocationUpdates();
                         mHHM.stopSensors();
                         mHDD.setPauseStatus(true);
@@ -364,8 +364,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                         builder.setPositiveButton("Resume", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //Unpause Hike!
-                                //TODO UnPause the collection and saving of data
+                                //UnPause the collection and saving of data
                                 mHLE.startLocationUpdates(HikeViewPagerActivity.this);
                                 mHHM.startSensors(HikeViewPagerActivity.this);
                                 mHDD.setPauseStatus(false);
@@ -379,14 +378,15 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                         pauseAlert.setCancelable(false);
                         pauseAlert.setCanceledOnTouchOutside(false);
                         pauseAlert.show();
-                        //Unlocking Button
-                    } else {
-                        mEndHikeButtonLocked = true;
-                        mPauseHikeButtonLocked = false;
 
-                        mHikeFragment.setButtonEndHIke(0.8f);
-                        mHikeFragment.setButtonPauseHIke(0.2f);
                     }
+                }
+                else{
+                    //Unlocking Button
+                    mEndHikeButtonLocked = true;
+                    mPauseHikeButtonLocked = false;
+                    mHikeFragment.setButtonEndHIke(0.8f);
+                    mHikeFragment.setButtonPauseHIke(0.2f);
                 }
             }
         });
