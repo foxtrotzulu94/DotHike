@@ -167,7 +167,7 @@ public class HikeDataDirector {
 
                 //Start the hike
                 mockHike.start();
-                for (int i=0; i<10000; ++i) {
+                for (int i=0; i<100; ++i) {
                     mockStats.updateHumidity(randy.nextFloat());
                     mockStats.updateTemp(randy.nextFloat());
                     mockStats.updatePressure(randy.nextFloat());

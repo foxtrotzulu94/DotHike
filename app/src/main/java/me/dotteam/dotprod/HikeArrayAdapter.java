@@ -30,6 +30,7 @@ import java.util.Map;
 import me.dotteam.dotprod.data.Coordinates;
 import me.dotteam.dotprod.data.Hike;
 import me.dotteam.dotprod.data.HikeDataDirector;
+import me.dotteam.dotprod.data.LocationPoints;
 
 /**
  * Created by foxtrot on 16/11/15.
@@ -47,7 +48,15 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
      */
     Context mContext;
 
+    /**
+     *
+     */
     Map<Integer, MapReady> mMapCallbacks;
+
+    /**
+     *
+     */
+    Map<Integer, LocationPoints> mLoadedLocationPoints;
 
     /**
      * Default Constructor
@@ -58,6 +67,9 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
         super(context,R.layout.lite_map_fragment,allHikes);
         mContext = context;
         mMapCallbacks = new HashMap<>();
+
+        //Do Async with this
+        //mLoadedLocationPoints = HikeDataDirector.getInstance(mContext).
     }
 
     @Override
@@ -144,6 +156,8 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
 
             // Get Location Points
             HikeDataDirector hdd = HikeDataDirector.getInstance(mContext);
+
+            //TODO: OPTIMIZE AND BULK LOAD
             hdd.retrieveSessionFromHike(hike);
             List<Coordinates> coordinatesList = hdd.getSessionData().getGeoPoints().getCoordinateList();
 
