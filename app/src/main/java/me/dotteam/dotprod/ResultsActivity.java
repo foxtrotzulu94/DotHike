@@ -384,8 +384,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextHikeTimeContainer.addView(textHikeTime);
 
         StringBuilder HikeTimeResults = new StringBuilder();
-        // TODO: Format Time
-        HikeTimeResults.append(String.valueOf(numberFormat.format(hikeDuration)) + " s");
+        HikeTimeResults.append(results.formattedDuration());
         TextView textHikeTimeResults = new TextView(this);
         textHikeTimeResults.setText(HikeTimeResults.toString());
         textHikeTimeResults.setTextColor(getResources().getColor(R.color.hike_blue_grey));
