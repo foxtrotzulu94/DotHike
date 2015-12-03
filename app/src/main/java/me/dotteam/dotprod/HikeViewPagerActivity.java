@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
@@ -270,6 +271,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                 if (mMapReady) {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     mMapPolylineOptions.add(latLng);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                     mMap.addPolyline(mMapPolylineOptions);
                 }
     
@@ -447,8 +449,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,17));
                 mGotLocation = true;
             }
         });
