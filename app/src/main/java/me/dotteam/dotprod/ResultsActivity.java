@@ -146,7 +146,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 
                 mDistanceTraveled += distanceResults[0];
             }
-            setupInstPaceChart();
+            // Note: Removed since we could not implement on time. Eventually this will be added
+            //setupInstPaceChart();
         }
 
         setupEnvReadingsLayout();
