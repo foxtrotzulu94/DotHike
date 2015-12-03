@@ -355,6 +355,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                 if (!mPauseHikeButtonLocked) {
                     if (!mHikeCurrentlyPaused) {
                         //TODO Pause the collection and saving of data
+                        mHLE.stopLocationUpdates();
                         mHHM.stopSensors();
                         mHDD.setPauseStatus(true);
                         mHikeCurrentlyPaused = true;
@@ -365,6 +366,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                             public void onClick(DialogInterface dialog, int which) {
                                 //Unpause Hike!
                                 //TODO UnPause the collection and saving of data
+                                mHLE.startLocationUpdates(HikeViewPagerActivity.this);
                                 mHHM.startSensors(HikeViewPagerActivity.this);
                                 mHDD.setPauseStatus(false);
                                 mHikeCurrentlyPaused = false;
