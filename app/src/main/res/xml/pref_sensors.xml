@@ -10,6 +10,11 @@
             android:entryValues="@array/pref_sensors_device_updatevals"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
+        <CheckBoxPreference
+            android:key="sensor_activatefallback"
+            android:title="@string/pref_sensors_fallback_title"
+            android:summary="@string/pref_sensors_fallback_summary"
+            android:defaultValue="true" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -25,7 +30,7 @@
         <Preference
             android:key="extsensor_period"
             android:title="@string/pref_sensors_refresh"
-            android:summary="500ms"
+            android:summary="Default: 500ms"
             android:defaultValue="500"/>
         <CheckBoxPreference
             android:key="extsensor_askconnect"

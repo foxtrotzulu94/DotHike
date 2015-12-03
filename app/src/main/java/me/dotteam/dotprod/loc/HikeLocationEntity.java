@@ -1,6 +1,9 @@
 package me.dotteam.dotprod.loc;
 
-import android.app.AlertDialog;
+import android.content.SharedPreferences;
+import android.hardware.SensorManager;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,7 +44,11 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
      */
     private final int DEFAULT_INTERVAL = 5000;
     private final int DEFAULT_FASTEST_INTERVAL = 1000;
-    private final int DEFAULT_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
+
+    /**
+     * Location Request Priority. Default is High Accuracy
+     */
+    private int REQUEST_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
     /**
      * Alpha parameter for lowpass filter on altitude
@@ -130,10 +137,21 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
         mLocationRequest = new LocationRequest();
         mInterval = DEFAULT_INTERVAL;
         mFastestInterval = DEFAULT_FASTEST_INTERVAL;
-        mPriority = DEFAULT_PRIORITY;
+        mPriority = REQUEST_PRIORITY;
         mLocationRequest.setInterval(mInterval);
         mLocationRequest.setFastestInterval(mFastestInterval);
         mLocationRequest.setPriority(mPriority);
+    }
+
+    private void updateFromPreferences(){
+        SharedPreferences prefMan = PreferenceManager.getDefaultSharedPreferences(mContext);
+        if (prefMan.contains("location_permission")){
+            REQUEST_PRIORITY = Integer.parseInt(
+                    prefMan.getString("location_permission",String.valueOf(LocationRequest.PRIORITY_HIGH_ACCURACY)));
+        }
+        if(prefMan.contains("location_filter_accuracy")){
+            MIN_LOCATION_ACCURACY = prefMan.getInt("location_filter_accuracy", MIN_LOCATION_ACCURACY);
+        }
     }
 
     /**
@@ -146,6 +164,9 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
         mContext = context;
 
         mRequestingLocationUpdates = true;
+
+        //Read the preferences
+        updateFromPreferences();
 
         if (mGoogleApiClientConnected) {
 

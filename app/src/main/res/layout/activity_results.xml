@@ -20,7 +20,8 @@
             android:id="@+id/textResultsTitle"
             android:textColor="@color/hike_blue_grey"
             android:textSize="30sp"
-            android:layout_weight="0.3" />
+            android:layout_weight="0.3"
+            android:gravity="center_vertical" />
 
         <TextView
             android:layout_width="match_parent"

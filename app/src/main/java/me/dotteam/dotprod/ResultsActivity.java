@@ -404,10 +404,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         textStepCount.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextStepCountContainer.addView(textStepCount);
 
-        StringBuilder StepCountResults = new StringBuilder();
-        StepCountResults.append(results.getStepCount().toString());
         TextView textStepCountResults = new TextView(this);
-        textStepCount.setText(StepCountResults.toString());
+        textStepCount.setText(results.getStepCount().toString());
         textStepCount.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextStepCountContainer.addView(textStepCountResults);
     }

@@ -8,18 +8,35 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class to handle Persistent Storage of Data structures defined in the application
  */
 public class PersistentStorageEntity {
 
+    public class CacheMap<K,V> extends LinkedHashMap<K,V>{
+        private int cacheMapSize=3;
+        public CacheMap(int size){
+            cacheMapSize = size;
+        }
+
+        @Override
+        protected boolean removeEldestEntry(Entry eldest) {
+            return (super.size() <= cacheMapSize);
+        }
+    }
+
     private final String TAG="PSE";
 
     private Context mCreateContext;
     private DBAssistant mProvider;
     private SQLiteDatabase mDB;
+
+    private LinkedHashMap<Integer,SessionData> cachedObjects;
+    private int cacheCapacity=5; //Quite a lot
 
     /**
      * Default constructor
@@ -28,6 +45,7 @@ public class PersistentStorageEntity {
         mCreateContext = currentContext;
         mProvider = new DBAssistant(mCreateContext);
         mDB=mProvider.getWritableDatabase();
+        cachedObjects = new CacheMap<>(cacheCapacity);
     }
 
     /**
@@ -76,6 +94,11 @@ public class PersistentStorageEntity {
             return null;
         }
 
+        //Check if Cached
+        if(cachedObjects.containsKey(hikeID)){
+            return cachedObjects.get(hikeID);
+        }
+
         //Already got hike, so...
         //Get EnvData
         EnvData retrievedStatistics = new EnvData(
@@ -105,8 +128,14 @@ public class PersistentStorageEntity {
      * @return a SessionData object with the indicators that it was in the DB, null otherwise.
      */
     public SessionData loadHikeData(int hikeID) {
+        //Check if Valid
         if(hikeID<1){
             return null;
+        }
+
+        //Check if Cached
+        if(cachedObjects.containsKey(hikeID)){
+            return cachedObjects.get(hikeID);
         }
 
         //First, load the Hike
@@ -211,13 +240,13 @@ public class PersistentStorageEntity {
         Log.w(TAG,"Statement returned "+cursor.getColumnCount()+" "+cursor.getCount());
         int assignedID = cursor.getInt(cursor.getColumnIndex("id"));
 
+        //Modify the Hike ID of the original object
         givenSession.setHikeID(assignedID);
 
-        //Continue insertion of objects with the associated ID.
-        List<Coordinates> allCoordinates =givenSession.getGeoPoints().getCoordinateList();
-        for(int i=0; i<allCoordinates.size();++i) {
-            mDB.insert(DBAssistant.COORDS, null,allCoordinates.get(i).toStorage(assignedID));
-        }
+        //Cache it
+        cachedObjects.put(assignedID,givenSession);
+
+        //Insertion done in O(1) time
         //Insert all EnvStatistics
         mDB.insert(DBAssistant.ENVTEMP,null,givenSession.getCurrentStats().getSerializedTemp(assignedID));
         mDB.insert(DBAssistant.ENVHUMD,null,givenSession.getCurrentStats().getSerializedHumidity(assignedID));
@@ -227,6 +256,13 @@ public class PersistentStorageEntity {
         //If there's a name, save it
         mDB.insert(DBAssistant.HIKE_NAME,null,givenSession.hikeNameToStorage()); //TODO: Change later. All hike data should be inserted in one-shot
 
+        //Insertion takes O(n). This is a HUGE bottleneck actually and we have no way of optimizing it...
+        //Continue insertion of objects with the associated ID.
+        List<Coordinates> allCoordinates =givenSession.getGeoPoints().getCoordinateList();
+        int length = allCoordinates.size();
+        for(int i=0; i<allCoordinates.size();++i) {
+            mDB.insert(DBAssistant.COORDS, null,allCoordinates.get(i).toStorage(assignedID));
+        }
         //CHANGE if operation fails at any point!
         return true;
     }
@@ -238,6 +274,11 @@ public class PersistentStorageEntity {
      */
     public boolean deleteSession(SessionData givenSession){
         mDB = mProvider.getWritableDatabase();
+
+        //Check if Cached and remove
+        if(cachedObjects.containsKey(givenSession.hikeID())){
+            cachedObjects.remove(givenSession.hikeID());
+        }
 
         if(givenSession.hikeID()>0){
             //Verify the ID is in the DB
@@ -274,6 +315,11 @@ public class PersistentStorageEntity {
      */
     public boolean deleteHike(Hike givenHike){
         mDB = mProvider.getWritableDatabase();
+
+        //Check if Cached and remove
+        if(cachedObjects.containsKey(givenHike.getUniqueID())){
+            cachedObjects.remove(givenHike.getUniqueID());
+        }
 
         if(givenHike.getUniqueID()>0){
             //Verify the ID is in the DB

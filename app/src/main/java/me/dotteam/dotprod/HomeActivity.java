@@ -56,19 +56,6 @@ public class HomeActivity extends AppCompatActivity{
         //The icons were also optimized into .9.png thanks to
         //https://romannurik.github.io/AndroidAssetStudio/nine-patches.html
 
-        //TODO: Recover and put on settings or something.
-        //Show build information for debugging.
-        if (BuildConfig.DEBUG) {
-            TextView buildField = (TextView) findViewById(R.id.app_build);
-            Date buildDate = new Date(BuildConfig.TIMESTAMP);
-            Formatter formatter = new Formatter(new StringBuilder(), Locale.US);
-            formatter.format("[ %1$s build ] \nBuild: %2$s\nCommitt: %3$s \n[from %4$s]",
-                    BuildConfig.BUILD_TYPE,
-                    buildDate.toString(),
-                    BuildConfig.GIT_COMMIT_INFO,
-                    BuildConfig.GIT_BRANCH);
-            buildField.setText(formatter.toString());
-        }
         Runtime.getRuntime().gc();
         System.gc();
     }
@@ -91,6 +78,24 @@ public class HomeActivity extends AppCompatActivity{
             }
         });
 
+        //Intent to Sensors
+        mLinearLayoutSensors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentSensors = new Intent(HomeActivity.this, SensorsActivity.class);
+                startActivity(intentSensors);
+            }
+        });
+
+        //Intent to Past Hikes
+        mLinearLayoutPastHikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentPastHike = new Intent(HomeActivity.this, PastHikesActivity.class);
+                startActivity(intentPastHike);
+            }
+        });
+
         // Shows Setting Dialogue
         mLinearLayoutSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -100,24 +105,6 @@ public class HomeActivity extends AppCompatActivity{
                                 getString("example_text", ""));
             }
         });
-
-        mLinearLayoutSensors.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //NOTE: Uncomment to cause an unconditional exception.
-                //Integer integers[] = new Integer[Integer.MAX_VALUE];
-                HikeDataDirector.getInstance(HomeActivity.this).testStorage();
-            }
-        });
-
-        mLinearLayoutPastHikes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentPastHike = new Intent(HomeActivity.this, PastHikesActivity.class);
-                startActivity(intentPastHike);
-            }
-        });
-
     }
 
 }
