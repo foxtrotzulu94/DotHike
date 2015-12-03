@@ -120,9 +120,6 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mCoordinatesList = mHDD.getSessionData().getGeoPoints().getCoordinateList();
 
 
-//        StringBuilder dump = new StringBuilder();
-    SessionData results = mHDD.getSessionData();
-
         //Setup all the charts!
         if (mCoordinatesList != null && mCoordinatesList.size() != 0) {
             setupMap();
@@ -152,8 +149,6 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 
         setupEnvReadingsLayout();
         setupOtherInfoLayout();
-//        dump.append(results.toString());
-//        mDumpSpace.setText(dump.toString());
     }
     protected void setupMap(){
         // GoogleMapOptions to Set Map to Lite Mode
