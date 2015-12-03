@@ -156,8 +156,6 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         //Check the preferences for any updates on the sensor update times
         updateFromPreferences();
 
-        Log.d(TAG, String.valueOf(mUsingAndroidEnvironmentalSensors));
-
         startSensorTagConnector();
         startPedometer();
         startCompass();
