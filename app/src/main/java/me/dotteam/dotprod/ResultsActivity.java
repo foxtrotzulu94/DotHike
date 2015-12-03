@@ -1,8 +1,10 @@
 package me.dotteam.dotprod;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -418,8 +420,17 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
 
         mMap = googleMap;
 
-        // Set MapType to Terrain
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        // Set MapType
+        SharedPreferences prefMan= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(prefMan.contains("display_maptype")){
+            googleMap.setMapType(
+                    Integer.parseInt(prefMan.getString(
+                            "display_maptype",
+                            Integer.toString(GoogleMap.MAP_TYPE_TERRAIN))));
+        }
+        else {
+            googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        }
 
         // Change GoogleMap's UI Settings to remove toolbar stuff
         UiSettings mapSettings = mMap.getUiSettings();
