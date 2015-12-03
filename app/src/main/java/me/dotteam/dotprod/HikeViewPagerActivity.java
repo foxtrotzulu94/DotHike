@@ -336,16 +336,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             public void onClick(View v) {
                 //Button currently locked
                 if (!mEndHikeButtonLocked) {
-                    // Reset Pedometer
-                    // TODO Save Pedometer value
-                    mHHM.resetPedometer();
-                    mHLE.removeListener(HikeViewPagerActivity.this);
-                    mHLE.stopLocationUpdates();
-                    Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
-                    startActivity(intentResults);
-                    mHDD.endCollectionService();
-                    mHHM.stopSensors();
-                    finish();
+                    endHike();
+
                     //Unlocking Button
                 } else {
                     mEndHikeButtonLocked = false;
@@ -364,18 +356,40 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                 if (!mPauseHikeButtonLocked) {
                     if (!mHikeCurrentlyPaused) {
                         //Pause the collection and saving of data
+                        mHLE.stopLocationUpdates();
+                        mHHM.stopSensors();
+                        mHHM.startCompass(); //Keep compass on
                         mHDD.setPauseStatus(true);
                         mHikeCurrentlyPaused = true;
+
+                        mButtonPauseHike.setText("Resume Hike");
+
+                        //Alert notifying User that the Hike is Paused
+                        AlertDialog.Builder builder = new AlertDialog.Builder(HikeViewPagerActivity.this);
+                        builder.setTitle("Hike Paused");
+                        builder.setMessage("The Hike has been Paused");
+                        AlertDialog pauseAlert = builder.create();
+                        pauseAlert.show();
                     } else {
                         //UnPause the collection and saving of data
+                        mHLE.startLocationUpdates(HikeViewPagerActivity.this);
+                        mHHM.startSensors(HikeViewPagerActivity.this);
                         mHDD.setPauseStatus(false);
                         mHikeCurrentlyPaused = false;
+
+                        mButtonPauseHike.setText("Pause Hike");
+
+                        //Alert notifying User that the Hike Resumed
+                        AlertDialog.Builder builder = new AlertDialog.Builder(HikeViewPagerActivity.this);
+                        builder.setTitle("Hike Resumed");
+                        builder.setMessage("The Hike has Resumed");
+                        AlertDialog resumeAlert = builder.create();
+                        resumeAlert.show();
                     }
                     //Unlocking Button
                 } else {
                     mEndHikeButtonLocked = true;
                     mPauseHikeButtonLocked = false;
-
                     mHikeFragment.setButtonEndHIke(0.8f);
                     mHikeFragment.setButtonPauseHIke(0.2f);
                 }
@@ -397,6 +411,36 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                 mPager.setCurrentItem(2);
             }
         });
+    }
+
+    private void endHike(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(HikeViewPagerActivity.this);
+        builder.setPositiveButton("End Hike", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //End the Hike
+                mHHM.resetPedometer();
+                mHLE.removeListener(HikeViewPagerActivity.this);
+                mHLE.stopLocationUpdates();
+                Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
+                startActivity(intentResults);
+                mHDD.endCollectionService();
+                mHHM.stopSensors();
+                finish();
+            }
+        });
+
+        builder.setNegativeButton("Continue Hike", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Continue the Hike
+            }
+        });
+
+        builder.setMessage("Are you sure you would like to end the Hike?");
+        builder.setTitle("End Hike");
+        AlertDialog EndHikeAlert = builder.create();
+        EndHikeAlert.show();
     }
 
     private void mapZoomCameraToLocation(final LatLng latlng) {
@@ -502,8 +546,6 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         mTextLatitude = mNavFragment.getTextLatitude();
         mTextLongitude = mNavFragment.getTextLongitude();
         mTextAltitude = mNavFragment.getTextAltitude();
-//        mTextBearing = mNavFragment.getTextBearing();
-//        mTextAccuracy = mNavFragment.getTextAccuracy();
         mTextDistanceTraveled = mNavFragment.getTextDistanceTraveled();
         mTextStepCount = mNavFragment.getTextStepCount();
 
@@ -512,14 +554,10 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             mTextLatitude.setText(String.valueOf(mLocation.getLatitude()));
             mTextLongitude.setText(String.valueOf(mLocation.getLongitude()));
             mTextAltitude.setText(String.valueOf(mLocation.getAltitude()));
-//            mTextBearing.setText(String.valueOf(mLocation.getBearing()));
-//            mTextAccuracy.setText(String.valueOf(mLocation.getAccuracy()));
         } else {
             mTextLatitude.setText("0.0");
             mTextLongitude.setText("0.0");
             mTextAltitude.setText("0.0");
-//            mTextBearing.setText("0.0");
-//            mTextAccuracy.setText("0.0");
         }
         mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
         mTextStepCount.setText(mStepCountString);
