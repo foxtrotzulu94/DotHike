@@ -37,6 +37,7 @@
     <string name="textPace">Pace:</string>
     <string name="textResultsTitle">Hike Results</string>
     <string name="textReadings">Readings:</string>
-    <string name="textDistanceTraveled">Distance Traveled:</string>
+    <string name="textDistanceTraveled">Distance Traveled</string>
     <string name="title_activity_sensors">SensorsActivity</string>
+    <string name="textStepCount">Step Count</string>
 </resources>
