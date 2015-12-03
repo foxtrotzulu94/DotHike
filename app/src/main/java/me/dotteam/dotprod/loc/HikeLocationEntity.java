@@ -51,6 +51,11 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
     private int REQUEST_PRIORITY = LocationRequest.PRIORITY_HIGH_ACCURACY;
 
     /**
+     * Alpha parameter for lowpass filter on altitude
+     */
+    private static final float FILTER_ALPHA = 0.25f;
+
+    /**
      * Minimum location accuracy
      */
     private int MIN_LOCATION_ACCURACY = 40;
@@ -351,6 +356,18 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
         return mRequestingLocationUpdates;
     }
 
+    private double[] lowpassFilter(double[] input) {
+        double[] output = new double[input.length];
+
+        output[0] = input[0];
+
+        for (int i = 1; i < input.length; i++) {
+            output[i] = output[i - 1] + FILTER_ALPHA * (input[i] - output[i - 1]);
+        }
+
+        return output;
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         // Log values
@@ -383,16 +400,36 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
                 Location.distanceBetween(prevLatitude, prevLongitude, location.getLatitude(), location.getLongitude(), results);
 
                 // Log distance result
-                Log.d(TAG, "Distance: " + String.valueOf(results[0]));
+                Log.d(TAG, "Distance without altitude: " + String.valueOf(results[0]));
 
                 // Check if distance is greater than accuracy
                 if (results[0] > location.getAccuracy()) {
+
+                    // Put current and previous altitudes in an array of doubles
+                    double[] altitude = new double[2];
+                    altitude[0] = mLastKnownLocation.getAltitude();
+                    altitude[1] = location.getAltitude();
+
+                    // Filter altitude
+                    double[] new_altitude = lowpassFilter(altitude);
+
+                    // Update location object with new altitude
+                    location.setAltitude(new_altitude[1]);
+
+                    // Find change in altitude
+                    double delta_altitude = location.getAltitude() - mLastKnownLocation.getAltitude();
+
+                    // Adjust distance (d' = sqrt(d^2 + a^2))
+                    double adjusted_distance = Math.sqrt(Math.pow(results[0], 2) + Math.pow(delta_altitude, 2));
+
+                    Log.d(TAG, "Distance with altitude: " + String.valueOf(adjusted_distance));
+
                     // update last known location
                     mLastKnownLocation = location;
 
                     // Notify listeners
                     for (int i = 0; i < mListeners.size(); i++) {
-                        mListeners.get(i).onLocationChanged(location, results[0]);
+                        mListeners.get(i).onLocationChanged(location, (float) adjusted_distance);
                     }
                 }
             }
