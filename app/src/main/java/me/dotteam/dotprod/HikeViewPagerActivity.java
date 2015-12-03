@@ -376,6 +376,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                         //Pause the collection and saving of data
                         mHLE.stopLocationUpdates();
                         mHHM.stopSensors();
+                        mHHM.startCompass(); //keep compass on
                         mHDD.setPauseStatus(true);
                         mHikeCurrentlyPaused = true;
 
