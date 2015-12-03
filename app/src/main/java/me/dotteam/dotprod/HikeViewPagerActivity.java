@@ -262,6 +262,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                         mapZoomCameraToLocation(latLng);
                         mMapPolylineOptions.add(latLng);
+                        //Add a preference Guard check.
+                        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
                         mMap.addPolyline(mMapPolylineOptions);
                     }
                 } else {
@@ -270,6 +273,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                     if (mMapReady) {
                         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                         mMapPolylineOptions.add(latLng);
+                        //Add a preference Guard check.
+                        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                         mMap.addPolyline(mMapPolylineOptions);
                     }
 
