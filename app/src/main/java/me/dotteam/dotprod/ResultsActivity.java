@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -361,6 +362,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     protected void setupOtherInfoLayout(){
         SessionData results = mHDD.getSessionData();
 
+        DecimalFormat numberFormat = new DecimalFormat("#.000");
+
         double hikeDuration = (results.hikeEndTime() - results.hikeStartTime()) * 0.001;
 
         //Total Distance Travelled
@@ -370,7 +373,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextDistTravlContainer.addView(textDistTravl);
 
         TextView textDistTravlVal = new TextView(this);
-        textDistTravlVal.setText(String.valueOf(mDistanceTraveled) + " m");
+        textDistTravlVal.setText(String.valueOf(numberFormat.format(mDistanceTraveled)) + " m" + " (" + String.valueOf(numberFormat.format(mDistanceTraveled/1000)) + " km)");
         textDistTravlVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextDistTravlContainer.addView(textDistTravlVal);
 
@@ -381,7 +384,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextHikeTimeContainer.addView(textHikeTime);
 
         StringBuilder HikeTimeResults = new StringBuilder();
-        HikeTimeResults.append(String.valueOf(hikeDuration) + " s");
+        // TODO: Format Time
+        HikeTimeResults.append(String.valueOf(numberFormat.format(hikeDuration)) + " s");
         TextView textHikeTimeResults = new TextView(this);
         textHikeTimeResults.setText(HikeTimeResults.toString());
         textHikeTimeResults.setTextColor(getResources().getColor(R.color.hike_blue_grey));
@@ -394,7 +398,8 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextAvgPaceContainer.addView(textAvgPace);
 
         TextView textAvgPaceVal = new TextView(this);
-        textAvgPaceVal.setText(String.valueOf(mDistanceTraveled/hikeDuration) + " m/s");
+        double average_pace = mDistanceTraveled/hikeDuration;
+        textAvgPaceVal.setText(String.valueOf(numberFormat.format(average_pace)) + " m/s" + " (" + String.valueOf(numberFormat.format(average_pace * 3.6)) + " km/h)");
         textAvgPaceVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextAvgPaceContainer.addView(textAvgPaceVal);
 
