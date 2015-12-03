@@ -90,7 +90,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Latitude"
+                        android:text="Longitude"
                         android:id="@+id/textView3"
                         android:layout_marginLeft="10sp"
                         android:layout_weight="0.5"

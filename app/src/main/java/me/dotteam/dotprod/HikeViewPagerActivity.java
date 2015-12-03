@@ -241,13 +241,13 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         Log.d(TAG, "onLocationChanged");
         // Set TextViews to new values
         if (mTextLatitude != null) {
-            mTextLatitude.setText(String.format("%.2f", location.getLatitude()));
+            mTextLatitude.setText(String.valueOf(location.getLatitude()));
         }
         if (mTextLongitude != null) {
-            mTextLongitude.setText(String.format("%.2f", location.getLongitude()));
+            mTextLongitude.setText(String.valueOf(location.getLongitude()));
         }
         if (mTextAltitude != null) {
-            mTextAltitude.setText(String.format("%.2f", location.getAltitude()));
+            mTextAltitude.setText(String.valueOf(location.getAltitude()));
         }
 
         if (mLocation == null) {
@@ -376,29 +376,33 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                         //Pause the collection and saving of data
                         mHLE.stopLocationUpdates();
                         mHHM.stopSensors();
-                        mHHM.startCompass(); //keep compass on
+                        mHHM.startCompass(); //Keep compass on
                         mHDD.setPauseStatus(true);
                         mHikeCurrentlyPaused = true;
 
+                        mButtonPauseHike.setText("Resume Hike");
+
+                        //Alert notifying User that the Hike is Paused
                         AlertDialog.Builder builder = new AlertDialog.Builder(HikeViewPagerActivity.this);
-                        builder.setPositiveButton("Resume", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //UnPause the collection and saving of data
-                                mHLE.startLocationUpdates(HikeViewPagerActivity.this);
-                                mHHM.startSensors(HikeViewPagerActivity.this);
-                                mHDD.setPauseStatus(false);
-                                mHikeCurrentlyPaused = false;
-                            }
-                        });
-
-                        builder.setMessage("The Hike is Paused, would you like to resume?");
                         builder.setTitle("Hike Paused");
+                        builder.setMessage("The Hike has been Paused");
                         AlertDialog pauseAlert = builder.create();
-                        pauseAlert.setCancelable(false);
-                        pauseAlert.setCanceledOnTouchOutside(false);
                         pauseAlert.show();
+                    } else{
+                        //UnPause the collection and saving of data
+                        mHLE.startLocationUpdates(HikeViewPagerActivity.this);
+                        mHHM.startSensors(HikeViewPagerActivity.this);
+                        mHDD.setPauseStatus(false);
+                        mHikeCurrentlyPaused = false;
 
+                        mButtonPauseHike.setText("Pause Hike");
+
+                        //Alert notifying User that the Hike Resumed
+                        AlertDialog.Builder builder = new AlertDialog.Builder(HikeViewPagerActivity.this);
+                        builder.setTitle("Hike Resumed");
+                        builder.setMessage("The Hike has Resumed");
+                        AlertDialog resumeAlert = builder.create();
+                        resumeAlert.show();
                     }
                 }
                 else{
@@ -536,9 +540,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
 
         // Set Values to previous values
         if (mLocation != null) {
-            mTextLatitude.setText(String.format("%.2f", mLocation.getLatitude()));
-            mTextLongitude.setText(String.format("%.2f", mLocation.getLongitude()));
-            mTextAltitude.setText(String.format("%.2f",mLocation.getAltitude()));
+            mTextLatitude.setText(String.valueOf(mLocation.getLatitude()));
+            mTextLongitude.setText(String.valueOf(mLocation.getLongitude()));
+            mTextAltitude.setText(String.valueOf(mLocation.getAltitude()));
         } else {
             mTextLatitude.setText("0.0");
             mTextLongitude.setText("0.0");
