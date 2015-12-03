@@ -33,4 +33,10 @@
     <string name="exception_caught_title">Whoops! Something happened that we did not plan for</string>
     <string name="buttonTextPauseHike">Pause Hike</string>
     <string name="viewAndDeleteHint">View Hikes by Clicking. Delete by doing a long click</string>
+    <string name="textAltitude">Altitude:</string>
+    <string name="textPace">Pace:</string>
+    <string name="textResultsTitle">Hike Results</string>
+    <string name="textReadings">Readings:</string>
+    <string name="textDistanceTraveled">Distance Traveled:</string>
+    <string name="title_activity_sensors">SensorsActivity</string>
 </resources>

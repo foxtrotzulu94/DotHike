@@ -1,35 +1,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
     tools:context="me.dotteam.dotprod.EnvCondActivity"
     android:orientation="vertical"
-    android:background="@color/hike_indigo_baltik">
+    android:background="@color/hike_naval">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.3">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
+            android:layout_weight="0.3">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Temperature:"
+                android:id="@+id/textView3"
+                android:layout_weight="0.5"
+                android:textColor="@color/hike_blue_grey"
+                android:gravity="bottom|center_horizontal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/textDisplayTemperature"
+                android:id="@+id/textDispTemp"
+                android:gravity="top|center_vertical|center_horizontal"
+                android:layout_weight="0.5"
+                android:textColor="@color/hike_blue_grey" />
+
+        </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/imageTemp"
             android:layout_weight="0.7"
-            android:src="@drawable/thermometer_accent" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/textDisplayTemperature"
-            android:id="@+id/textDispTemp"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_weight="0.3"
-            android:textColor="@color/hike_blue_grey"/>
+            android:src="@drawable/thermometer_accent"
+            android:background="@color/hike_indigo_baltik" />
 
     </LinearLayout>
 
@@ -38,23 +55,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.3">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Relative Humidity"
+                android:id="@+id/textView4"
+                android:layout_weight="0.5"
+                android:textColor="@color/hike_blue_grey"
+                android:gravity="bottom|center_horizontal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/textDisplayHumidity"
+                android:id="@+id/textDispHum"
+                android:layout_weight="0.5"
+                android:gravity="top|center_vertical|center_horizontal"
+                android:textColor="@color/hike_blue_grey"/>
+
+        </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/imageHum"
             android:layout_weight="0.7"
-            android:src="@drawable/hygrometer_accent" />
+            android:src="@drawable/hygrometer_accent"
+            android:background="@color/hike_indigo_baltik" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/textDisplayHumidity"
-            android:id="@+id/textDispHum"
-            android:layout_weight="0.3"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@color/hike_blue_grey"/>
     </LinearLayout>
 
     <LinearLayout
@@ -62,6 +99,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.3">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Atmospheric Pressure"
+                android:id="@+id/textView5"
+                android:layout_weight="0.5"
+                android:textColor="@color/hike_blue_grey"
+                android:gravity="bottom|center_horizontal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/textDisplayPressure"
+                android:id="@+id/textDispPress"
+                android:layout_weight="0.5"
+                android:gravity="top|center_vertical|center_horizontal"
+                android:textColor="@color/hike_blue_grey"/>
+
+        </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
@@ -69,16 +134,8 @@
             android:id="@+id/imagePress"
             android:layout_weight="0.7"
             android:src="@drawable/hum_meter_accent"
-            android:layout_margin="7sp" />
+            android:background="@color/hike_indigo_baltik"
+            android:padding="7sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/textDisplayPressure"
-            android:id="@+id/textDispPress"
-            android:layout_weight="0.3"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@color/hike_blue_grey"/>
     </LinearLayout>
 </LinearLayout>
