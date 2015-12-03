@@ -5,20 +5,14 @@ import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.method.KeyListener;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -90,10 +84,6 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     protected LinearLayout mTextHikeTimeContainer;
     protected LinearLayout mTextAvgPaceContainer;
     protected LinearLayout mTextStepCountContainer;
-    protected LinearLayout mTextNameContainer;
-    protected LinearLayout mTextDateContainer;
-
-    protected String mHikeName;
 
     private void setMemberIDs(){
         mButtonResultsDone = (Button) findViewById(R.id.buttonResultsDone);
@@ -110,8 +100,6 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextHikeTimeContainer=(LinearLayout) findViewById(R.id.linlayout_textHikeTime);
         mTextAvgPaceContainer=(LinearLayout) findViewById(R.id.linlayout_textAvgPace);
         mTextStepCountContainer=(LinearLayout) findViewById(R.id.linlayout_textStepCount);
-        mTextNameContainer=(LinearLayout) findViewById(R.id.linlayout_name);
-        mTextDateContainer=(LinearLayout) findViewById(R.id.linlayout_date);
     }
 
     @Override
@@ -374,7 +362,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
-    protected void setupOtherInfoLayout(){
+    protected void setupOtherInfoLayout() {
         SessionData results = mHDD.getSessionData();
 
         DecimalFormat numberFormat = new DecimalFormat("#.000");
@@ -388,7 +376,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextDistTravlContainer.addView(textDistTravl);
 
         TextView textDistTravlVal = new TextView(this);
-        textDistTravlVal.setText(String.format("%.3f m (%.3f km)", mDistanceTraveled, mDistanceTraveled/1000));
+        textDistTravlVal.setText(String.format("%.3f m (%.3f km)", mDistanceTraveled, mDistanceTraveled / 1000));
         textDistTravlVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextDistTravlContainer.addView(textDistTravlVal);
 
@@ -410,7 +398,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextAvgPaceContainer.addView(textAvgPace);
 
         TextView textAvgPaceVal = new TextView(this);
-        double average_pace = mDistanceTraveled/hikeDuration;
+        double average_pace = mDistanceTraveled / hikeDuration;
         textAvgPaceVal.setText(String.format("%.3f m/s (%.3f km/h)", average_pace, average_pace * 3.6));
         textAvgPaceVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextAvgPaceContainer.addView(textAvgPaceVal);
@@ -425,23 +413,6 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         textStepCount.setText(results.getStepCount().toString());
         textStepCount.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextStepCountContainer.addView(textStepCountResults);
-
-        TextView textHikeName = new TextView(this);
-        textHikeName.setText("Hike Name: ");
-        textHikeName.setTextColor(getResources().getColor(R.color.hike_blue_grey));
-        textHikeName.setTextSize(30);
-        mTextNameContainer.addView(textHikeName);
-
-        EditText textHikeNameVal = new EditText(this);
-        textHikeNameVal.setText(String.valueOf(results.hikeID()));
-        textHikeNameVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
-        textHikeNameVal.setTextSize(30);
-        textHikeNameVal.setFocusable(true);
-        textHikeNameVal.setEnabled(true);
-        textHikeNameVal.setClickable(true);
-        textHikeNameVal.setFocusableInTouchMode(true);
-        textHikeNameVal.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE);
-        mTextNameContainer.addView(textHikeNameVal);
     }
 
     @Override
