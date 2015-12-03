@@ -33,13 +33,13 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
         switch (hikesensors){
 
             case TEMPERATURE:
-                updateTemperature(valueString);
+                updateTemperature(valueString + " ˚C");
                 break;
             case HUMIDITY:
-                updateHumidity(valueString);
+                updateHumidity(valueString + " %");
                 break;
             case PRESSURE:
-                updatePressure(valueString);
+                updatePressure(valueString + " kPa");
                 break;
             case PEDOMETER:
                 break;
@@ -87,6 +87,11 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
         mTextDisplayHumidity = (TextView) findViewById(R.id.textViewDispHum);
         mTextDisplayPressure = (TextView) findViewById(R.id.textViewDispPress);
         mTextDisplayTemperature = (TextView) findViewById(R.id.textViewDispTemp);
+
+        // Initialize TextViews
+        mTextDisplayTemperature.setText("N/A");
+        mTextDisplayHumidity.setText("N/A");
+        mTextDisplayPressure.setText("N/A");
     }
 
 

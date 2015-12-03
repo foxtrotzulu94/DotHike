@@ -85,9 +85,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     private TextView mTextDisplayHumidity;
     private TextView mTextDisplayTemperature;
     private TextView mTextDisplayPressure;
-    private String mHumidityString = "0.0";
-    private String mTemperatureString = "0.0";
-    private String mPressureString = "0.0";
+    private String mHumidityString = "N/A";
+    private String mTemperatureString = "N/A";
+    private String mPressureString = "N/A";
 
     /**
      * NavigationFragment variables and UI element references
@@ -241,13 +241,13 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         Log.d(TAG, "onLocationChanged");
         // Set TextViews to new values
         if (mTextLatitude != null) {
-            mTextLatitude.setText(String.valueOf(location.getLatitude()));
+            mTextLatitude.setText(String.format("%.7f˚", location.getLatitude()));
         }
         if (mTextLongitude != null) {
-            mTextLongitude.setText(String.valueOf(location.getLongitude()));
+            mTextLongitude.setText(String.format("%.7f˚", location.getLongitude()));
         }
         if (mTextAltitude != null) {
-            mTextAltitude.setText(String.valueOf(location.getAltitude()));
+            mTextAltitude.setText(String.format("%.2f m", location.getAltitude()));
         }
 
         if (mLocation == null) {
@@ -271,7 +271,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             mDistanceTravelled += distance;
 
             if (mTextDistanceTraveled != null) {
-                mTextDistanceTraveled.setText(String.format("%.2f", mDistanceTravelled));
+                mTextDistanceTraveled.setText(String.format("%.2f m", mDistanceTravelled));
             }
         }
     }
@@ -413,6 +413,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                 mHHM.resetPedometer();
                 mHLE.removeListener(HikeViewPagerActivity.this);
                 mHLE.stopLocationUpdates();
+                mLocation = null;
                 Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
                 mHDD.endCollectionService();
@@ -542,15 +543,15 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
 
         // Set Values to previous values
         if (mLocation != null) {
-            mTextLatitude.setText(String.valueOf(mLocation.getLatitude()));
-            mTextLongitude.setText(String.valueOf(mLocation.getLongitude()));
-            mTextAltitude.setText(String.valueOf(mLocation.getAltitude()));
+            mTextLatitude.setText(String.format("%.7f˚", mLocation.getLatitude()));
+            mTextLongitude.setText(String.format("%.7f˚", mLocation.getLongitude()));
+            mTextAltitude.setText(String.format("%.2f m", mLocation.getAltitude()));
         } else {
-            mTextLatitude.setText("0.0");
-            mTextLongitude.setText("0.0");
-            mTextAltitude.setText("0.0");
+            mTextLatitude.setText("N/A");
+            mTextLongitude.setText("N/A");
+            mTextAltitude.setText("N/A");
         }
-        mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+        mTextDistanceTraveled.setText(String.format("%.2f m", mDistanceTravelled));
         mTextStepCount.setText(mStepCountString);
     }
 

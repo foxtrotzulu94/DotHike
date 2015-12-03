@@ -24,15 +24,15 @@ public class HikeSensorListener implements SensorListenerInterface {
         Log.d(TAG, hikesensors.toString() + ": " + valueString);
         switch (hikesensors) {
             case TEMPERATURE: {
-                owner.updateTemperature(valueString);
+                owner.updateTemperature(valueString + " ˚C");
                 break;
             }
             case HUMIDITY: {
-                owner.updateHumidity(valueString);
+                owner.updateHumidity(valueString + " %");
                 break;
             }
             case PRESSURE: {
-                owner.updatePressure(valueString);
+                owner.updatePressure(valueString + " kPa");
                 break;
             }
             case PEDOMETER:
