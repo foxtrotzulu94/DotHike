@@ -327,16 +327,35 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
             public void onClick(View v) {
                 //Button currently locked
                 if (!mEndHikeButtonLocked) {
-                    // Reset Pedometer
-                    // TODO Save Pedometer value
-                    mHHM.resetPedometer();
-                    mHLE.removeListener(HikeViewPagerActivity.this);
-                    mHLE.stopLocationUpdates();
-                    Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
-                    startActivity(intentResults);
-                    mHDD.endCollectionService();
-                    mHHM.stopSensors();
-                    finish();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HikeViewPagerActivity.this);
+                    builder.setPositiveButton("End Hike", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //End the Hike
+                            mHHM.resetPedometer();
+                            mHLE.removeListener(HikeViewPagerActivity.this);
+                            mHLE.stopLocationUpdates();
+                            Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
+                            startActivity(intentResults);
+                            mHDD.endCollectionService();
+                            mHHM.stopSensors();
+                            finish();
+                        }
+                    });
+
+                    builder.setNegativeButton("Continue Hike", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Continue the Hike
+                        }
+                    });
+
+                    builder.setMessage("Are you sure you would like to end the Hike?");
+                    builder.setTitle("End Hike");
+                    AlertDialog EndHikeAlert = builder.create();
+                    EndHikeAlert.show();
+
                     //Unlocking Button
                 } else {
                     mEndHikeButtonLocked = false;
