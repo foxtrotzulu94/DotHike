@@ -260,8 +260,8 @@ public class DemoShow extends Thread{
                         newLocation.setAccuracy(7.0f);
                         newLocation.setLatitude(latitude[i]);
                         newLocation.setLongitude(longitude[i]);
+                        newLocation.setAltitude(258.5 + (3*Math.sin(valueGenerator.nextDouble()*System.currentTimeMillis())));
                         newLocation.setTime(System.currentTimeMillis());
-
 
                         broadcastLoc.invoke(mHLE, newLocation);
 
