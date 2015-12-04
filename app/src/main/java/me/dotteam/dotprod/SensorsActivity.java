@@ -29,17 +29,16 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
     private HikeHardwareManager mHHM;
 
     public void update(HikeSensors hikesensors, double value) {
-        String valueString = String.format("%.2f",value);
         switch (hikesensors){
 
             case TEMPERATURE:
-                updateTemperature(valueString + " ˚C");
+                updateTemperature(value);
                 break;
             case HUMIDITY:
-                updateHumidity(valueString + " %");
+                updateHumidity(value);
                 break;
             case PRESSURE:
-                updatePressure(valueString + " kPa");
+                updatePressure(value);
                 break;
             case PEDOMETER:
                 break;
@@ -49,34 +48,35 @@ public class SensorsActivity extends AppCompatActivity implements SensorListener
         }
     }
 
-    void updateTemperature(final String temp) {
+    void updateTemperature(final double temp) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mTextDisplayTemperature != null) {
-                    mTextDisplayTemperature.setText(temp);
+                    mTextDisplayTemperature.setText(String.format("%.2f ˚C", temp));
                 }
             }
         });
     }
 
-    void updateHumidity(final String hum) {
+    void updateHumidity(final double hum) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mTextDisplayHumidity != null) {
-                    mTextDisplayHumidity.setText(hum);
+
+                    mTextDisplayHumidity.setText(String.format("%.2f %%", hum));
                 }
             }
         });
     }
 
-    void updatePressure(final String pressure) {
+    void updatePressure(final double pressure) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mTextDisplayPressure != null) {
-                    mTextDisplayPressure.setText(pressure);
+                    mTextDisplayPressure.setText(String.format("%.2f kPa", pressure));
                 }
             }
         });
