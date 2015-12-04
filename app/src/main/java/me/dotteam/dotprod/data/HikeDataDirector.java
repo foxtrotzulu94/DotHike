@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -52,7 +53,6 @@ public class HikeDataDirector {
             mPSE = new PersistentStorageEntity(mCreateContext);
         }
     }
-
 
     /**
      * Singleton method to obtain or generate current instance.
@@ -144,6 +144,16 @@ public class HikeDataDirector {
         else {
             return false;
         }
+    }
+
+    public Map<Integer,LocationPoints> bulkLoadCoordinates(){
+        checkOrSetPSE();
+        return mPSE.loadMaps();
+    }
+
+    public boolean canBulkLoadCoordinates(){
+        checkOrSetPSE();
+        return mPSE.hasCoordinatesCached();
     }
 
     public void setPauseStatus(boolean b){
