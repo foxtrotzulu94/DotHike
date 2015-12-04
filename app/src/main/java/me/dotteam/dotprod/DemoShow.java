@@ -255,18 +255,25 @@ public class DemoShow extends Thread{
             @Override
             public void run(){
                 try{
+                    double startingAltitude = 258.5;
                     for (int i = 0; i < LOCATION_POINTS; i++) {
                         Location newLocation = new Location(LocationManager.GPS_PROVIDER); //DEMOMAN is the provider
                         newLocation.setAccuracy(7.0f);
                         newLocation.setLatitude(latitude[i]);
                         newLocation.setLongitude(longitude[i]);
-                        newLocation.setAltitude(258.5 + (3*Math.sin(valueGenerator.nextDouble()*System.currentTimeMillis())));
+                        newLocation.setAltitude(startingAltitude);
                         newLocation.setTime(System.currentTimeMillis());
 
                         broadcastLoc.invoke(mHLE, newLocation);
 
                         //We might change this, though we really only need it 15 minutes.
                         sleep(AVG_TIME_PER_POINT);
+                        if(LOCATION_POINTS/2 >i){
+                            startingAltitude -= (3*Math.sin(valueGenerator.nextDouble()*System.currentTimeMillis()));
+                        }
+                        else{
+                            startingAltitude += i * valueGenerator.nextDouble();
+                        }
                     }
                 }
                 catch (Exception e){

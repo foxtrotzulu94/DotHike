@@ -246,14 +246,15 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+            // Set TextViews to new values
             if (mTextLatitude != null) {
-                mTextLatitude.setText(String.valueOf(location.getLatitude()));
+                mTextLatitude.setText(String.format("%.7f˚", location.getLatitude()));
             }
             if (mTextLongitude != null) {
-                mTextLongitude.setText(String.valueOf(location.getLongitude()));
+                mTextLongitude.setText(String.format("%.7f˚", location.getLongitude()));
             }
             if (mTextAltitude != null) {
-                mTextAltitude.setText(String.valueOf(location.getAltitude()));
+                mTextAltitude.setText(String.format("%.2f m", location.getAltitude()));
             }
     
             if (mLocation == null) {
