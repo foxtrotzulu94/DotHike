@@ -406,6 +406,15 @@ public class HikeHardwareManager implements SensorTagConnector.STConnectorListen
         }
     }
 
+    public int getListenerCount(){
+        if (mSensorListenerList != null) {
+            return mSensorListenerList.size();
+        }
+        else{
+            return -1;
+        }
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Hardware Event Listener Classes

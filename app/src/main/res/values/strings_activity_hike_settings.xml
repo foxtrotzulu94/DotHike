@@ -56,11 +56,9 @@
     <string name="pref_sensors_ext_sensor_title">External Sensor</string>
     <string-array name="pref_sensors_ext_sensor">
         <item>TI SensorTag</item>
-        <item>None</item>
     </string-array>
     <string-array name="pref_sensors_ext_sensorval">
         <item>1</item>
-        <item>-1</item>
     </string-array>
     <string name="pref_sensors_refresh">Refresh Time</string>
     <string name="pref_sensors_prompt_title">Prompt For Connection</string>
@@ -97,6 +95,10 @@
     <string name="pref_location_android">System Location Settings</string>
     <!-- This would fire an Intent -->
 
+    <!-- Storage Settings-->
+    <string name="pref_header_storage">Storage</string>
+    <string name="pref_storage_reset_title">Reset Storage?</string>
+    <string name="pref_storage_reset_summary">This will destroy all of your stored hikes</string>
 
     <!-- About Settings-->
     <string name="pref_header_about">About</string>

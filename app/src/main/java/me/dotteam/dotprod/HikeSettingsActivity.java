@@ -3,6 +3,8 @@ package me.dotteam.dotprod;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
@@ -34,6 +36,8 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
+
+import me.dotteam.dotprod.data.HikeDataDirector;
 
 
 /**
@@ -247,7 +251,7 @@ public class HikeSettingsActivity extends PreferenceActivity {
                     valueText.setGravity(Gravity.CENTER);
                     valueText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     valueText.setText(String.format("%s ms",
-                            PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(preference.getKey(),500)));
+                            PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(preference.getKey(), 500)));
                     root.addView(inputVal);
                     root.addView(valueText);
 
@@ -291,12 +295,6 @@ public class HikeSettingsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.pref_notification);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
 
         }
     }
@@ -456,6 +454,64 @@ public class HikeSettingsActivity extends PreferenceActivity {
                     dialog.setTitle("Special Thanks from Team Dot");
                     dialog.setMessage(getString(R.string.special_thanks));
                     dialog.show();
+                    return false;
+                }
+            });
+        }
+    }
+
+    public static class StoragePreferenceFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_storage);
+
+            Preference myPref =  findPreference("storage_reset");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setPositiveButton("Reset Everything", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Delete EVERYTHING!
+                            HikeDataDirector.getInstance(getActivity()).deleteAllData();
+                        }
+                    });
+
+                    builder.setNegativeButton("Keep", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Keep my data.
+                        }
+                    });
+                    builder.setMessage("This will delete ALL hikes.\nThere's no going back after this. Are you sure you want to continue?");
+                    builder.setTitle("Delete ALL Stored Data");
+                    AlertDialog deleteAlert = builder.create();
+                    deleteAlert.setCancelable(true);
+                    deleteAlert.show();
+                    return false;
+                }
+            });
+        }
+    }
+
+    public static class DemoDayFragment extends PreferenceFragment {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.pref_demo);
+
+            Preference myPref =  findPreference("demo");
+            myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if(!DemoShow.isRunning){
+                        DemoShow demo = new DemoShow(getActivity().getApplicationContext());
+                        demo.start();
+                        Toast.makeText(getActivity(),"Loading Demo Data...",Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(getActivity(), HikeViewPagerActivity.class));
+                    }
                     return false;
                 }
             });

@@ -400,7 +400,7 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
                 Location.distanceBetween(prevLatitude, prevLongitude, location.getLatitude(), location.getLongitude(), results);
 
                 // Log distance result
-                Log.d(TAG, "Distance without altitude: " + String.valueOf(results[0]));
+                Log.d(TAG, "Distance: " + String.valueOf(results[0]));
 
                 // Check if distance is greater than accuracy
                 if (results[0] > location.getAccuracy()) {
@@ -426,13 +426,16 @@ public class HikeLocationEntity implements GoogleApiClient.ConnectionCallbacks, 
 
                     // update last known location
                     mLastKnownLocation = location;
-
-                    // Notify listeners
-                    for (int i = 0; i < mListeners.size(); i++) {
-                        mListeners.get(i).onLocationChanged(location, (float) adjusted_distance);
-                    }
+                    broadcastUpdate(location, results[0]);
                 }
             }
+        }
+    }
+
+    private void broadcastUpdate(Location location, float distance){
+        // Notify listeners
+        for (int i = 0; i < mListeners.size(); i++) {
+            mListeners.get(i).onLocationChanged(location, distance);
         }
     }
 

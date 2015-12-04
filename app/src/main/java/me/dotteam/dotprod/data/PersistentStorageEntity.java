@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,9 @@ public class PersistentStorageEntity {
     private LinkedHashMap<Integer,SessionData> cachedObjects;
     private int cacheCapacity=5; //Quite a lot
 
+    private Map<Integer,LocationPoints> mLoadedLocationPoints;
+    private boolean mMapsLoaded=false;
+
     /**
      * Default constructor
      */
@@ -46,6 +50,14 @@ public class PersistentStorageEntity {
         mProvider = new DBAssistant(mCreateContext);
         mDB=mProvider.getWritableDatabase();
         cachedObjects = new CacheMap<>(cacheCapacity);
+        Thread offload = new Thread(){
+            @Override
+            public void run(){
+                mLoadedLocationPoints = loadMaps();
+            }
+        };
+//        offload.start();
+
     }
 
     /**
@@ -83,6 +95,53 @@ public class PersistentStorageEntity {
         return allHikes;
     }
 
+    public Map<Integer,LocationPoints> loadMaps(){
+//        if(mMapsLoaded){
+//            return mLoadedLocationPoints;
+//        }
+
+        Cursor cursor = mDB.query(DBAssistant.COORDS, null, null, null, DBAssistant.HIKE_ID, null, null);
+        Map<Integer,LocationPoints> retVal = null;
+
+        if(cursor.getCount()>0){
+            retVal = new HashMap<>(cursor.getCount());
+            Log.e(TAG, "loadMaps LOADING ALL COORDS "+cursor.getCount());
+            int altColumn = cursor.getColumnIndex(DBAssistant.ALT_COL);
+            int latColumn = cursor.getColumnIndex(DBAssistant.LAT_COL);
+            int longColumn = cursor.getColumnIndex(DBAssistant.LONG_COL);
+            int hikeColumn = cursor.getColumnIndex(DBAssistant.HIKE_ID);
+
+
+            cursor.moveToFirst();
+            do{
+
+                //Get the Hike ID
+                int setHikeID = cursor.getInt(hikeColumn);
+
+                Log.d(TAG, "loadMaps Hike number "+setHikeID);
+
+                List<Coordinates> setList = new ArrayList<>();
+                while(!cursor.isAfterLast() && setHikeID == cursor.getInt(hikeColumn)){
+                    setList.add(new Coordinates(
+                            cursor.getDouble(longColumn),
+                            cursor.getDouble(latColumn),
+                            cursor.getDouble(altColumn)
+                    ));
+                    cursor.moveToNext();
+                }
+
+                //If we break out of the loop, it means we need to save
+                retVal.put(setHikeID, new LocationPoints(setList));
+
+            }while(!cursor.isAfterLast());
+        }
+
+        cursor.close();
+        mMapsLoaded = true;
+        mLoadedLocationPoints = retVal;
+        return retVal;
+    }
+
     /**
      * Method to retrieve the entire {@link SessionData} object representation associated to a Hike object
      * @param specificHike the HikeObject that defines the SessionData
@@ -107,8 +166,13 @@ public class PersistentStorageEntity {
                 retrieveEnvDataTable(DBAssistant.ENVPRES,hikeID));
 
         //Get GeoPoints
-        LocationPoints retrievedPoints = new LocationPoints(retrieveCoordinates(hikeID));
-
+        LocationPoints retrievedPoints = null;
+//        if(mMapsLoaded){
+//            retrievedPoints = mLoadedLocationPoints.get(hikeID);
+//        }
+//        else {
+            retrievedPoints = new LocationPoints(retrieveCoordinates(hikeID));
+//        }
         //And finally, get steps
         StepCount retrievedStepCount = retrieveSteps(hikeID);
 
@@ -177,7 +241,8 @@ public class PersistentStorageEntity {
         return retrievedValue;
     }
 
-    private List<Coordinates> retrieveCoordinates(int uniqueID){
+    public List<Coordinates> retrieveCoordinates(int uniqueID){
+
         List<Coordinates> retrievedList = null;
         Cursor cursor = mDB.query(DBAssistant.COORDS,null,DBAssistant.HIKE_ID+"=?",
                 new String[]{Integer.toString(uniqueID)},null,null,DBAssistant.HIKE_ID);
@@ -263,6 +328,10 @@ public class PersistentStorageEntity {
         for(int i=0; i<allCoordinates.size();++i) {
             mDB.insert(DBAssistant.COORDS, null,allCoordinates.get(i).toStorage(assignedID));
         }
+
+        //save to cache
+//        mLoadedLocationPoints.put(assignedID,givenSession.getGeoPoints());
+
         //CHANGE if operation fails at any point!
         return true;
     }
@@ -354,6 +423,10 @@ public class PersistentStorageEntity {
      */
     public void reset(){
         mProvider.onUpgrade(mDB,-1,DBAssistant.SCHEME_VERSION);
+    }
+
+    public boolean hasCoordinatesCached(){
+        return mMapsLoaded;
     }
 
 }

@@ -17,7 +17,16 @@
         android:title="@string/pref_header_location" />
 
     <header
+        android:fragment="me.dotteam.dotprod.HikeSettingsActivity$StoragePreferenceFragment"
+        android:title="@string/pref_header_storage" />
+
+    <header
+        android:fragment="me.dotteam.dotprod.HikeSettingsActivity$DemoDayFragment"
+        android:title="Demo Features" />
+
+    <header
         android:fragment="me.dotteam.dotprod.HikeSettingsActivity$AboutPreferenceFragment"
         android:title="@string/pref_header_about" />
+
 
 </preference-headers>

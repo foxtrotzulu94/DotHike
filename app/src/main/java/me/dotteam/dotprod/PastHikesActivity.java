@@ -137,9 +137,6 @@ public class PastHikesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-//                Intent intentHome = new Intent(PastHikesActivity.this, HomeActivity.class);
-//                intentHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intentHome);
             }
         });
     }

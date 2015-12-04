@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.UiSettings;
@@ -237,43 +238,54 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     }
 
     @Override
-    public void onLocationChanged(Location location, float distance) {
+    public void onLocationChanged(final Location location, final float distance) {
         Log.d(TAG, "onLocationChanged");
         // Set TextViews to new values
-        if (mTextLatitude != null) {
-            mTextLatitude.setText(String.format("%.7f˚", location.getLatitude()));
-        }
-        if (mTextLongitude != null) {
-            mTextLongitude.setText(String.format("%.7f˚", location.getLongitude()));
-        }
-        if (mTextAltitude != null) {
-            mTextAltitude.setText(String.format("%.2f m", location.getAltitude()));
-        }
 
-        if (mLocation == null) {
-            mLocation = new Location(location);
-
-            if (mMapReady) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mapZoomCameraToLocation(latLng);
-                mMapPolylineOptions.add(latLng);
-                mMap.addPolyline(mMapPolylineOptions);
+        //Explicitly run this from the UI Thread!
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            // Set TextViews to new values
+            if (mTextLatitude != null) {
+                mTextLatitude.setText(String.format("%.7f˚", location.getLatitude()));
             }
-        } else {
-            mLocation = location;
-
-            if (mMapReady) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mMapPolylineOptions.add(latLng);
-                mMap.addPolyline(mMapPolylineOptions);
+            if (mTextLongitude != null) {
+                mTextLongitude.setText(String.format("%.7f˚", location.getLongitude()));
             }
-
-            mDistanceTravelled += distance;
-
-            if (mTextDistanceTraveled != null) {
-                mTextDistanceTraveled.setText(String.format("%.2f m", mDistanceTravelled));
+            if (mTextAltitude != null) {
+                mTextAltitude.setText(String.format("%.2f m", location.getAltitude()));
             }
-        }
+    
+            if (mLocation == null) {
+                mLocation = new Location(location);
+    
+                if (mMapReady) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mapZoomCameraToLocation(latLng);
+                    mMapPolylineOptions.add(latLng);
+                    mMap.addPolyline(mMapPolylineOptions);
+                }
+            } else {
+                mLocation = location;
+    
+                if (mMapReady) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMapPolylineOptions.add(latLng);
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.addPolyline(mMapPolylineOptions);
+                }
+    
+                mDistanceTravelled += distance;
+    
+                if (mTextDistanceTraveled != null) {
+                    mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+                }
+            }
+            }
+        });
+
+
     }
 
     /// ===========================================
@@ -439,8 +451,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,17));
                 mGotLocation = true;
             }
         });

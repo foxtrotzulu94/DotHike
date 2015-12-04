@@ -93,7 +93,7 @@ public class HikeDataDirectorTest extends ServiceTestCase<SessionCollectionServi
             Method updater=null;
             HikeHardwareManager HHM= HikeHardwareManager.getInstance(testContext);
             try {
-                updater = HHM.getClass().getMethod("broadcastUpdate", new Class[]{SensorListenerInterface.HikeSensors.class, float.class});
+                updater = HHM.getClass().getMethod("broadcastUpdate", new Class[]{SensorListenerInterface.HikeSensors.class, Double.TYPE});
             }
             catch (Exception e){return;}
             updater.setAccessible(true);
