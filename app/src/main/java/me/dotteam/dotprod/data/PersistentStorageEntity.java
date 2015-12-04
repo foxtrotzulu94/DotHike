@@ -241,7 +241,7 @@ public class PersistentStorageEntity {
         return retrievedValue;
     }
 
-    private List<Coordinates> retrieveCoordinates(int uniqueID){
+    public List<Coordinates> retrieveCoordinates(int uniqueID){
 
         List<Coordinates> retrievedList = null;
         Cursor cursor = mDB.query(DBAssistant.COORDS,null,DBAssistant.HIKE_ID+"=?",

@@ -31,6 +31,7 @@ import me.dotteam.dotprod.data.Coordinates;
 import me.dotteam.dotprod.data.Hike;
 import me.dotteam.dotprod.data.HikeDataDirector;
 import me.dotteam.dotprod.data.LocationPoints;
+import me.dotteam.dotprod.data.PersistentStorageEntity;
 
 /**
  * Created by foxtrot on 16/11/15.
@@ -58,6 +59,8 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
      */
     Map<Integer, LocationPoints> mLoadedLocationPoints;
 
+    private PersistentStorageEntity mPSE;
+
     /**
      * Default Constructor
      * @param context
@@ -68,8 +71,7 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
         mContext = context;
         mMapCallbacks = new HashMap<>();
 
-        //Do Async with this
-        //mLoadedLocationPoints = HikeDataDirector.getInstance(mContext).
+        mPSE = new PersistentStorageEntity(context);
     }
 
     @Override
@@ -153,18 +155,9 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
         MapReady mapReadyCallback = mMapCallbacks.get(id);
 
         if (mapReadyCallback == null) {
-
-            // Get Location Points
-            HikeDataDirector hdd = HikeDataDirector.getInstance(mContext);
-
-            //TODO: OPTIMIZE AND BULK LOAD
-            hdd.retrieveSessionFromHike(hike);
-            List<Coordinates> coordinatesList = hdd.getSessionData().getGeoPoints().getCoordinateList();
-
+            //Make a new object and retrieve the list of coordinates from the PSE
             mapReadyCallback = new MapReady(id);
-
-            mapReadyCallback.mCoordinatesList = coordinatesList;
-
+            mapReadyCallback.mCoordinatesList = mPSE.retrieveCoordinates(id);
             mMapCallbacks.put(id, mapReadyCallback);
         }
 
