@@ -279,7 +279,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                 mDistanceTravelled += distance;
     
                 if (mTextDistanceTraveled != null) {
-                    mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
+                    mTextDistanceTraveled.setText(String.format("%.2f m", mDistanceTravelled));
                 }
             }
             }
@@ -451,7 +451,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng,17));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 17));
                 mGotLocation = true;
             }
         });
