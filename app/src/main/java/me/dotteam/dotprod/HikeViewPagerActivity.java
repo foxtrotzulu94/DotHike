@@ -86,9 +86,9 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     private TextView mTextDisplayHumidity;
     private TextView mTextDisplayTemperature;
     private TextView mTextDisplayPressure;
-    private String mHumidityString = "0.0";
-    private String mTemperatureString = "0.0";
-    private String mPressureString = "0.0";
+    private double mHumidity = Double.NaN;
+    private double mTemperature = Double.NaN;
+    private double mPressure = Double.NaN;
 
     /**
      * NavigationFragment variables and UI element references
@@ -99,7 +99,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
     private TextView mTextDistanceTraveled;
     private TextView mTextStepCount;
     private float mDistanceTravelled = 0;
-    private String mStepCountString = "0";
+    private int mStepCount = 0;
     private Location mLocation;
     private LocationPoints mLocationPoints;
 
@@ -388,8 +388,8 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                         AlertDialog resumeAlert = builder.create();
                         resumeAlert.show();
                     }
-                    //Unlocking Button
                 } else {
+                    //Unlocking Button
                     mEndHikeButtonLocked = true;
                     mPauseHikeButtonLocked = false;
                     mHikeFragment.setButtonEndHIke(0.8f);
@@ -424,6 +424,7 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
                 mHHM.resetPedometer();
                 mHLE.removeListener(HikeViewPagerActivity.this);
                 mHLE.stopLocationUpdates();
+                mLocation = null;
                 Intent intentResults = new Intent(HikeViewPagerActivity.this, ResultsActivity.class);
                 startActivity(intentResults);
                 mHDD.endCollectionService();
@@ -460,48 +461,60 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         mapZoomCameraToLocation(latLng);
     }
 
-    void updateTemperature(final String temp) {
-        mTemperatureString = temp;
+    void updateTemperature(final double temp) {
+        mTemperature = temp;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mTextDisplayTemperature != null) {
-                    mTextDisplayTemperature.setText(temp);
+                    if (Double.isNaN(mTemperature)) {
+                        mTextDisplayTemperature.setText("N/A");
+                    } else {
+                        mTextDisplayTemperature.setText(String.format("%.2f ˚C", mTemperature));
+                    }
                 }
             }
         });
     }
 
-    void updateHumidity(final String hum) {
-        mHumidityString = hum;
+    void updateHumidity(final double hum) {
+        mHumidity = hum;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mTextDisplayHumidity != null) {
-                    mTextDisplayHumidity.setText(hum);
+                    if (Double.isNaN(mHumidity)) {
+                        mTextDisplayHumidity.setText("N/A");
+                    } else {
+                        mTextDisplayHumidity.setText(String.format("%.2f %%", mHumidity));
+                    }
                 }
             }
         });
     }
 
-    void updatePressure(final String pressure) {
-        mPressureString = pressure;
+    void updatePressure(final double pressure) {
+        mPressure = pressure;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mTextDisplayPressure != null) {
-                    mTextDisplayPressure.setText(pressure);
+                    if (Double.isNaN(mPressure)) {
+                        mTextDisplayPressure.setText("N/A");
+                    } else {
+                        mTextDisplayPressure.setText(String.format("%.2f kPa", mPressure));
+                    }
                 }
             }
         });
     }
-    void updateStepCount(final String stepcount) {
-        mStepCountString = stepcount;
+    void updateStepCount(final double stepcount) {
+        mStepCount = (int)stepcount;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mTextStepCount != null) {
-                    mTextStepCount.setText(stepcount);
+                    mTextStepCount.setText(String.valueOf(mStepCount));
                 }
             }
         });
@@ -529,10 +542,21 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
         mTextDisplayTemperature = mEnvCondFragment.getTextDisplayTemperature();
 
         // Set Text Initial Values
-        mTextDisplayHumidity.setText(mHumidityString);
-        mTextDisplayPressure.setText(mPressureString);
-        mTextDisplayTemperature.setText(mTemperatureString);
-
+        if (Double.isNaN(mTemperature)) {
+            mTextDisplayTemperature.setText("N/A");
+        } else {
+            mTextDisplayTemperature.setText(String.format("%.2f ˚C", mTemperature));
+        }
+        if (Double.isNaN(mHumidity)) {
+            mTextDisplayHumidity.setText("N/A");
+        } else {
+            mTextDisplayHumidity.setText(String.format("%.2f %%", mHumidity));
+        }
+        if (Double.isNaN(mPressure)) {
+            mTextDisplayPressure.setText("N/A");
+        } else {
+            mTextDisplayPressure.setText(String.format("%.2f kPa", mPressure));
+        }
     }
 
     /// ===========================================
@@ -552,16 +576,16 @@ public class HikeViewPagerActivity extends FragmentActivity implements HikeLocat
 
         // Set Values to previous values
         if (mLocation != null) {
-            mTextLatitude.setText(String.valueOf(mLocation.getLatitude()));
-            mTextLongitude.setText(String.valueOf(mLocation.getLongitude()));
-            mTextAltitude.setText(String.valueOf(mLocation.getAltitude()));
+            mTextLatitude.setText(String.format("%.7f˚", mLocation.getLatitude()));
+            mTextLongitude.setText(String.format("%.7f˚", mLocation.getLongitude()));
+            mTextAltitude.setText(String.format("%.2f m", mLocation.getAltitude()));
         } else {
-            mTextLatitude.setText("0.0");
-            mTextLongitude.setText("0.0");
-            mTextAltitude.setText("0.0");
+            mTextLatitude.setText("N/A");
+            mTextLongitude.setText("N/A");
+            mTextAltitude.setText("N/A");
         }
-        mTextDistanceTraveled.setText(String.valueOf(mDistanceTravelled));
-        mTextStepCount.setText(mStepCountString);
+        mTextDistanceTraveled.setText(String.format("%.2f m", mDistanceTravelled));
+        mTextStepCount.setText(String.valueOf(mStepCount));
     }
 
 

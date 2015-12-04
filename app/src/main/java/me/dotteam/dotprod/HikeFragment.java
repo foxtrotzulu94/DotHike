@@ -108,7 +108,9 @@ public class HikeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCompassAnimator.stopAnimation();
+        if (mCompassAnimator != null) {
+            mCompassAnimator.stopAnimation();
+        }
     }
 
     /**

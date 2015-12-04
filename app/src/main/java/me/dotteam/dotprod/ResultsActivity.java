@@ -1,8 +1,10 @@
 package me.dotteam.dotprod;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -151,6 +153,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         setupEnvReadingsLayout();
         setupOtherInfoLayout();
     }
+
     protected void setupMap(){
         // GoogleMapOptions to Set Map to Lite Mode
         GoogleMapOptions googleMapOptions = new GoogleMapOptions().liteMode(true);
@@ -359,7 +362,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
-    protected void setupOtherInfoLayout(){
+    protected void setupOtherInfoLayout() {
         SessionData results = mHDD.getSessionData();
 
         DecimalFormat numberFormat = new DecimalFormat("#.000");
@@ -373,7 +376,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextDistTravlContainer.addView(textDistTravl);
 
         TextView textDistTravlVal = new TextView(this);
-        textDistTravlVal.setText(String.format("%.3f m (%.3f km)", mDistanceTraveled, mDistanceTraveled/1000));
+        textDistTravlVal.setText(String.format("%.3f m (%.3f km)", mDistanceTraveled, mDistanceTraveled / 1000));
         textDistTravlVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextDistTravlContainer.addView(textDistTravlVal);
 
@@ -395,7 +398,7 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
         mTextAvgPaceContainer.addView(textAvgPace);
 
         TextView textAvgPaceVal = new TextView(this);
-        double average_pace = mDistanceTraveled/hikeDuration;
+        double average_pace = mDistanceTraveled / hikeDuration;
         textAvgPaceVal.setText(String.format("%.3f m/s (%.3f km/h)", average_pace, average_pace * 3.6));
         textAvgPaceVal.setTextColor(getResources().getColor(R.color.hike_blue_grey));
         mTextAvgPaceContainer.addView(textAvgPaceVal);
@@ -413,13 +416,27 @@ public class ResultsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     @Override
+    public void onBackPressed() {
+        mButtonResultsDone.performClick();
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "onMapReady called");
 
         mMap = googleMap;
 
-        // Set MapType to Terrain
-        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        // Set MapType
+        SharedPreferences prefMan= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(prefMan.contains("display_maptype")){
+            googleMap.setMapType(
+                    Integer.parseInt(prefMan.getString(
+                            "display_maptype",
+                            Integer.toString(GoogleMap.MAP_TYPE_TERRAIN))));
+        }
+        else {
+            googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        }
 
         // Change GoogleMap's UI Settings to remove toolbar stuff
         UiSettings mapSettings = mMap.getUiSettings();

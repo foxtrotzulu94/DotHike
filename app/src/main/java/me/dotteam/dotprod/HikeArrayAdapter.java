@@ -277,7 +277,7 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
                 public void onMapLoaded() {
                     Log.d(TAG, "onMapLoaded: " + String.valueOf(mHikeId));
 
-                    if (mMapBounds != null && mMapPolylineOptions != null) {
+                    if (mMapBounds == null || mMapPolylineOptions == null) {
                         // Create Polyline object
                         PolylineOptions mapPolylineOptions = new PolylineOptions();
 
@@ -307,10 +307,10 @@ public class HikeArrayAdapter extends ArrayAdapter<Hike>  {
                             mMap.animateCamera(CameraUpdateFactory.zoomTo(0));
                         }
                     }
-//                    else {
-//                        mMap.addPolyline(mMapPolylineOptions);
-//                        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(mMapBounds, 5));
-//                    }
+                    else {
+                        mMap.addPolyline(mMapPolylineOptions);
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(mMapBounds, 5));
+                    }
                 }
             });
         }

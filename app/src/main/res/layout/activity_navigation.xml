@@ -1,130 +1,138 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
     tools:context="me.dotteam.dotprod.NavigationActivity"
     android:orientation="vertical"
     android:background="@color/hike_naval">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.3">
+        android:layout_weight="0.2"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView3"
+            android:layout_weight="0.7"
+            android:src="@drawable/globe_accent_lat"
+            android:background="@color/hike_indigo_baltik"
+            android:paddingBottom="4sp"
+            android:paddingTop="4sp" />
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.3"
-            android:baselineAligned="false">
+            android:gravity="center">
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Latitude"
+                android:id="@+id/textView"
+                android:textColor="@color/hike_blue_grey"
                 android:layout_weight="0.5"
-                android:gravity="center">
+                android:gravity="bottom|center_horizontal" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageView3"
-                    android:layout_weight="0.7"
-                    android:src="@drawable/globe_accent_lat" />
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Latitude"
-                        android:id="@+id/textView"
-                        android:layout_marginLeft="7sp"
-                        android:textColor="@color/hike_blue_grey" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Large Text"
-                        android:id="@+id/textLatitude"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="0.5"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/hike_blue_grey"
-                        android:layout_marginLeft="10sp" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageView4"
-                    android:layout_weight="0.7"
-                    android:src="@drawable/globe_accent_long" />
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.7"
-                    android:gravity="center" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Longitude"
-                        android:id="@+id/textView3"
-                        android:layout_marginLeft="10sp"
-                        android:layout_weight="0.5"
-                        android:gravity="bottom"
-                        android:textColor="@color/hike_blue_grey" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Large Text"
-                        android:id="@+id/textLongitude"
-                        android:layout_weight="0.5"
-                        android:gravity="top|center_vertical"
-                        android:textColor="@color/hike_blue_grey"
-                        android:layout_marginLeft="10sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/textLatitude"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:textColor="@color/hike_blue_grey"
+                android:gravity="center_horizontal" />
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2">
+
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.3">
+            android:id="@+id/imageView4"
+            android:layout_weight="0.7"
+            android:src="@drawable/globe_accent_long"
+            android:background="@color/hike_indigo_baltik"
+            android:paddingBottom="4sp"
+            android:paddingTop="4sp" />
 
-            <ImageView
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:gravity="center">
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/imageView2"
-                android:layout_weight="0.7"
-                android:src="@drawable/altitude_accent" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Longitude"
+                android:id="@+id/textView3"
+                android:layout_weight="0.5"
+                android:gravity="bottom|center_horizontal"
+                android:textColor="@color/hike_blue_grey" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/textLongitude"
+                android:layout_weight="0.5"
+                android:gravity="top|center_horizontal"
+                android:textColor="@color/hike_blue_grey">
+
+            </TextView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView2"
+            android:layout_weight="0.7"
+            android:src="@drawable/altitude_accent"
+            android:background="@color/hike_indigo_baltik"
+            android:paddingLeft="4sp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:gravity="center" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Altitude"
+                android:id="@+id/textView9"
+                android:textColor="@color/hike_blue_grey"
+                android:layout_weight="0.5"
+                android:gravity="bottom|center_horizontal" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -133,9 +141,60 @@
                 android:text="Large Text"
                 android:id="@+id/textAltitude"
                 android:layout_weight="0.5"
-                android:gravity="center_vertical"
-                android:textColor="@color/hike_blue_grey"
-                android:layout_marginLeft="10sp" />
+                android:gravity="top|center"
+                android:textColor="@color/hike_blue_grey" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.2">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.143">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageView5"
+                android:layout_weight="0.7"
+                android:background="@color/hike_indigo_baltik"
+                android:src="@drawable/distance"
+                android:paddingLeft="4sp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/textDistanceTraveled"
+                    android:id="@+id/textView6"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/hike_blue_grey"
+                    android:gravity="bottom|center_horizontal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Large Text"
+                    android:id="@+id/textDistanceTraveled"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/hike_blue_grey"
+                    android:gravity="top|center" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -145,7 +204,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5">
+        android:layout_weight="0.2">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -153,59 +212,44 @@
             android:layout_height="match_parent"
             android:layout_weight="0.143">
 
-            <TextView
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/textDistanceTraveled"
-                android:id="@+id/textView6"
-                android:layout_weight="0.5"
-                android:textStyle="bold"
-                android:textColor="@color/hike_blue_grey" />
+                android:id="@+id/imageView6"
+                android:layout_weight="0.7"
+                android:background="@color/hike_indigo_baltik"
+                android:src="@drawable/step_count" />
 
-            <TextView
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
-                android:id="@+id/textDistanceTraveled"
-                android:layout_weight="0.5"
-                android:textColor="@color/hike_blue_grey"/>
+                android:layout_weight="0.3">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/textStepCount"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/hike_blue_grey"
+                    android:gravity="bottom|center_horizontal"
+                    android:autoText="false"
+                    android:id="@+id/textView" />
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Large Text"
+                    android:id="@+id/textStepCount"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/hike_blue_grey"
+                    android:gravity="top|center|center_horizontal" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.143">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Step Count:"
-                android:layout_weight="0.5"
-                android:textStyle="bold"
-                android:textColor="@color/hike_blue_grey" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
-                android:id="@+id/textStepCount"
-                android:layout_weight="0.5"
-                android:textColor="@color/hike_blue_grey"/>
         </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
+
