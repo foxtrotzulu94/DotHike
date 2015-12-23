@@ -23,6 +23,15 @@ Summary of the Packages/Classes depending on what you want to modify:
 ### The Team
 * Eric Tremblay
 * Javier Fajardo
+* Cory Bonneau
+* Amit Desai
+ 
+### Thanks
+* Concordia ENCS and ECE
+* M.A. Chan and @AmineMhedhbi
+* Texas Instruments
+* @PhilJay for [MPAndroid](https://github.com/PhilJay/MPAndroidChart)
+* Team @RedInput for [CompassView](https://github.com/RedInput/CompassView)
 
 ## Legal Notice
 Two important notes must be made regarding the code in this repo
