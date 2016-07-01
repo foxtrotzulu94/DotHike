@@ -105,6 +105,9 @@ public class HikeDataDirector {
             mIsCollectingData=false;
             Log.d(TAG,"Data received!");
             Log.e(TAG, "receiveDataFromService " + collectedData.toString());
+
+            //Hotfix for losing data: Save data as soon as it's received
+            storeCollectedStatistics();
         }
     }
 
